@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_login/config.dart';
 import 'package:flutter_login/login.dart';
+import 'package:flutter_login/treino.dart';
 
 class TelaInicial extends StatefulWidget {
   @override
@@ -70,6 +71,17 @@ class _TelaInicialState extends State<TelaInicial> {
               itemBuilder: (BuildContext context, int index) {
                 return ListTile(
                   title: Text(_items[index]),
+                  onTap: () {
+                      Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => TelaTreino( title: 'Treino de musculação',
+                                                                description:
+                                                                    'Este é um treino completo de musculação, incluindo exercícios para peitoral, costas, pernas e braços. É recomendado realizar este treino 3 vezes por semana para obter os melhores resultados.',
+                                                                imageUrl: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSyIqYidFja544v8GzJz6A_H7klzwzSOw2gfg&usqp=CAU',),
+                            ),
+                          );
+                      }
                 );
               },
             ),
