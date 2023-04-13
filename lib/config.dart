@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_login/infoObri.dart';
 
 class ConfiguracoesPage extends StatelessWidget {
   @override
@@ -17,10 +18,15 @@ class ConfiguracoesPage extends StatelessWidget {
         children: [
           ListTile(
             //leading: Icon(Icons),
-            title: Text('Informações Pessoas'),
+            title: Text('Informações Pessoais'),
             //trailing: Icon(Icons.arrow_forward_ios),
             onTap: () {
-             
+               Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => PersonalInfoForm(),
+                    ),
+                  );
             },
           ),
           ListTile(

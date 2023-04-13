@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'formTreino.dart';
+
 class CadastroPage extends StatefulWidget {
   @override
   _CadastroPageState createState() => _CadastroPageState();
@@ -33,6 +35,14 @@ Widget build(BuildContext context) {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
+             Center(
+                child: Container(
+                  height: 100.0,
+                  width: 100.0,
+                  child: Image.asset('assets/images/logo.png'),
+                ),
+              ),
+              SizedBox(height: 3.0),
             TextFormField(
               controller: _emailController,
               decoration: InputDecoration(
@@ -82,9 +92,12 @@ Widget build(BuildContext context) {
             SizedBox(height: 16.0),
             ElevatedButton(
               onPressed: () {
-                // if (_formKey.currentState.validate()) {
-                //   // Aqui você pode adicionar a lógica para criar uma nova conta
-                // }
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => FormScreen(),
+                    ),
+                  );
               },
               style: ElevatedButton.styleFrom(
                 primary: Color(0xFF78F259),

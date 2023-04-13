@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_login/cadastro.dart';
-import 'package:flutter_login/home.dart';
+import 'package:flutter_login/formTreino.dart';
+import 'package:flutter_login/telainicial.dart';
 
 class LoginPage extends StatefulWidget {
   @override
@@ -32,6 +33,14 @@ class _LoginPageState extends State<LoginPage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: <Widget>[
+              Center(
+                child: Container(
+                  height: 100.0,
+                  width: 100.0,
+                  child: Image.asset('assets/images/logo.png'),
+                ),
+              ),
+              SizedBox(height: 3.0),
               TextFormField(
                 controller: _emailController,
                 decoration: InputDecoration(
@@ -64,10 +73,10 @@ class _LoginPageState extends State<LoginPage> {
               SizedBox(height: 16.0),
               ElevatedButton(
                 onPressed: () {
-                  Navigator.push(
+                     Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => FormScreen(),
+                      builder: (context) => TelaInicial(),
                     ),
                   );
                   
