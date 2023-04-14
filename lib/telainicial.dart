@@ -10,6 +10,7 @@ class TelaInicial extends StatefulWidget {
 
 class _TelaInicialState extends State<TelaInicial> {
 
+  // ignore: prefer_final_fields
   List<String> _items = [
     'Item 1',
     'Item 2',
@@ -75,6 +76,7 @@ class _TelaInicialState extends State<TelaInicial> {
                       Navigator.push(
                             context,
                             MaterialPageRoute(
+                              // ignore: prefer_const_constructors
                               builder: (context) => TelaTreino( title: 'Treino de musculação',
                                                                 description:
                                                                     'Este é um treino completo de musculação, incluindo exercícios para peitoral, costas, pernas e braços. É recomendado realizar este treino 3 vezes por semana para obter os melhores resultados.',

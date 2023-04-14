@@ -1,4 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_login/cadastro.dart';
+import 'package:flutter_login/config.dart';
+import 'package:flutter_login/formTreino.dart';
+import 'package:flutter_login/infoObri.dart';
+import 'package:flutter_login/telainicial.dart';
+import 'package:flutter_login/treino.dart';
 import 'login.dart';
 
 
@@ -12,7 +18,15 @@ class LoginApp extends StatelessWidget {
     return MaterialApp(
       title: 'FitLife',
       debugShowCheckedModeBanner: false,
-      home: LoginPage(),
+       initialRoute: "login",
+      routes: {
+        "login":(context) =>  LoginPage(),
+        "cadastro":(context) => CadastroPage(),
+        "inicial":(context) => TelaInicial(),
+        "form":(context) => FormScreen(),
+        "info":(context) => PersonalInfoForm(),
+        "config":(context) => ConfiguracoesPage()
+      },
     );
   }
 }

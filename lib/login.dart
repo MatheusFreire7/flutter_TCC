@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_login/cadastro.dart';
-import 'package:flutter_login/formTreino.dart';
 import 'package:flutter_login/telainicial.dart';
 
 class LoginPage extends StatefulWidget {
@@ -24,10 +23,10 @@ class _LoginPageState extends State<LoginPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Login'),
+        title: const Text('Login'),
       ),
       body: Padding(
-        padding: EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(16.0),
         child: Form(
           key: _formKey,
           child: Column(
@@ -40,79 +39,87 @@ class _LoginPageState extends State<LoginPage> {
                   child: Image.asset('assets/images/logo.png'),
                 ),
               ),
-              SizedBox(height: 3.0),
+              const SizedBox(height: 3.0),
               TextFormField(
                 controller: _emailController,
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                   labelText: 'Email',
-                  border: OutlineInputBorder(),
+                  border: const OutlineInputBorder(),
                 ),
                 keyboardType: TextInputType.emailAddress,
                 validator: (value) {
-                  if (value!.isEmpty ) {
+                  if (value!.isEmpty) {
                     return 'Por favor, insira seu email.';
                   }
                   return null;
                 },
               ),
-              SizedBox(height: 16.0),
-              TextFormField(
+              const SizedBox(height: 16.0),
+               TextFormField(
                 controller: _passwordController,
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                   labelText: 'Senha',
                   border: OutlineInputBorder(),
                 ),
                 obscureText: true,
                 validator: (value) {
-                  if (value!.isEmpty ) {
+                  if (value!.isEmpty) {
                     return 'Por favor, insira sua senha.';
                   }
                   return null;
                 },
               ),
-              SizedBox(height: 16.0),
+              const SizedBox(height: 16.0),
               ElevatedButton(
                 onPressed: () {
-                     Navigator.push(
+                  Navigator.push(
                     context,
                     MaterialPageRoute(
                       builder: (context) => TelaInicial(),
                     ),
                   );
-                  
                 },
-              style: ElevatedButton.styleFrom(
-                primary: Color(0xFF78F259),
-                minimumSize: Size(200, 50), // define o tamanho mínimo do botão
-              ),
-                child: Text('Entrar', style: TextStyle(color: Colors.black)),
-                
-              ),
-              SizedBox(
-              height: 10,
-            ),
-            Container(
-              color:  Color(0xFF78F259),
-              height: 40,
-              child: ElevatedButton(
                 style: ElevatedButton.styleFrom(
-                  primary: Color(0xFF78F259),
+                  primary: const Color(0xFF78F259),
+                  minimumSize:
+                      const Size(200, 50), // define o tamanho mínimo do botão
                 ),
-                child: Text(
-                  "Cadastre-se",
-                  textAlign: TextAlign.center,
-                  style: TextStyle(color: Colors.black),
-                ),
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => CadastroPage(),
-                    ),
-                  );
-                },
+                child: const Text('Entrar', style: TextStyle(color: Colors.black)),
               ),
-            ),
+              const SizedBox(
+                height: 20,
+              ),
+              const Center(
+                child: Text(
+                  "Não tem Conta?",
+                  style: TextStyle(color: Colors.grey),
+                ),
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              Container(
+                color: const Color(0xFF78F259),
+                height: 40,
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    primary: const Color(0xFF78F259),
+                  ),
+                  child: const Text(
+                    "Cadastre-se",
+                    textAlign: TextAlign.center,
+                    style: const TextStyle(color: Colors.black),
+                  ),
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => CadastroPage(),
+                      ),
+                    );
+                  },
+                ),
+              ),
             ],
           ),
         ),
@@ -120,4 +127,3 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 }
-
