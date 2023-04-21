@@ -19,6 +19,7 @@ class _FormScreenState extends State<FormScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Formulário de Treino'),
+        centerTitle: true,
       ),
       body: Container(
         padding: EdgeInsets.all(16),

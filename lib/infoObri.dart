@@ -27,6 +27,7 @@ class _PersonalInfoFormState extends State<PersonalInfoForm> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Informações Pessoais'),
+        centerTitle: true,
       ),
       body: Padding(
         padding: EdgeInsets.all(16.0),
