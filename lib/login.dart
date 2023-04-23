@@ -1,6 +1,9 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_login/cadastro.dart';
 import 'package:flutter_login/telainicial.dart';
+import 'package:http/http.dart' as http;
 
 class LoginPage extends StatefulWidget {
   @override
@@ -8,6 +11,38 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+  Future<void> login(String email, String password) async {
+    try {
+      final response = await http.post(
+        Uri.parse('http://localhost:3000/login'),
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode({'username': email, 'password': password}),
+      );
+
+      print(jsonEncode({'email': email, 'password': password}));
+      print(response.body);
+
+      if (response.statusCode == 200) {
+        // Se o login foi bem sucedido, navegue para a tela inicial
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => TelaInicial()),
+        );
+      } else {
+        // Se o login falhar, mostre uma mensagem de erro
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: const Text(
+                'Login inválido. Verifique suas credenciais e tente novamente.'),
+            duration: const Duration(seconds: 3),
+          ),
+        );
+      }
+    } catch (e) {
+      // Captura e mostra qualquer exceção lançada durante a execução do código
+      print('Ocorreu uma exceção: $e');
+    }
+  }
 
   final _formKey = GlobalKey<FormState>();
   final _emailController = TextEditingController();
@@ -57,7 +92,7 @@ class _LoginPageState extends State<LoginPage> {
                 },
               ),
               const SizedBox(height: 16.0),
-               TextFormField(
+              TextFormField(
                 controller: _passwordController,
                 decoration: const InputDecoration(
                   labelText: 'Senha',
@@ -74,19 +109,15 @@ class _LoginPageState extends State<LoginPage> {
               const SizedBox(height: 16.0),
               ElevatedButton(
                 onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => TelaInicial(),
-                    ),
-                  );
+                  login(_emailController.text, _passwordController.text);
                 },
                 style: ElevatedButton.styleFrom(
                   primary: const Color(0xFF78F259),
                   minimumSize:
                       const Size(200, 50), // define o tamanho mínimo do botão
                 ),
-                child: const Text('Entrar', style: TextStyle(color: Colors.black)),
+                child:
+                    const Text('Entrar', style: TextStyle(color: Colors.black)),
               ),
               const SizedBox(
                 height: 20,
