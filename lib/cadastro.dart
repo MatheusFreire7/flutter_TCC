@@ -58,12 +58,12 @@ class _CadastroPageState extends State<CadastroPage> {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: Text('Erro'),
-        content: Text('Ocorreu um erro ao realizar o cadastro.'),
+        title: const Text('Erro'),
+        content: const Text('Ocorreu um erro ao realizar o cadastro.'),
         actions: <Widget>[
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: Text('Ok'),
+            child: const Text('Ok'),
           ),
         ],
       ),
@@ -83,7 +83,7 @@ class _CadastroPageState extends State<CadastroPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Cadastro'),
+        title: const Text('Cadastro'),
         centerTitle: true,
       ),
       body: Padding(
@@ -103,7 +103,7 @@ class _CadastroPageState extends State<CadastroPage> {
               SizedBox(height: 3.0),
               TextFormField(
                 controller: _emailController,
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                   labelText: 'Email',
                   border: OutlineInputBorder(),
                 ),
@@ -118,7 +118,7 @@ class _CadastroPageState extends State<CadastroPage> {
               SizedBox(height: 16.0),
               TextFormField(
                 controller: _passwordController,
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                   labelText: 'Senha',
                   border: OutlineInputBorder(),
                 ),
@@ -133,7 +133,7 @@ class _CadastroPageState extends State<CadastroPage> {
               SizedBox(height: 16.0),
               TextFormField(
                 controller: _confirmPasswordController,
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                   labelText: 'Confirmar Senha',
                   border: OutlineInputBorder(),
                 ),
@@ -147,17 +147,23 @@ class _CadastroPageState extends State<CadastroPage> {
                   return null;
                 },
               ),
-              SizedBox(height: 16.0),
+              const SizedBox(height: 16.0),
               ElevatedButton(
                 onPressed: () {
-                  _cadastrar();
+                  //_cadastrar();
+                   Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => FormScreen(),
+                    ),
+                  );
                 },
                 style: ElevatedButton.styleFrom(
                   primary: Color(0xFF78F259),
                   minimumSize:
-                      Size(200, 50), // define o tamanho mínimo do botão
+                      const Size(200, 50), // define o tamanho mínimo do botão
                 ),
-                child: Text('Cadastrar', style: TextStyle(color: Colors.black)),
+                child: const Text('Cadastrar', style: TextStyle(color: Colors.black)),
               ),
             ],
           ),

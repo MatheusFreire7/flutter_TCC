@@ -31,7 +31,7 @@ class _LoginPageState extends State<LoginPage> {
       } else {
         // Se o login falhar, mostre uma mensagem de erro
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
+          const SnackBar(
             content: const Text(
                 'Login inválido. Verifique suas credenciais e tente novamente.'),
             duration: const Duration(seconds: 3),
@@ -109,7 +109,11 @@ class _LoginPageState extends State<LoginPage> {
               const SizedBox(height: 16.0),
               ElevatedButton(
                 onPressed: () {
-                  login(_emailController.text, _passwordController.text);
+                   Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => TelaInicial()),
+                  );
+                  //login(_emailController.text, _passwordController.text);
                 },
                 style: ElevatedButton.styleFrom(
                   primary: const Color(0xFF78F259),

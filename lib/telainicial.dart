@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_login/config.dart';
 import 'package:flutter_login/infoObri.dart';
 import 'package:flutter_login/login.dart';
-import 'package:flutter_login/promotionBanner.dart';
 import 'package:flutter_login/testeApi.dart';
 
 class TelaInicial extends StatefulWidget {
@@ -11,6 +10,7 @@ class TelaInicial extends StatefulWidget {
 }
 
 class _TelaInicialState extends State<TelaInicial> {
+  // ignore: prefer_final_fields
   List<String> _items = [
     'Item 1',
     'Item 2',
@@ -47,11 +47,13 @@ class _TelaInicialState extends State<TelaInicial> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Tela Inicial - FitLife'),
         centerTitle: true,
+        backgroundColor: Colors.white,
+        iconTheme: IconThemeData(color: Colors.black), // Defina a cor do ícone aqui
         actions: [
           IconButton(
             icon: const Icon(Icons.settings),
+            color: Colors.black,
             onPressed: () {
               Navigator.push(
                 context,
@@ -68,14 +70,15 @@ class _TelaInicialState extends State<TelaInicial> {
           padding: EdgeInsets.zero,
           children: <Widget>[
             const UserAccountsDrawerHeader(
-              accountName: Text("Nome do usuário"),
-              accountEmail: Text("email_do_usuario@gmail.com"),
+              accountName: Text("Nome do usuário", style: TextStyle(color: Colors.black)),
+              accountEmail: Text("email_do_usuario@gmail.com", style: TextStyle(color: Colors.black)),
               currentAccountPicture: CircleAvatar(
                 backgroundImage:
-                    AssetImage('assets/images/user_profile_picture.jpg'),
+                    AssetImage('assets/images/user_profile.png'),
+                    backgroundColor: Color(0xFF29B405),
               ),
               decoration: BoxDecoration(
-                color: Colors.blue,
+                color:  Color(0xFF78F259),
               ),
             ),
             ListTile(
@@ -90,7 +93,7 @@ class _TelaInicialState extends State<TelaInicial> {
               },
             ),
             ListTile(
-              title: const Text('Plano de Exercicio'),
+              title: const Text('Plano de Treino'),
               onTap: () {
                 Navigator.pop(context);
               },
@@ -104,18 +107,13 @@ class _TelaInicialState extends State<TelaInicial> {
             ListTile(
               title: const Text('Lista de Exercícios'),
               onTap: () {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      // ignore: prefer_const_constructors
-                      builder: (context) => ExerciseList()),
-                );
-              },
-            ),
-            ListTile(
-              title: const Text('Configurações'),
-              onTap: () {
                 Navigator.pop(context);
+              // Navigator.push(
+              //     context,
+              //     MaterialPageRoute(
+              //         // ignore: prefer_const_constructors
+              //         builder: (context) => ExerciseList()),
+              //   );
               },
             ),
             ListTile(
@@ -124,27 +122,12 @@ class _TelaInicialState extends State<TelaInicial> {
                 Navigator.pop(context);
               },
             ),
-            ListTile(
-              title: const Text('Sair'),
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      // ignore: prefer_const_constructors
-                      builder: (context) => LoginPage()),
-                );
-              },
-            ),
+           
           ],
         ),
       ),
       body: Column(
         children: [
-           PromotionBanner(
-            imageUrl: 'assets/images/banner.jpg',
-            text: 'Seja bem Vindo ao FitLife!',
-          ),
-    
           Row(
             children: [
               Expanded(
@@ -162,12 +145,12 @@ class _TelaInicialState extends State<TelaInicial> {
                 return ListTile(
                   title: Text(_items[index]),
                   onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          // ignore: prefer_const_constructors
-                          builder: (context) => ExerciseList()),
-                    );
+                    // Navigator.push(
+                    //   context,
+                    //   MaterialPageRoute(
+                    //       // ignore: prefer_const_constructors
+                    //       builder: (context) => ExerciseList()),
+                    // );
                   },
                 );
               },
@@ -175,32 +158,32 @@ class _TelaInicialState extends State<TelaInicial> {
           ),
         ],
       ),
-      bottomNavigationBar: BottomNavigationBar(
-        items: [
-          const BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            backgroundColor: Colors.blueGrey,
-            label: 'Início',
-          ),
-          const BottomNavigationBarItem(
-            icon: Icon(Icons.settings),
-            backgroundColor: Colors.blueGrey,
-            label: 'Configurações',
-          ),
-          const BottomNavigationBarItem(
-            icon: Icon(Icons.person),
-            backgroundColor: Colors.blueGrey,
-            label: 'Login',
-          ),
-          const BottomNavigationBarItem(
-            icon: Icon(Icons.fitness_center),
-            label: 'Exercícios',
-          ),
-        ],
-        currentIndex: _selectedIndex,
-        selectedItemColor: Colors.blue,
-        onTap: _onItemTapped,
-      ),
+      // bottomNavigationBar: BottomNavigationBar(
+      //   items: [
+      //     const BottomNavigationBarItem(
+      //       icon: Icon(Icons.home),
+      //       backgroundColor: Colors.blueGrey,
+      //       label: 'Início',
+      //     ),
+      //     const BottomNavigationBarItem(
+      //       icon: Icon(Icons.settings),
+      //       backgroundColor: Colors.blueGrey,
+      //       label: 'Configurações',
+      //     ),
+      //     const BottomNavigationBarItem(
+      //       icon: Icon(Icons.person),
+      //       backgroundColor: Colors.blueGrey,
+      //       label: 'Login',
+      //     ),
+      //     const BottomNavigationBarItem(
+      //       icon: Icon(Icons.fitness_center),
+      //       label: 'Exercícios',
+      //     ),
+      //   ],
+      //   currentIndex: _selectedIndex,
+      //   selectedItemColor: Colors.blue,
+      //   onTap: _onItemTapped,
+      // ),
     );
   }
 }

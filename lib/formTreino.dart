@@ -18,11 +18,11 @@ class _FormScreenState extends State<FormScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Formulário de Treino'),
+        title: const Text('Formulário de Treino'),
         centerTitle: true,
       ),
       body: Container(
-        padding: EdgeInsets.all(16),
+        padding: const EdgeInsets.all(16),
         child: Form(
           key: _formKey,
           child: Column(
@@ -35,9 +35,9 @@ class _FormScreenState extends State<FormScreen> {
                   child: Image.asset('assets/images/logo.png'),
                 ),
               ),
-              SizedBox(height: 3.0),
+              const SizedBox(height: 3.0),
               TextFormField(
-                decoration: InputDecoration(labelText: 'Nome'),
+                decoration: const InputDecoration(labelText: 'Nome'),
                 validator: (value) {
                   if (value!.isEmpty) {
                     return 'Por favor, insira seu nome';
@@ -48,9 +48,9 @@ class _FormScreenState extends State<FormScreen> {
                   _name = value!;
                 },
               ),
-              SizedBox(height: 16),
+              const SizedBox(height: 16),
               TextFormField(
-                decoration: InputDecoration(labelText: 'Sexo'),
+                decoration: const InputDecoration(labelText: 'Sexo'),
                 validator: (value) {
                   if (value!.isEmpty) {
                     return 'Por favor, insira seu sexo';
@@ -61,9 +61,9 @@ class _FormScreenState extends State<FormScreen> {
                   _sex = value!;
                 },
               ),
-              SizedBox(height: 16),
+              const SizedBox(height: 16),
               TextFormField(
-                decoration: InputDecoration(labelText: 'Idade'),
+                decoration: const InputDecoration(labelText: 'Idade'),
                 keyboardType: TextInputType.number,
                 validator: (value) {
                   if (value!.isEmpty) {
@@ -75,9 +75,9 @@ class _FormScreenState extends State<FormScreen> {
                   _age = int.parse(value!);
                 },
               ),
-              SizedBox(height: 16),
+              const SizedBox(height: 16),
               TextFormField(
-                decoration: InputDecoration(labelText: 'Altura (cm)'),
+                decoration: const InputDecoration(labelText: 'Altura (cm)'),
                 keyboardType: TextInputType.number,
                 validator: (value) {
                   if (value!.isEmpty) {
@@ -89,9 +89,9 @@ class _FormScreenState extends State<FormScreen> {
                   _height = double.parse(value!);
                 },
               ),
-              SizedBox(height: 16),
+              const SizedBox(height: 16),
               TextFormField(
-                decoration: InputDecoration(labelText: 'Peso (kg)'),
+                decoration: const InputDecoration(labelText: 'Peso (kg)'),
                 keyboardType: TextInputType.number,
                 validator: (value) {
                   if (value!.isEmpty) {
@@ -103,7 +103,7 @@ class _FormScreenState extends State<FormScreen> {
                   _weight = double.parse(value!);
                 },
               ),
-              SizedBox(height: 32),
+              const SizedBox(height: 32),
               ElevatedButton(
                 onPressed: () {
                   // if (_formKey.currentState!.validate()) {
@@ -122,7 +122,7 @@ class _FormScreenState extends State<FormScreen> {
                     ),
                   );
                 },
-                child: Text('Montar Treino', style: TextStyle(color: Colors.black)),
+                child:Text('Montar Treino', style: TextStyle(color: Colors.black)),
                 style: ElevatedButton.styleFrom(
                   primary: Color(0xFF78F259),
                   minimumSize: Size(double.infinity, 48),

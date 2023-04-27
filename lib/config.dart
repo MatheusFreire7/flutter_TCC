@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_login/infoObri.dart';
+import 'package:flutter_login/login.dart';
 
 class ConfiguracoesPage extends StatefulWidget {
   @override
@@ -9,6 +10,8 @@ class ConfiguracoesPage extends StatefulWidget {
 class _ConfiguracoesPageState extends State<ConfiguracoesPage> {
    bool _notificacoesAtivas = true;
   ThemeData _themeData = ThemeData.light(); // Tema padrão é o Modo Claro
+  Color _appBarColor = Colors.white;
+   Color _iconColor = Colors.black; // Cor padrão do ícone na app bar
 
     @override
   Widget build(BuildContext context) {
@@ -18,10 +21,12 @@ class _ConfiguracoesPageState extends State<ConfiguracoesPage> {
       theme: _themeData, // Define o tema atual da aplicação
       home: Scaffold(
         appBar: AppBar(
-          title: Text('Configurações'),
+          iconTheme: IconThemeData(color: _iconColor), // Define a cor do ícone na app bar
+          backgroundColor:_appBarColor,
+          //title: const Text('Configurações'),
           centerTitle: true,
           leading: IconButton(
-            icon: Icon(Icons.arrow_back),
+            icon: const Icon(Icons.arrow_back),
             onPressed: () {
               Navigator.pop(context);
             },
@@ -30,9 +35,8 @@ class _ConfiguracoesPageState extends State<ConfiguracoesPage> {
         body: ListView(
           children: [
             ListTile(
-              //leading: Icon(Icons),
-              title: Text('Informações Pessoais'),
-              //trailing: Icon(Icons.arrow_forward_ios),
+              leading: const Icon(Icons.person),
+              title: const Text('Informações Pessoais'),
               onTap: () {
                 Navigator.push(
                   context,
@@ -43,8 +47,8 @@ class _ConfiguracoesPageState extends State<ConfiguracoesPage> {
               },
             ),
             ListTile(
-              leading: Icon(Icons.notifications),
-              title: Text('Notificações'),
+              leading: const Icon(Icons.notifications),
+              title: const Text('Notificações'),
               trailing: Switch(
                 value: _notificacoesAtivas, // Valor da configuração de notificações
                 onChanged: (value) {
@@ -55,8 +59,8 @@ class _ConfiguracoesPageState extends State<ConfiguracoesPage> {
               ),
             ),
             ListTile(
-              leading: Icon(Icons.color_lens),
-              title: Text('Tema'),
+              leading: const Icon(Icons.color_lens),
+              title: const Text('Tema'),
               trailing: DropdownButton<String>(
                 value: 'Modo Claro', // Valor do tema atual
                 onChanged: (value) {
@@ -64,8 +68,12 @@ class _ConfiguracoesPageState extends State<ConfiguracoesPage> {
                     // Atualizar o valor do tema e a cor da aplicação
                     if (value == 'Modo Claro') {
                       _themeData = ThemeData.light();
+                       _appBarColor = Colors.white;   // Atualiza a cor de fundo da AppBar
+                        _iconColor = Colors.black;
                     } else if (value == 'Modo Escuro') {
                       _themeData = ThemeData.dark();
+                       _appBarColor = Colors.black;  // Atualiza a cor de fundo da AppBar
+                        _iconColor = Colors.white;
                     }
                   });
                 },
@@ -77,6 +85,18 @@ class _ConfiguracoesPageState extends State<ConfiguracoesPage> {
                   );
                 }).toList(),
               ),
+            ),
+             ListTile(
+              leading: const Icon(Icons.arrow_back),
+              title: const Text('Sair'),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      // ignore: prefer_const_constructors
+                      builder: (context) => LoginPage()),
+                );
+              },
             ),
           ],
         ),

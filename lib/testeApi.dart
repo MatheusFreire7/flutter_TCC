@@ -27,7 +27,7 @@ class ExerciseList extends StatefulWidget {
 
 class _ExerciseListState extends State<ExerciseList> {
   late List<Exercise> exercises;
-
+  
   Future<List<Exercise>> fetchExercises() async {
     final response = await http.get(Uri.parse('http://localhost:3000/exercicios'));
     if (response.statusCode == 200) {
@@ -52,7 +52,7 @@ class _ExerciseListState extends State<ExerciseList> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Lista de Exercícios'),
+        title: const Text('Lista de Exercícios'),
         centerTitle: true,
       ),
       body: ListView.builder(
