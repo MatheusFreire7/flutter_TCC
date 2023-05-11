@@ -1,8 +1,8 @@
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_login/cadastro.dart';
 import 'package:flutter_login/telainicial.dart';
+import 'package:flutter_login/theme.dart';
 import 'package:http/http.dart' as http;
 
 class LoginPage extends StatefulWidget {
@@ -24,7 +24,7 @@ class _LoginPageState extends State<LoginPage> {
 
       if (response.statusCode == 200) {
         // Se o login foi bem sucedido, navegue para a tela inicial
-        Navigator.push(
+         Navigator.push(
           context,
           MaterialPageRoute(builder: (context) => TelaInicial()),
         );
@@ -57,14 +57,20 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return MaterialApp(
+     debugShowCheckedModeBanner: false,
+      theme:AppTheme.themeData,
+
+     home : Scaffold(
       appBar: AppBar(
-        title: const Text('Login'),
+        backgroundColor: Colors.white,
+        iconTheme: IconThemeData(color: Colors.black),
+        //title: const Text('Login'),
         centerTitle: true,
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
-        child: Form(
+        child: Form(  
           key: _formKey,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -72,8 +78,16 @@ class _LoginPageState extends State<LoginPage> {
               Center(
                 child: Container(
                   height: 100.0,
-                  width: 100.0,
-                  child: Image.asset('assets/images/logo.png'),
+                  width: 200.0,
+                  child: Text(
+                    "FitLife", 
+                  style: TextStyle(
+                    fontFamily: 'Work Sans',
+                    fontSize: 64,
+                    fontStyle: FontStyle.italic,
+                   fontWeight: FontWeight.bold,
+                     )
+                  ),
                 ),
               ),
               const SizedBox(height: 3.0),
@@ -107,21 +121,22 @@ class _LoginPageState extends State<LoginPage> {
                 },
               ),
               const SizedBox(height: 16.0),
-              ElevatedButton(
-                onPressed: () {
-                   Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => TelaInicial()),
-                  );
-                  //login(_emailController.text, _passwordController.text);
-                },
-                style: ElevatedButton.styleFrom(
-                  primary: const Color(0xFF78F259),
-                  minimumSize:
-                      const Size(200, 50), // define o tamanho mínimo do botão
+             SizedBox(
+                width: 50,
+                child: ElevatedButton(
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => TelaInicial()),
+                    );
+                  },
+                  style: ElevatedButton.styleFrom(
+                    primary: const Color(0xFF78F259),
+                    minimumSize: const Size(30, 50),
+                    padding: const EdgeInsets.symmetric(horizontal: 12),
+                  ),
+                  child: const Text('Entrar', style: TextStyle(color: Colors.black)),
                 ),
-                child:
-                    const Text('Entrar', style: TextStyle(color: Colors.black)),
               ),
               const SizedBox(
                 height: 20,
@@ -161,6 +176,7 @@ class _LoginPageState extends State<LoginPage> {
           ),
         ),
       ),
+    ),
     );
   }
 }

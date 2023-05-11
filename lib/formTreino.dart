@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_login/telainicial.dart';
+import 'package:flutter_login/theme.dart';
 
 class FormScreen extends StatefulWidget {
   @override
@@ -16,10 +17,21 @@ class _FormScreenState extends State<FormScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return MaterialApp(
+     debugShowCheckedModeBanner: false,
+    theme: AppTheme.themeData,
+    home: Scaffold(
       appBar: AppBar(
-        title: const Text('Formulário de Treino'),
+        backgroundColor: Colors.white,
+        iconTheme: IconThemeData(color: Colors.black),
+        //title: const Text('Formulário de Treino'),
         centerTitle: true,
+        leading: IconButton(
+         icon: const Icon(Icons.arrow_back),
+          onPressed: () {
+            Navigator.pop(context);
+            },
+          ),
       ),
       body: Container(
         padding: const EdgeInsets.all(16),
@@ -132,6 +144,7 @@ class _FormScreenState extends State<FormScreen> {
           ),
         ),
       ),
+    ),
     );
   }
 }

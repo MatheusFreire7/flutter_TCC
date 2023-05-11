@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
+
 class Exercise {
   final String title;
   final String description;
@@ -26,9 +27,10 @@ class ExerciseList extends StatefulWidget {
 }
 
 class _ExerciseListState extends State<ExerciseList> {
-  late List<Exercise> exercises;
-  
+ late List<Exercise> exercises = [];
+
   Future<List<Exercise>> fetchExercises() async {
+    //final response = await http.get(Uri.parse('http://177.220.18.53:3000/exercicios'));
     final response = await http.get(Uri.parse('http://localhost:3000/exercicios'));
     if (response.statusCode == 200) {
       List jsonResponse = json.decode(response.body);
@@ -52,8 +54,16 @@ class _ExerciseListState extends State<ExerciseList> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Lista de Exercícios'),
+        backgroundColor: Colors.white,
+       iconTheme: IconThemeData(color: Colors.black),
+        //title: const Text('Lista de Exercícios'),
         centerTitle: true,
+        leading: IconButton(
+        icon: const Icon(Icons.arrow_back),
+         onPressed: () {
+          Navigator.pop(context);
+           },
+         ),
       ),
       body: ListView.builder(
         itemCount: exercises == null ? 0 : exercises.length,

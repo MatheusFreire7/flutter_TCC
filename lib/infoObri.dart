@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_login/theme.dart';
 
 class PersonalInfoForm extends StatefulWidget {
   @override
@@ -24,10 +25,21 @@ class _PersonalInfoFormState extends State<PersonalInfoForm> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return MaterialApp(
+     debugShowCheckedModeBanner: false,
+    theme: AppTheme.themeData,
+     home: Scaffold(
       appBar: AppBar(
-        title: Text('Informações Pessoais'),
+        backgroundColor: Colors.white,
+        iconTheme: IconThemeData(color: Colors.black),
+        //title: Text('Informações Pessoais'),
         centerTitle: true,
+        leading: IconButton(
+        icon: const Icon(Icons.arrow_back),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
       ),
       body: Padding(
         padding: EdgeInsets.all(16.0),
@@ -133,6 +145,7 @@ class _PersonalInfoFormState extends State<PersonalInfoForm> {
           ),
         ),
       ),
+    ),
     );
   }
 }

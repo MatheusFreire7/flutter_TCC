@@ -4,7 +4,7 @@ import 'package:flutter_login/config.dart';
 import 'package:flutter_login/formTreino.dart';
 import 'package:flutter_login/infoObri.dart';
 import 'package:flutter_login/telainicial.dart';
-import 'package:flutter_login/treino.dart';
+import 'package:flutter_login/theme.dart';
 import 'login.dart';
 
 
@@ -17,6 +17,7 @@ class LoginApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'FitLife',
+      theme: AppTheme.themeData,
       debugShowCheckedModeBanner: false,
        initialRoute: "login",
       routes: {

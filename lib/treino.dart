@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_login/theme.dart';
 
 class TelaTreino extends StatelessWidget {
   final String title;
@@ -14,7 +15,10 @@ class TelaTreino extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return MaterialApp(
+     debugShowCheckedModeBanner: false,
+      theme: AppTheme.themeData,
+      home: Scaffold(
       appBar: AppBar(
         leading: IconButton(
           icon: Icon(Icons.arrow_back),
@@ -52,6 +56,7 @@ class TelaTreino extends StatelessWidget {
           ),
         ),
       ),
+    ),
     );
   }
 }

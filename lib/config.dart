@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_login/infoObri.dart';
 import 'package:flutter_login/login.dart';
+import 'package:flutter_login/theme.dart';
+
+
+ ThemeData _themeData = AppTheme.themeData; // Use sua classe de tema global aqui
 
 class ConfiguracoesPage extends StatefulWidget {
   @override
@@ -9,10 +13,8 @@ class ConfiguracoesPage extends StatefulWidget {
 
 class _ConfiguracoesPageState extends State<ConfiguracoesPage> {
    bool _notificacoesAtivas = true;
-  ThemeData _themeData = ThemeData.light(); // Tema padrão é o Modo Claro
   Color _appBarColor = Colors.white;
-   Color _iconColor = Colors.black; // Cor padrão do ícone na app bar
-
+  Color _iconColor = Colors.black; // Cor padrão do ícone na app bar
     @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -58,34 +60,35 @@ class _ConfiguracoesPageState extends State<ConfiguracoesPage> {
                 },
               ),
             ),
-            ListTile(
-              leading: const Icon(Icons.color_lens),
-              title: const Text('Tema'),
-              trailing: DropdownButton<String>(
-                value: 'Modo Claro', // Valor do tema atual
-                onChanged: (value) {
-                  setState(() {
-                    // Atualizar o valor do tema e a cor da aplicação
-                    if (value == 'Modo Claro') {
-                      _themeData = ThemeData.light();
-                       _appBarColor = Colors.white;   // Atualiza a cor de fundo da AppBar
+          ListTile(
+                leading: const Icon(Icons.color_lens),
+                title: const Text('Tema'),
+                trailing: DropdownButton<String>(
+                  value: _themeData.brightness == Brightness.light
+                      ? 'Modo Claro'
+                      : 'Modo Escuro',
+                  onChanged: (value) {
+                    setState(() {
+                      if (value == 'Modo Claro') {
+                         AppTheme.setThemeData(ThemeData.light());
+                        _appBarColor = Colors.white;
                         _iconColor = Colors.black;
-                    } else if (value == 'Modo Escuro') {
-                      _themeData = ThemeData.dark();
-                       _appBarColor = Colors.black;  // Atualiza a cor de fundo da AppBar
+                      } else if (value == 'Modo Escuro') {
+                        AppTheme.setThemeData(ThemeData.dark());
+                        _appBarColor = Colors.black;
                         _iconColor = Colors.white;
-                    }
-                  });
-                },
-                items: <String>['Modo Claro', 'Modo Escuro']
-                    .map<DropdownMenuItem<String>>((String value) {
-                  return DropdownMenuItem<String>(
-                    value: value,
-                    child: Text(value),
-                  );
-                }).toList(),
+                      }
+                    });
+                  },
+                  items: <String>['Modo Claro', 'Modo Escuro']
+                      .map<DropdownMenuItem<String>>((String value) {
+                    return DropdownMenuItem<String>(
+                      value: value,
+                      child: Text(value),
+                    );
+                  }).toList(),
+                ),
               ),
-            ),
              ListTile(
               leading: const Icon(Icons.arrow_back),
               title: const Text('Sair'),

@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_login/theme.dart';
 import 'package:http/http.dart' as http;
 import 'formTreino.dart';
 
@@ -81,10 +82,21 @@ class _CadastroPageState extends State<CadastroPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return MaterialApp(
+     debugShowCheckedModeBanner: false,
+      theme: AppTheme.themeData,
+      home: Scaffold(
       appBar: AppBar(
-        title: const Text('Cadastro'),
+        backgroundColor: Colors.white,
+        iconTheme: IconThemeData(color: Colors.black),
+        //title: const Text('Cadastro'),
         centerTitle: true,
+        leading: IconButton(
+        icon: const Icon(Icons.arrow_back),
+        onPressed: () {
+            Navigator.pop(context);
+          },
+          ),
       ),
       body: Padding(
         padding: EdgeInsets.all(16.0),
@@ -93,11 +105,19 @@ class _CadastroPageState extends State<CadastroPage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: <Widget>[
-              Center(
+             Center(
                 child: Container(
                   height: 100.0,
-                  width: 100.0,
-                  child: Image.asset('assets/images/logo.png'),
+                  width: 200.0,
+                  child: Text(
+                    "FitLife", 
+                  style: TextStyle(
+                    fontFamily: 'Work Sans',
+                    fontSize: 64,
+                    fontStyle: FontStyle.italic,
+                   fontWeight: FontWeight.bold,
+                     )
+                  ),
                 ),
               ),
               SizedBox(height: 3.0),
@@ -169,6 +189,7 @@ class _CadastroPageState extends State<CadastroPage> {
           ),
         ),
       ),
+    ),
     );
   }
 }
