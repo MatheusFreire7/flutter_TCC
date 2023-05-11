@@ -30,8 +30,8 @@ class _PersonalInfoFormState extends State<PersonalInfoForm> {
     theme: AppTheme.themeData,
      home: Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.white,
-        iconTheme: IconThemeData(color: Colors.black),
+        iconTheme: IconThemeData(color: AppTheme.iconColor), // Define a cor do ícone na app bar
+        backgroundColor: AppTheme.appBarColor,
         //title: Text('Informações Pessoais'),
         centerTitle: true,
         leading: IconButton(

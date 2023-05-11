@@ -52,13 +52,12 @@ class _TelaInicialState extends State<TelaInicial> {
       home: Scaffold(
         appBar: AppBar(
           centerTitle: true,
-          backgroundColor: Colors.white,
-          iconTheme: const IconThemeData(
-              color: Colors.black), // Defina a cor do ícone aqui
+          iconTheme: IconThemeData(color: AppTheme.iconColor), // Define a cor do ícone na app bar
+          backgroundColor: AppTheme.appBarColor,
           actions: [
             IconButton(
               icon: const Icon(Icons.settings),
-              color: Colors.black,
+              color: AppTheme.iconColor,
               onPressed: () {
                 Navigator.push(
                   context,

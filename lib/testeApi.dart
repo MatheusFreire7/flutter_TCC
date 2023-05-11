@@ -54,7 +54,7 @@ class _ExerciseListState extends State<ExerciseList> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.white,
+       backgroundColor: Colors.white,
        iconTheme: IconThemeData(color: Colors.black),
         //title: const Text('Lista de Exercícios'),
         centerTitle: true,

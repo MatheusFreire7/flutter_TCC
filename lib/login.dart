@@ -63,8 +63,8 @@ class _LoginPageState extends State<LoginPage> {
 
      home : Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.white,
-        iconTheme: IconThemeData(color: Colors.black),
+       iconTheme: IconThemeData(color: AppTheme.iconColor), // Define a cor do ícone na app bar
+       backgroundColor: AppTheme.appBarColor,
         //title: const Text('Login'),
         centerTitle: true,
       ),
