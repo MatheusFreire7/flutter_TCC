@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_login/infoObri.dart';
 import 'package:flutter_login/login.dart';
+import 'package:flutter_login/telainicial.dart';
 import 'package:flutter_login/theme.dart';
 
 
@@ -49,7 +50,12 @@ class _ConfiguracoesPageState extends State<ConfiguracoesPage> {
           leading: IconButton(
             icon: const Icon(Icons.arrow_back),
             onPressed: () {
-              Navigator.pop(context);
+             Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => TelaInicial(),
+                  ),
+                );
             },
           ),
         ),

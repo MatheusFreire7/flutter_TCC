@@ -8,7 +8,6 @@ class PersonalInfoForm extends StatefulWidget {
 
 class _PersonalInfoFormState extends State<PersonalInfoForm> {
   final _formKey = GlobalKey<FormState>();
-  final _nameController = TextEditingController();
   final _ageController = TextEditingController();
   final _weightController = TextEditingController();
   final _heightController = TextEditingController();
@@ -16,7 +15,6 @@ class _PersonalInfoFormState extends State<PersonalInfoForm> {
 
   @override
   void dispose() {
-    _nameController.dispose();
     _ageController.dispose();
     _weightController.dispose();
     _heightController.dispose();
@@ -48,21 +46,17 @@ class _PersonalInfoFormState extends State<PersonalInfoForm> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: <Widget>[
-              TextFormField(
-                controller: _nameController,
-                decoration: InputDecoration(
-                  labelText: 'Nome',
-                  border: OutlineInputBorder(),
+              Center(
+                child: Text(
+                  "Informações Pessoais",
+                   style: TextStyle(
+                    fontFamily: 'Work Sans',
+                    fontSize: 25,
+                   fontWeight: FontWeight.bold,
+                     )
+                  ),
                 ),
-                keyboardType: TextInputType.text,
-                validator: (value) {
-                  if (value!.isEmpty) {
-                    return 'Por favor, insira seu nome.';
-                  }
-                  return null;
-                },
-              ),
-              SizedBox(height: 16.0),
+               SizedBox(height: 16.0),
               TextFormField(
                 controller: _ageController,
                 decoration: InputDecoration(
