@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_login/appConfig.dart';
 import 'package:flutter_login/infoObri.dart';
 import 'package:flutter_login/login.dart';
 import 'package:flutter_login/telainicial.dart';
 import 'package:flutter_login/theme.dart';
 
-
- ThemeData _themeData = AppTheme.themeData; // Use sua classe de tema global aqui
+ThemeData _themeData = AppTheme.themeData; // Use sua classe de tema global aqui
 
 class ConfiguracoesPage extends StatefulWidget {
   @override
@@ -16,21 +16,24 @@ class _ConfiguracoesPageState extends State<ConfiguracoesPage> {
   bool _notificacoesAtivas = true;
   Color _appBarColor = Colors.white;
   Color _iconColor = Colors.black; // Cor padrão do ícone na app bar
+  String _unidadeMedida = 'kg'; // Unidade de medida padrão
+  int _metaDiaria = 0; // Meta diária padrão
 
-  ThemeData _themeData = AppTheme.themeData; // Use sua classe de tema global aqui
+  ThemeData _themeData =
+      AppTheme.themeData; // Use sua classe de tema global aqui
 
   void changeTheme(String value) {
     setState(() {
       if (value == 'Modo Claro') {
-         _themeData = ThemeData.light();
+        _themeData = ThemeData.light();
         _appBarColor = Colors.white;
         _iconColor = Colors.black;
-          AppTheme.setThemeData(ThemeData.light(),_appBarColor,_iconColor);
+        AppTheme.setThemeData(ThemeData.light(), _appBarColor, _iconColor);
       } else if (value == 'Modo Escuro') {
         _themeData = ThemeData.dark();
         _appBarColor = Colors.white10;
         _iconColor = Colors.white;
-         AppTheme.setThemeData(ThemeData.dark(),_appBarColor,_iconColor);
+        AppTheme.setThemeData(ThemeData.dark(), _appBarColor, _iconColor);
       }
     });
   }
@@ -43,19 +46,20 @@ class _ConfiguracoesPageState extends State<ConfiguracoesPage> {
       theme: _themeData, // Define o tema atual da aplicação
       home: Scaffold(
         appBar: AppBar(
-         iconTheme: IconThemeData(color: AppTheme.iconColor), // Define a cor do ícone na app bar
-         backgroundColor: AppTheme.appBarColor,
+          iconTheme: IconThemeData(
+              color: AppTheme.iconColor), // Define a cor do ícone na app bar
+          backgroundColor: AppTheme.appBarColor,
           //title: const Text('Configurações'),
           centerTitle: true,
           leading: IconButton(
             icon: const Icon(Icons.arrow_back),
             onPressed: () {
-             Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => TelaInicial(),
-                  ),
-                );
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => TelaInicial(),
+                ),
+              );
             },
           ),
         ),
@@ -77,15 +81,17 @@ class _ConfiguracoesPageState extends State<ConfiguracoesPage> {
               leading: const Icon(Icons.notifications),
               title: const Text('Notificações'),
               trailing: Switch(
-                value: _notificacoesAtivas, // Valor da configuração de notificações
+                value:
+                    _notificacoesAtivas, // Valor da configuração de notificações
                 onChanged: (value) {
                   setState(() {
-                    _notificacoesAtivas = value; // Atualizar o valor da configuração de notificações
+                    _notificacoesAtivas =
+                        value; // Atualizar o valor da configuração de notificações
                   });
                 },
               ),
             ),
-           ListTile(
+            ListTile(
               leading: const Icon(Icons.color_lens),
               title: const Text('Tema'),
               trailing: DropdownButton<String>(
@@ -93,7 +99,8 @@ class _ConfiguracoesPageState extends State<ConfiguracoesPage> {
                     ? 'Modo Claro'
                     : 'Modo Escuro',
                 onChanged: (value) {
-                  changeTheme(value!); // Chama a função de alterar tema com o valor selecionado
+                  changeTheme(
+                      value!); // Chama a função de alterar tema com o valor selecionado
                 },
                 items: <String>['Modo Claro', 'Modo Escuro']
                     .map<DropdownMenuItem<String>>((String value) {
@@ -102,6 +109,72 @@ class _ConfiguracoesPageState extends State<ConfiguracoesPage> {
                     child: Text(value),
                   );
                 }).toList(),
+              ),
+            ),
+            ListTile(
+              leading: const Icon(Icons.settings),
+              title: const Text('Unidade de Medida'),
+              trailing: DropdownButton<String>(
+                value: AppConfig.unidadeMedida,
+                onChanged: (value) {
+                  setState(() {
+                    AppConfig.unidadeMedida = value!;
+                  });
+                },
+                items: <String>['kg', 'lb']
+                    .map<DropdownMenuItem<String>>((String value) {
+                  return DropdownMenuItem<String>(
+                    value: value,
+                    child: Text(value),
+                  );
+                }).toList(),
+              ),
+            ),
+            ListTile(
+              leading: const Icon(Icons.flag),
+              title: const Text('Metas Diárias de Perda de Peso'),
+              subtitle: Text(
+                  '${AppConfig.metaDiaria} ${AppConfig.unidadeMedida == 'kg' ? 'kg' : 'lb'}'),
+              trailing: IconButton(
+                icon: const Icon(Icons.edit),
+                onPressed: () {
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      int metaNova = AppConfig
+                          .metaDiaria; // Armazene o valor atualizado temporariamente
+                      return AlertDialog(
+                        title:
+                            const Text('Definir Meta Diária de Perda de Peso'),
+                        content: TextField(
+                          keyboardType: TextInputType.number,
+                          onChanged: (value) {
+                            metaNova = int.tryParse(value) ??
+                                0; // Atualize o valor temporário
+                          },
+                        ),
+                        actions: <Widget>[
+                          TextButton(
+                            child: const Text('Cancelar'),
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                            },
+                          ),
+                          TextButton(
+                            child: const Text('Salvar'),
+                            onPressed: () {
+                              setState(() {
+                                AppConfig.metaDiaria =
+                                    metaNova; // Atualize o valor na classe AppConfig
+                              });
+                              Navigator.of(context).pop();
+                            },
+                          ),
+                        ],
+                      );
+                    },
+                  );
+                },
               ),
             ),
             ListTile(

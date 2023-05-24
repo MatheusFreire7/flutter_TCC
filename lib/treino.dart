@@ -1,62 +1,55 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_login/theme.dart';
 
-class TelaTreino extends StatelessWidget {
-  final String title;
-  final String description;
+class PlanoTreinoDetalhes extends StatelessWidget {
+  final String nomePlano;
+  final String descricao;
   final String imageUrl;
 
-  const TelaTreino({
-    Key? key,
-    required this.title,
-    required this.description,
+  PlanoTreinoDetalhes({
+    required this.nomePlano,
+    required this.descricao,
     required this.imageUrl,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-     debugShowCheckedModeBanner: false,
-      theme: AppTheme.themeData,
-      home: Scaffold(
+    return Scaffold(
       appBar: AppBar(
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back),
-          onPressed: () => Navigator.pop(context),
-        ),
+        title: Text('Detalhes do Plano de Treino'),
       ),
       body: Column(
         children: [
-          SizedBox(height: 20),
-          Image.network(imageUrl),
-          SizedBox(height: 20),
-          Text(
-            title,
-            style: TextStyle(
-              fontSize: 24,
-              fontWeight: FontWeight.bold,
+          Expanded(
+            child: SingleChildScrollView(
+              child: Column(
+                children: [
+                  Image.network(imageUrl),
+                  SizedBox(height: 16.0),
+                  Text(
+                    nomePlano,
+                    style: TextStyle(
+                      fontSize: 20.0,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  SizedBox(height: 8.0),
+                  Text(descricao),
+                ],
+              ),
             ),
           ),
-          SizedBox(height: 20),
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            child: Text(
-              description,
-              style: TextStyle(fontSize: 16),
+            padding: const EdgeInsets.all(16.0),
+            child: ElevatedButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: Text('Voltar'),
             ),
           ),
         ],
       ),
-      bottomNavigationBar: Container(
-        height: 80,
-        child: Center(
-          child: Image.asset(
-            'assets/images/logo.png',
-            height: 50,
-          ),
-        ),
-      ),
-    ),
     );
   }
 }
+

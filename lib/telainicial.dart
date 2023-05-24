@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_login/config.dart';
 import 'package:flutter_login/infoObri.dart';
 import 'package:flutter_login/login.dart';
+import 'package:flutter_login/suporte.dart';
 import 'package:flutter_login/testeApi.dart';
 import 'package:flutter_login/theme.dart';
+import 'package:flutter_login/treino.dart';
 
 class TelaInicial extends StatefulWidget {
   @override
@@ -137,7 +139,7 @@ class _TelaInicialState extends State<TelaInicial> {
                     context,
                     MaterialPageRoute(
                         // ignore: prefer_const_constructors
-                        builder: (context) => TelaInicial()),
+                        builder: (context) => SupportScreen()),
                   );
                 },
               ),
@@ -175,13 +177,17 @@ class _TelaInicialState extends State<TelaInicial> {
                   return ListTile(
                     title: Text(_items[index]),
                     onTap: () {
-                      // Navigator.push(
-                      //   context,
-                      //   MaterialPageRoute(
-                      //       // ignore: prefer_const_constructors
-                      //       builder: (context) => ExerciseList()),
-                      // );
-                    },
+                    // Navigator.push(
+                    //   context,
+                    //   MaterialPageRoute(
+                    //     builder: (context) => PlanoTreinoDetalhes(
+                    //       nomePlano: _items[index],
+                    //       descricao: 'Descrição do ${_items[index]}',
+                    //       imageUrl: 'URL da imagem do ${_items[index]}',
+                    //     ),
+                    //   ),
+                    // );
+                     },
                   );
                 },
               ),
