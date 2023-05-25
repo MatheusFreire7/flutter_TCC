@@ -132,20 +132,17 @@ class _ConfiguracoesPageState extends State<ConfiguracoesPage> {
             ),
             ListTile(
               leading: const Icon(Icons.flag),
-              title: const Text('Metas Diárias de Perda de Peso'),
-              subtitle: Text(
-                  '${AppConfig.metaDiaria} ${AppConfig.unidadeMedida == 'kg' ? 'kg' : 'lb'}'),
+              title: const Text('Metas Diárias de Km Percorrido'),
+              subtitle: Text('${AppConfig.metaDiaria} km'),
               trailing: IconButton(
                 icon: const Icon(Icons.edit),
                 onPressed: () {
                   showDialog(
                     context: context,
                     builder: (BuildContext context) {
-                      int metaNova = AppConfig
-                          .metaDiaria; // Armazene o valor atualizado temporariamente
+                      int metaNova = AppConfig.metaDiaria; // Armazene o valor atualizado temporariamente
                       return AlertDialog(
-                        title:
-                            const Text('Definir Meta Diária de Perda de Peso'),
+                        title: const Text('Definir Meta Diária de Km percorridos'),
                         content: TextField(
                           keyboardType: TextInputType.number,
                           onChanged: (value) {
@@ -164,8 +161,7 @@ class _ConfiguracoesPageState extends State<ConfiguracoesPage> {
                             child: const Text('Salvar'),
                             onPressed: () {
                               setState(() {
-                                AppConfig.metaDiaria =
-                                    metaNova; // Atualize o valor na classe AppConfig
+                                AppConfig.metaDiaria = metaNova; // Atualize o valor na classe AppConfig
                               });
                               Navigator.of(context).pop();
                             },

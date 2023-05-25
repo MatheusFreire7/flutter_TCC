@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_login/alimentSaudavel.dart';
 import 'package:flutter_login/config.dart';
 import 'package:flutter_login/infoObri.dart';
 import 'package:flutter_login/login.dart';
+import 'package:flutter_login/progresso.dart';
+import 'package:flutter_login/promotionBanner.dart';
 import 'package:flutter_login/suporte.dart';
 import 'package:flutter_login/testeApi.dart';
 import 'package:flutter_login/theme.dart';
-import 'package:flutter_login/treino.dart';
 
 class TelaInicial extends StatefulWidget {
   @override
@@ -13,37 +15,12 @@ class TelaInicial extends StatefulWidget {
 }
 
 class _TelaInicialState extends State<TelaInicial> {
-  // ignore: prefer_final_fields
-  List<String> _items = [
-    'Item 1',
-    'Item 2',
-    'Item 3',
-    'Item 4',
-    'Item 5',
-    'Item 6',
-    'Item 7',
-    'Item 8',
-    'Item 9',
-    'Item 10'
-  ];
   int _selectedIndex = 0;
-  final List<Widget> _screens = [
-    TelaInicial(),
-    ConfiguracoesPage(),
-    LoginPage(),
-    const ExerciseList()
-  ];
 
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
     });
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => _screens[_selectedIndex],
-      ),
-    );
   }
 
   @override
@@ -54,7 +31,7 @@ class _TelaInicialState extends State<TelaInicial> {
       home: Scaffold(
         appBar: AppBar(
           centerTitle: true,
-          iconTheme: IconThemeData(color: AppTheme.iconColor), // Define a cor do ícone na app bar
+          iconTheme: IconThemeData(color: AppTheme.iconColor),
           backgroundColor: AppTheme.appBarColor,
           actions: [
             IconButton(
@@ -75,11 +52,26 @@ class _TelaInicialState extends State<TelaInicial> {
           child: ListView(
             padding: EdgeInsets.zero,
             children: <Widget>[
-              const UserAccountsDrawerHeader(
-                accountName: Text("Nome do usuário",
-                    style: TextStyle(color: Colors.black)),
-                accountEmail: Text("email_do_usuario@gmail.com",
-                    style: TextStyle(color: Colors.black)),
+              UserAccountsDrawerHeader(
+                accountName: Text(
+                  "Nome do usuário",
+                  style: TextStyle(color: Colors.black),
+                ),
+                accountEmail: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    SizedBox(height: 8), 
+                    Text(
+                      "email_do_usuario@gmail.com",
+                      style: TextStyle(color: Colors.black),
+                    ),
+                    SizedBox(height: 8), 
+                    Text(
+                      "IMC Atual:",
+                      style: TextStyle(color: Colors.black),
+                    ),
+                  ],
+                ),
                 currentAccountPicture: CircleAvatar(
                   backgroundImage: AssetImage('assets/images/user_profile.png'),
                   backgroundColor: Color(0xFF29B405),
@@ -94,8 +86,8 @@ class _TelaInicialState extends State<TelaInicial> {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                        // ignore: prefer_const_constructors
-                        builder: (context) => PersonalInfoForm()),
+                      builder: (context) => PersonalInfoForm(),
+                    ),
                   );
                 },
               ),
@@ -105,8 +97,8 @@ class _TelaInicialState extends State<TelaInicial> {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                        // ignore: prefer_const_constructors
-                        builder: (context) => TelaInicial()),
+                      builder: (context) => TelaInicial(),
+                    ),
                   );
                 },
               ),
@@ -116,8 +108,8 @@ class _TelaInicialState extends State<TelaInicial> {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                        // ignore: prefer_const_constructors
-                        builder: (context) => TelaInicial()),
+                      builder: (context) => TelaInicial(),
+                    ),
                   );
                 },
               ),
@@ -127,8 +119,8 @@ class _TelaInicialState extends State<TelaInicial> {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                        // ignore: prefer_const_constructors
-                        builder: (context) => TelaInicial()),
+                      builder: (context) => TelaInicial(),
+                    ),
                   );
                 },
               ),
@@ -138,8 +130,19 @@ class _TelaInicialState extends State<TelaInicial> {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                        // ignore: prefer_const_constructors
-                        builder: (context) => SupportScreen()),
+                      builder: (context) => SupportScreen(),
+                    ),
+                  );
+                },
+              ),
+              ListTile(
+                title: const Text('Configurações'),
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => ConfiguracoesPage(),
+                    ),
                   );
                 },
               ),
@@ -170,48 +173,138 @@ class _TelaInicialState extends State<TelaInicial> {
                 )
               ],
             ),
+            // PromotionBanner(
+            //   imageUrl: 'imagem',
+            //   text: 'Seja Bem vindo!',
+            // ),
             Expanded(
-              child: ListView.builder(
-                itemCount: _items.length,
-                itemBuilder: (BuildContext context, int index) {
-                  return ListTile(
-                    title: Text(_items[index]),
-                    onTap: () {
-                    // Navigator.push(
-                    //   context,
-                    //   MaterialPageRoute(
-                    //     builder: (context) => PlanoTreinoDetalhes(
-                    //       nomePlano: _items[index],
-                    //       descricao: 'Descrição do ${_items[index]}',
-                    //       imageUrl: 'URL da imagem do ${_items[index]}',
-                    //     ),
-                    //   ),
-                    // );
-                     },
-                  );
-                },
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: GridView.count(
+                  crossAxisCount: 2,
+                  mainAxisSpacing: 16,
+                  crossAxisSpacing: 16,
+                  children: [
+                    CustomCard(
+                      title: 'Informações Pessoais',
+                      icon: Icons.person,
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => PersonalInfoForm(),
+                          ),
+                        );
+                      },
+                    ),
+                    CustomCard(
+                      title: 'Plano de Treino',
+                      icon: Icons.fitness_center,
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => TelaInicial(),
+                          ),
+                        );
+                      },
+                    ),
+                    CustomCard(
+                      title: 'Plano de Dieta',
+                      icon: Icons.food_bank,
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => TelaInicial(),
+                          ),
+                        );
+                      },
+                    ),
+                    CustomCard(
+                      title: 'Lista de Exercícios',
+                      icon: Icons.list_alt,
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => TelaInicial(),
+                          ),
+                        );
+                      },
+                    ),
+                     CustomCard(
+                      title: 'Progresso',
+                      icon: Icons.trending_up,
+                      onTap: () {
+                       Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => Progresso.withSampleData(),
+                          ),
+                        );
+                      },
+                    ),
+                    CustomCard(
+                      title: 'Alimentação Saudável',
+                      icon: Icons.restaurant_menu,
+                      onTap: () {
+                       Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => AlimentacaoSaudavel()
+                          ),
+                        );
+                      },
+                    ),
+                    CustomCard(
+                      title: 'Configurações',
+                      icon: Icons.settings,
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => ConfiguracoesPage(),
+                          ),
+                        );
+                      },
+                    ),
+                    CustomCard(
+                      title: 'Suporte',
+                      icon: Icons.help_outline,
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => SupportScreen(),
+                          ),
+                        );
+                      },
+                    ),
+                  ],
+                ),
               ),
             ),
           ],
         ),
         // bottomNavigationBar: BottomNavigationBar(
-        //   items: [
-        //     const BottomNavigationBarItem(
+        //   items: const [
+        //     BottomNavigationBarItem(
         //       icon: Icon(Icons.home),
         //       backgroundColor: Colors.blueGrey,
         //       label: 'Início',
         //     ),
-        //     const BottomNavigationBarItem(
+        //     BottomNavigationBarItem(
         //       icon: Icon(Icons.settings),
         //       backgroundColor: Colors.blueGrey,
         //       label: 'Configurações',
         //     ),
-        //     const BottomNavigationBarItem(
+        //     BottomNavigationBarItem(
         //       icon: Icon(Icons.person),
         //       backgroundColor: Colors.blueGrey,
         //       label: 'Login',
         //     ),
-        //     const BottomNavigationBarItem(
+        //     BottomNavigationBarItem(
         //       icon: Icon(Icons.fitness_center),
         //       label: 'Exercícios',
         //     ),
@@ -224,3 +317,49 @@ class _TelaInicialState extends State<TelaInicial> {
     );
   }
 }
+
+class CustomCard extends StatelessWidget {
+  final String title;
+  final IconData icon;
+  final VoidCallback onTap;
+
+  const CustomCard({
+    required this.title,
+    required this.icon,
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Card(
+        elevation: 4,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(8),
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(
+              icon,
+              size: 48,
+            ),
+            SizedBox(height: 8),
+            Text(
+              title,
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+
+
