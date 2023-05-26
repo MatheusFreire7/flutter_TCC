@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_login/appConfig.dart';
+import 'package:flutter_login/distancia.dart';
 import 'package:flutter_login/infoObri.dart';
 import 'package:flutter_login/login.dart';
 import 'package:flutter_login/telainicial.dart';
@@ -73,6 +74,18 @@ class _ConfiguracoesPageState extends State<ConfiguracoesPage> {
                   context,
                   MaterialPageRoute(
                     builder: (context) => PersonalInfoForm(),
+                  ),
+                );
+              },
+            ),
+             ListTile(
+              leading: const Icon(Icons.directions_walk),
+              title: const Text('Distância Percorrida'),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => DistanceTracker(),
                   ),
                 );
               },
