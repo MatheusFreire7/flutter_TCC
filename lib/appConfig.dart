@@ -6,5 +6,5 @@ class AppConfig {
   static Color iconColor = Colors.black;
   static bool notificationsEnabled = true;
   static String unidadeMedida = 'kg';
-  static int metaDiaria = 0;
+  static double metaDiaria = 0.0;
 }

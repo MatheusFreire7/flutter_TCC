@@ -17,7 +17,7 @@ class _ConfiguracoesPageState extends State<ConfiguracoesPage> {
   Color _appBarColor = Colors.white;
   Color _iconColor = Colors.black; // Cor padrão do ícone na app bar
   String _unidadeMedida = 'kg'; // Unidade de medida padrão
-  int _metaDiaria = 0; // Meta diária padrão
+  double _metaDiaria = 0.0; // Meta diária padrão
 
   ThemeData _themeData =
       AppTheme.themeData; // Use sua classe de tema global aqui
@@ -113,7 +113,7 @@ class _ConfiguracoesPageState extends State<ConfiguracoesPage> {
             ),
             ListTile(
               leading: const Icon(Icons.settings),
-              title: const Text('Unidade de Medida'),
+              title: const Text('Unidade de Medida de Peso'),
               trailing: DropdownButton<String>(
                 value: AppConfig.unidadeMedida,
                 onChanged: (value) {
@@ -140,14 +140,14 @@ class _ConfiguracoesPageState extends State<ConfiguracoesPage> {
                   showDialog(
                     context: context,
                     builder: (BuildContext context) {
-                      int metaNova = AppConfig.metaDiaria; // Armazene o valor atualizado temporariamente
+                      double metaNova = AppConfig.metaDiaria; // Armazene o valor atualizado temporariamente
                       return AlertDialog(
                         title: const Text('Definir Meta Diária de Km percorridos'),
                         content: TextField(
                           keyboardType: TextInputType.number,
                           onChanged: (value) {
-                            metaNova = int.tryParse(value) ??
-                                0; // Atualize o valor temporário
+                            metaNova = double.tryParse(value) ??
+                                0.0; // Atualize o valor temporário
                           },
                         ),
                         actions: <Widget>[

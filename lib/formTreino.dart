@@ -43,8 +43,16 @@ class _FormScreenState extends State<FormScreen> {
                Center(
                 child: Container(
                   height: 100.0,
-                  width: 100.0,
-                  child: Image.asset('assets/images/logo.png'),
+                  width: 200.0,
+                  child: Text(
+                    "FitLife", 
+                  style: TextStyle(
+                    fontFamily: 'Work Sans',
+                    fontSize: 64,
+                    fontStyle: FontStyle.italic,
+                   fontWeight: FontWeight.bold,
+                     )
+                  ),
                 ),
               ),
               const SizedBox(height: 3.0),
