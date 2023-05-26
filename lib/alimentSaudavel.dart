@@ -8,24 +8,23 @@ class AlimentacaoSaudavel extends StatefulWidget {
 }
 
 class _AlimentacaoSaudavelState extends State<AlimentacaoSaudavel> {
-  List<Receita> receitas = [];
+  List<Alimento> alimentos = [];
 
   @override
   void initState() {
     super.initState();
-    fetchReceitas();
+    fetchAlimentos();
   }
 
-  Future<void> fetchReceitas() async {
-    final response = await http.get(Uri.parse('https://www.themealdb.com/api/json/v1/1/filter.php?c=Vegetarian'));
+  Future<void> fetchAlimentos() async {
+    final response = await http.get(Uri.parse('http://localhost:3000/alimentos'));
     if (response.statusCode == 200) {
       final data = jsonDecode(response.body);
       setState(() {
-        receitas = List<Receita>.from(data['meals'].map((meal) => Receita.fromJson(meal)));
+        alimentos = List<Alimento>.from(data.map((item) => Alimento.fromJson(item)));
       });
     } else {
-      // Tratar erro ao carregar as receitas
-      print('Erro ao carregar as receitas: ${response.statusCode}');
+      print('Erro ao carregar os alimentos: ${response.statusCode}');
     }
   }
 
@@ -36,18 +35,25 @@ class _AlimentacaoSaudavelState extends State<AlimentacaoSaudavel> {
         title: Text('Alimentação Saudável'),
       ),
       body: ListView.builder(
-        itemCount: receitas.length,
+        itemCount: alimentos.length,
         itemBuilder: (context, index) {
-          final receita = receitas[index];
-          return ListTile(
-            leading: Image.network(
-              receita.imagemUrl,
-              width: 60,
-              height: 60,
-              fit: BoxFit.cover,
+          final alimento = alimentos[index];
+          return Card(
+            child: ListTile(
+              leading: Icon(Icons.food_bank),
+              title: Text(alimento.nome),
+              subtitle: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  SizedBox(height: 4),
+                  Text('Calorias: ${alimento.calorias.toStringAsFixed(2)}'),
+                  Text('Proteínas: ${alimento.proteinas.toStringAsFixed(2)}'),
+                  Text('Gorduras: ${alimento.gorduras.toStringAsFixed(2)}'),
+                  Text('Carboidratos: ${alimento.carboidratos.toStringAsFixed(2)}'),
+                  SizedBox(height: 4),
+                ],
+              ),
             ),
-            title: Text(receita.nome),
-            subtitle: Text(receita.descricao),
           );
         },
       ),
@@ -55,27 +61,34 @@ class _AlimentacaoSaudavelState extends State<AlimentacaoSaudavel> {
   }
 }
 
-class Receita {
+class Alimento {
   final String nome;
-  final String descricao;
-  final String imagemUrl;
+  final double calorias;
+  final double proteinas;
+  final double gorduras;
+  final double carboidratos;
 
-  Receita({
+  Alimento({
     required this.nome,
-    required this.descricao,
-    required this.imagemUrl,
+    required this.calorias,
+    required this.proteinas,
+    required this.gorduras,
+    required this.carboidratos,
   });
 
- factory Receita.fromJson(Map<String, dynamic> json) {
-  final nome = json['strMeal'] ?? '';
-  final descricao = json['strInstructions'] ?? '';
-  final imagemUrl = json['strMealThumb'] ?? '';
+  factory Alimento.fromJson(Map<String, dynamic> json) {
+    final nome = json['nome'] ?? '';
+    final calorias = json['calorias']?.toDouble() ?? 0.0;
+    final proteinas = json['proteinas']?.toDouble() ?? 0.0;
+    final gorduras = json['gorduras']?.toDouble() ?? 0.0;
+    final carboidratos = json['carboidratos']?.toDouble() ?? 0.0;
 
-  return Receita(
-    nome: nome,
-    descricao: descricao,
-    imagemUrl: imagemUrl,
-  );
-}
-
+    return Alimento(
+      nome: nome,
+      calorias: calorias,
+      proteinas: proteinas,
+      gorduras: gorduras,
+      carboidratos: carboidratos,
+    );
+  }
 }

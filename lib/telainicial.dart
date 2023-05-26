@@ -246,7 +246,7 @@ class _TelaInicialState extends State<TelaInicial> {
                       },
                     ),
                     CustomCard(
-                      title: 'Alimentação Saudável',
+                      title: 'Alimentos Saudáveis',
                       icon: Icons.restaurant_menu,
                       onTap: () {
                        Navigator.push(
