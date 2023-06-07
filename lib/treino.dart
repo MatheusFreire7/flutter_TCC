@@ -1,21 +1,25 @@
 import 'package:flutter/material.dart';
 
-class PlanoTreinoDetalhes extends StatelessWidget {
-  final String nomePlano;
-  final String descricao;
+class TreinoDetalhes extends StatelessWidget {
+  final String title;
   final String imageUrl;
+  final String series;
+  final String duration;
+  final String description;
 
-  PlanoTreinoDetalhes({
-    required this.nomePlano,
-    required this.descricao,
+  TreinoDetalhes({
+    required this.title,
     required this.imageUrl,
+    required this.series,
+    required this.duration,
+    required this.description,
   });
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Detalhes do Plano de Treino'),
+        title: Text('Detalhes do Exercício: $title' ),
       ),
       body: Column(
         children: [
@@ -23,17 +27,22 @@ class PlanoTreinoDetalhes extends StatelessWidget {
             child: SingleChildScrollView(
               child: Column(
                 children: [
-                  Image.network(imageUrl),
+                  //Image.network(imageUrl),
+                  Text(imageUrl),
                   SizedBox(height: 16.0),
                   Text(
-                    nomePlano,
+                    title,
                     style: TextStyle(
                       fontSize: 20.0,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
                   SizedBox(height: 8.0),
-                  Text(descricao),
+                  Text(series),
+                  SizedBox(height: 8.0),
+                  Text(duration),
+                  SizedBox(height: 8.0),
+                  Text(description),
                 ],
               ),
             ),
@@ -52,4 +61,3 @@ class PlanoTreinoDetalhes extends StatelessWidget {
     );
   }
 }
-

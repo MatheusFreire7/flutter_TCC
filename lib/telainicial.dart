@@ -3,6 +3,7 @@ import 'package:flutter_login/alimentSaudavel.dart';
 import 'package:flutter_login/config.dart';
 import 'package:flutter_login/infoObri.dart';
 import 'package:flutter_login/login.dart';
+import 'package:flutter_login/planoTreino.dart';
 import 'package:flutter_login/progresso.dart';
 import 'package:flutter_login/promotionBanner.dart';
 import 'package:flutter_login/suporte.dart';
@@ -97,7 +98,7 @@ class _TelaInicialState extends State<TelaInicial> {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => TelaInicial(),
+                      builder: (context) => PlanoTreinoPage(),
                     ),
                   );
                 },
@@ -204,7 +205,7 @@ class _TelaInicialState extends State<TelaInicial> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => TelaInicial(),
+                            builder: (context) => PlanoTreinoPage(),
                           ),
                         );
                       },

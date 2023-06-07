@@ -24,122 +24,120 @@ class _PersonalInfoFormState extends State<PersonalInfoForm> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-     debugShowCheckedModeBanner: false,
-    theme: AppTheme.themeData,
-     home: Scaffold(
-      appBar: AppBar(
-        iconTheme: IconThemeData(color: AppTheme.iconColor), // Define a cor do ícone na app bar
-        backgroundColor: AppTheme.appBarColor,
-        //title: Text('Informações Pessoais'),
-        centerTitle: true,
-        leading: IconButton(
-        icon: const Icon(Icons.arrow_back),
-          onPressed: () {
-            Navigator.pop(context);
-          },
+      debugShowCheckedModeBanner: false,
+      theme: AppTheme.themeData,
+      home: Scaffold(
+        appBar: AppBar(
+          iconTheme: IconThemeData(color: AppTheme.iconColor),
+          backgroundColor: AppTheme.appBarColor,
+          centerTitle: true,
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back),
+            onPressed: () {
+              Navigator.pop(context);
+            },
+          ),
         ),
-      ),
-      body: Padding(
-        padding: EdgeInsets.all(16.0),
-        child: Form(
-          key: _formKey,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: <Widget>[
-              Center(
-                child: Text(
-                  "Informações Pessoais",
-                   style: TextStyle(
-                    fontFamily: 'Work Sans',
-                    fontSize: 25,
-                   fontWeight: FontWeight.bold,
-                     )
+        body: Padding(
+          padding: EdgeInsets.all(16.0),
+          child: Form(
+            key: _formKey,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: <Widget>[
+                Center(
+                  child: Text(
+                    "Informações Pessoais",
+                    style: TextStyle(
+                      fontFamily: 'Work Sans',
+                      fontSize: 25,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                 ),
-               SizedBox(height: 16.0),
-              TextFormField(
-                controller: _ageController,
-                decoration: InputDecoration(
-                  labelText: 'Idade',
-                  border: OutlineInputBorder(),
+                SizedBox(height: 16.0),
+                TextFormField(
+                  controller: _ageController,
+                  decoration: InputDecoration(
+                    labelText: 'Idade',
+                    border: OutlineInputBorder(),
+                  ),
+                  keyboardType: TextInputType.number,
+                  validator: (value) {
+                    if (value!.isEmpty) {
+                      return 'Por favor, insira sua idade.';
+                    }
+                    return null;
+                  },
                 ),
-                keyboardType: TextInputType.number,
-                validator: (value) {
-                  if (value!.isEmpty) {
-                    return 'Por favor, insira sua idade.';
-                  }
-                  return null;
-                },
-              ),
-              SizedBox(height: 16.0),
-              TextFormField(
-                controller: _weightController,
-                decoration: InputDecoration(
-                  labelText: 'Peso (kg)',
-                  border: OutlineInputBorder(),
+                SizedBox(height: 16.0),
+                TextFormField(
+                  controller: _weightController,
+                  decoration: InputDecoration(
+                    labelText: 'Peso (kg)',
+                    border: OutlineInputBorder(),
+                  ),
+                  keyboardType: TextInputType.number,
+                  validator: (value) {
+                    if (value!.isEmpty) {
+                      return 'Por favor, insira seu peso.';
+                    }
+                    return null;
+                  },
                 ),
-                keyboardType: TextInputType.number,
-                validator: (value) {
-                  if (value!.isEmpty) {
-                    return 'Por favor, insira seu peso.';
-                  }
-                  return null;
-                },
-              ),
-              SizedBox(height: 16.0),
-              TextFormField(
-                controller: _heightController,
-                decoration: InputDecoration(
-                  labelText: 'Altura (cm)',
-                  border: OutlineInputBorder(),
+                SizedBox(height: 16.0),
+                TextFormField(
+                  controller: _heightController,
+                  decoration: InputDecoration(
+                    labelText: 'Altura (cm)',
+                    border: OutlineInputBorder(),
+                  ),
+                  keyboardType: TextInputType.number,
+                  validator: (value) {
+                    if (value!.isEmpty) {
+                      return 'Por favor, insira sua altura.';
+                    }
+                    return null;
+                  },
                 ),
-                keyboardType: TextInputType.number,
-                validator: (value) {
-                  if (value!.isEmpty) {
-                    return 'Por favor, insira sua altura.';
-                  }
-                  return null;
-                },
-              ),
-              SizedBox(height: 16.0),
-              DropdownButtonFormField(
-                value: _gender,
-                items: ['Masculino', 'Feminino']
-                    .map<DropdownMenuItem<String>>((String value) {
-                  return DropdownMenuItem<String>(
-                    value: value,
-                    child: Text(value),
-                  );
-                }).toList(),
-                decoration: InputDecoration(
-                  labelText: 'Gênero',
-                  border: OutlineInputBorder(),
+                SizedBox(height: 16.0),
+                DropdownButtonFormField(
+                  value: _gender,
+                  items: ['Masculino', 'Feminino']
+                      .map<DropdownMenuItem<String>>((String value) {
+                    return DropdownMenuItem<String>(
+                      value: value,
+                      child: Text(value),
+                    );
+                  }).toList(),
+                  decoration: InputDecoration(
+                    labelText: 'Gênero',
+                    border: OutlineInputBorder(),
+                  ),
+                  onChanged: (String? newValue) {
+                    setState(() {
+                      _gender = newValue!;
+                    });
+                  },
                 ),
-                onChanged: (String? newValue) {
-                  setState(() {
-                    _gender = newValue!;
-                  });
-                },
-              ),
-              SizedBox(height: 16.0),
-              ElevatedButton(
-                onPressed: () {
-                  if (_formKey.currentState!.validate()) {
-                    // Fazer alguma coisa com os dados do formulário
-                  }
-                },
-                style: ElevatedButton.styleFrom(
-                  primary: Color(0xFF78F259),
-                  minimumSize:
-                      Size(200, 50), // define o tamanho mínimo do botão
+                SizedBox(height: 16.0),
+                ElevatedButton(
+                  onPressed: () {
+                    if (_formKey.currentState!.validate()) {
+                      // Fazer alguma coisa com os dados do formulário
+                    }
+                  },
+                  style: ElevatedButton.styleFrom(
+                    primary: const Color(0xFF78F259),
+                    minimumSize: const Size(200, 50),
+                  ),
+                  child: Text('Pronto', style: TextStyle(color: Colors.black)),
                 ),
-                child: Text('Pronto', style: TextStyle(color: Colors.black)),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
-    ),
     );
   }
 }

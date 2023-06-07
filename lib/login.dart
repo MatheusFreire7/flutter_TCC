@@ -24,7 +24,7 @@ class _LoginPageState extends State<LoginPage> {
 
       if (response.statusCode == 200) {
         // Se o login foi bem sucedido, navegue para a tela inicial
-         Navigator.push(
+        Navigator.push(
           context,
           MaterialPageRoute(builder: (context) => TelaInicial()),
         );
@@ -58,125 +58,130 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-     debugShowCheckedModeBanner: false,
-      theme:AppTheme.themeData,
-
-     home : Scaffold(
-      appBar: AppBar(
-       iconTheme: IconThemeData(color: AppTheme.iconColor), // Define a cor do ícone na app bar
-       backgroundColor: AppTheme.appBarColor,
-        //title: const Text('Login'),
-        centerTitle: true,
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Form(  
-          key: _formKey,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: <Widget>[
-              Center(
-                child: Container(
-                  height: 100.0,
-                  width: 200.0,
-                  child: Text(
-                    "FitLife", 
-                  style: TextStyle(
-                    fontFamily: 'Work Sans',
-                    fontSize: 64,
-                    fontStyle: FontStyle.italic,
-                   fontWeight: FontWeight.bold,
-                     )
-                  ),
-                ),
-              ),
-              const SizedBox(height: 3.0),
-              TextFormField(
-                controller: _emailController,
-                decoration: const InputDecoration(
-                  labelText: 'Email',
-                  border: const OutlineInputBorder(),
-                ),
-                keyboardType: TextInputType.emailAddress,
-                validator: (value) {
-                  if (value!.isEmpty) {
-                    return 'Por favor, insira seu email.';
-                  }
-                  return null;
-                },
-              ),
-              const SizedBox(height: 16.0),
-              TextFormField(
-                controller: _passwordController,
-                decoration: const InputDecoration(
-                  labelText: 'Senha',
-                  border: OutlineInputBorder(),
-                ),
-                obscureText: true,
-                validator: (value) {
-                  if (value!.isEmpty) {
-                    return 'Por favor, insira sua senha.';
-                  }
-                  return null;
-                },
-              ),
-              const SizedBox(height: 16.0),
-             SizedBox(
-                width: 50,
-                child: ElevatedButton(
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => TelaInicial()),
-                    );
-                  },
-                  style: ElevatedButton.styleFrom(
-                    primary: const Color(0xFF78F259),
-                    minimumSize: const Size(30, 50),
-                    padding: const EdgeInsets.symmetric(horizontal: 12),
-                  ),
-                  child: const Text('Entrar', style: TextStyle(color: Colors.black)),
-                ),
-              ),
-              const SizedBox(
-                height: 20,
-              ),
-              const Center(
-                child: Text(
-                  "Não tem Conta?",
-                  style: TextStyle(color: Colors.grey),
-                ),
-              ),
-              const SizedBox(
-                height: 10,
-              ),
-              Container(
-                color: const Color(0xFF78F259),
-                height: 40,
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    primary: const Color(0xFF78F259),
-                  ),
-                  child: const Text(
-                    "Cadastre-se",
-                    textAlign: TextAlign.center,
-                    style: const TextStyle(color: Colors.black),
-                  ),
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => CadastroPage(),
-                      ),
-                    );
-                  },
-                ),
-              ),
-            ],
+      debugShowCheckedModeBanner: false,
+      theme: AppTheme.themeData,
+      home: Scaffold(
+          appBar: AppBar(
+            iconTheme: IconThemeData(
+                color: AppTheme.iconColor), // Define a cor do ícone na app bar
+            backgroundColor: AppTheme.appBarColor,
+            //title: const Text('Login'),
+            centerTitle: true,
           ),
-        ),
-      ),
-    ),
+          body: SingleChildScrollView(
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Form(
+                key: _formKey,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: <Widget>[
+                    Center(
+                      child: Container(
+                        height: 100.0,
+                        width: 200.0,
+                        child: Text("FitLife",
+                            style: TextStyle(
+                              fontFamily: 'Work Sans',
+                              fontSize: 64,
+                              fontStyle: FontStyle.italic,
+                              fontWeight: FontWeight.bold,
+                            )),
+                      ),
+                    ),
+                    const SizedBox(height: 3.0),
+                    TextFormField(
+                      controller: _emailController,
+                      decoration: const InputDecoration(
+                        labelText: 'Email',
+                        border: const OutlineInputBorder(),
+                      ),
+                      keyboardType: TextInputType.emailAddress,
+                      validator: (value) {
+                        if (value!.isEmpty) {
+                          return 'Por favor, insira seu email.';
+                        }
+                        return null;
+                      },
+                    ),
+                    const SizedBox(height: 16.0),
+                    TextFormField(
+                      controller: _passwordController,
+                      decoration: const InputDecoration(
+                        labelText: 'Senha',
+                        border: OutlineInputBorder(),
+                      ),
+                      obscureText: true,
+                      validator: (value) {
+                        if (value!.isEmpty) {
+                          return 'Por favor, insira sua senha.';
+                        }
+                        return null;
+                      },
+                    ),
+                    const SizedBox(height: 16.0),
+                    SizedBox(
+                      width: 50,
+                      child: ElevatedButton(
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => TelaInicial()),
+                          );
+                        },
+                        style: ElevatedButton.styleFrom(
+                          primary: const Color(0xFF78F259),
+                          minimumSize: const Size(30, 50),
+                          padding: const EdgeInsets.symmetric(horizontal: 12),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(16.0),
+                          ),
+                        ),
+                        child: const Text('Entrar',
+                            style: TextStyle(color: Colors.black)),
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    const Center(
+                      child: Text(
+                        "Não tem Conta?",
+                        style: TextStyle(color: Colors.grey),
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        primary: const Color(0xFF78F259),
+                        minimumSize: const Size(30, 50),
+                        padding: const EdgeInsets.symmetric(horizontal: 12),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(16.0),
+                        ),
+                      ),
+                      child: const Text(
+                        "Cadastre-se",
+                        textAlign: TextAlign.center,
+                        style: const TextStyle(color: Colors.black),
+                      ),
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => CadastroPage(),
+                          ),
+                        );
+                      },
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          )),
     );
   }
 }
