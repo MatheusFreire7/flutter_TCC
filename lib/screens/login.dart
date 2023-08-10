@@ -1,8 +1,8 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:flutter_login/cadastro.dart';
-import 'package:flutter_login/telainicial.dart';
-import 'package:flutter_login/theme.dart';
+import 'package:flutter_login/screens/cadastro.dart';
+import 'package:flutter_login/screens/telainicial.dart';
+import 'package:flutter_login/settings/theme.dart';
 import 'package:http/http.dart' as http;
 
 class LoginPage extends StatefulWidget {

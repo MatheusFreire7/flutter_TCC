@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_login/appConfig.dart';
-import 'package:flutter_login/distancia.dart';
-import 'package:flutter_login/infoObri.dart';
-import 'package:flutter_login/login.dart';
-import 'package:flutter_login/telainicial.dart';
-import 'package:flutter_login/theme.dart';
+import 'package:flutter_login/settings/appConfig.dart';
+import 'package:flutter_login/widgets/distancia.dart';
+import 'package:flutter_login/screens/infoObri.dart';
+import 'package:flutter_login/screens/login.dart';
+import 'package:flutter_login/screens/telainicial.dart';
+import 'package:flutter_login/settings/theme.dart';
 
 ThemeData _themeData = AppTheme.themeData; // Use sua classe de tema global aqui
 
@@ -78,18 +78,18 @@ class _ConfiguracoesPageState extends State<ConfiguracoesPage> {
                 );
               },
             ),
-             ListTile(
-              leading: const Icon(Icons.directions_walk),
-              title: const Text('Distância Percorrida'),
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => DistanceTracker(),
-                  ),
-                );
-              },
-            ),
+            //  ListTile(
+            //   leading: const Icon(Icons.directions_walk),
+            //   title: const Text('Distância Percorrida'),
+            //   onTap: () {
+            //     Navigator.push(
+            //       context,
+            //       MaterialPageRoute(
+            //         builder: (context) => DistanceTracker(),
+            //       ),
+            //     );
+            //   },
+            // ),
             ListTile(
               leading: const Icon(Icons.notifications),
               title: const Text('Notificações'),

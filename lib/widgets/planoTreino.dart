@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_login/treino.dart';
+import 'package:flutter_login/widgets/treino.dart';
 
 class PlanoTreinoPage extends StatefulWidget {
   @override

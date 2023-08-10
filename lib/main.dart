@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_login/cadastro.dart';
-import 'package:flutter_login/config.dart';
-import 'package:flutter_login/formTreino.dart';
-import 'package:flutter_login/infoObri.dart';
-import 'package:flutter_login/telainicial.dart';
-import 'package:flutter_login/theme.dart';
-import 'login.dart';
+import 'package:flutter_login/screens/cadastro.dart';
+import 'package:flutter_login/settings/config.dart';
+import 'package:flutter_login/screens/formTreino.dart';
+import 'package:flutter_login/screens/infoObri.dart';
+import 'package:flutter_login/screens/telainicial.dart';
+import 'package:flutter_login/settings/theme.dart';
+import 'screens/login.dart';
 
 
 void main() {

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_login/telainicial.dart';
-import 'package:flutter_login/theme.dart';
+import 'package:flutter_login/screens/telainicial.dart';
+import 'package:flutter_login/settings/theme.dart';
 
 class FormScreen extends StatefulWidget {
   @override

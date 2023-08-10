@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_login/alimentSaudavel.dart';
-import 'package:flutter_login/config.dart';
-import 'package:flutter_login/infoObri.dart';
-import 'package:flutter_login/login.dart';
-import 'package:flutter_login/planoTreino.dart';
-import 'package:flutter_login/progresso.dart';
-import 'package:flutter_login/promotionBanner.dart';
-import 'package:flutter_login/suporte.dart';
-import 'package:flutter_login/testeApi.dart';
-import 'package:flutter_login/theme.dart';
+import 'package:flutter_login/widgets/alimentSaudavel.dart';
+import 'package:flutter_login/settings/config.dart';
+import 'package:flutter_login/screens/infoObri.dart';
+import 'package:flutter_login/screens/login.dart';
+import 'package:flutter_login/widgets/planoTreino.dart';
+import 'package:flutter_login/widgets/progresso.dart';
+import 'package:flutter_login/widgets/promotionBanner.dart';
+import 'package:flutter_login/settings/suporte.dart';
+import 'package:flutter_login/widgets/testeApi.dart';
+import 'package:flutter_login/settings/theme.dart';
 
 class TelaInicial extends StatefulWidget {
   @override

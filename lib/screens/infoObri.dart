@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_login/theme.dart';
+import 'package:flutter_login/settings/theme.dart';
 
 class PersonalInfoForm extends StatefulWidget {
   @override

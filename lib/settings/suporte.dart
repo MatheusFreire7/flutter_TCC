@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_login/screens/telainicial.dart';
+import 'package:flutter_login/settings/theme.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class SupportScreen extends StatelessWidget {
@@ -67,9 +69,20 @@ class SupportScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      theme: AppTheme.themeData,
+      home: Scaffold(
       appBar: AppBar(
-        title: Text('Suporte'),
+          iconTheme: IconThemeData(color: AppTheme.iconColor),
+          backgroundColor: AppTheme.appBarColor,
+          centerTitle: true,
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back),
+            onPressed: () {
+              Navigator.pop(context);
+            },
+          ),
       ),
       body: Padding(
         padding: EdgeInsets.all(16.0),
@@ -114,6 +127,7 @@ class SupportScreen extends StatelessWidget {
           ],
         ),
       ),
+    ),
     );
   }
 }
