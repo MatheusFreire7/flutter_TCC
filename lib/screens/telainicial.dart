@@ -174,10 +174,6 @@ class _TelaInicialState extends State<TelaInicial> {
                 )
               ],
             ),
-            // PromotionBanner(
-            //   imageUrl: 'imagem',
-            //   text: 'Seja Bem vindo!',
-            // ),
             Expanded(
               child: Padding(
                 padding: const EdgeInsets.all(16.0),
@@ -187,18 +183,20 @@ class _TelaInicialState extends State<TelaInicial> {
                   crossAxisSpacing: 16,
                   children: [
                     CustomCard(
-                      title: 'Informações Pessoais',
-                      icon: Icons.person,
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => PersonalInfoForm(),
-                          ),
-                        );
-                      },
-                    ),
+                        color: Colors.indigo, // Defina a cor de fundo aqui
+                        title: 'Informações Pessoais',
+                        icon: Icons.person,
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => PersonalInfoForm(),
+                            ),
+                          );
+                        },
+                      ),
                     CustomCard(
+                       color: Colors.cyan, // Defina a cor de fundo aqui
                       title: 'Plano de Treino',
                       icon: Icons.fitness_center,
                       onTap: () {
@@ -211,6 +209,7 @@ class _TelaInicialState extends State<TelaInicial> {
                       },
                     ),
                     CustomCard(
+                       color: Colors.lime, // Defina a cor de fundo aqui
                       title: 'Plano de Dieta',
                       icon: Icons.food_bank,
                       onTap: () {
@@ -223,6 +222,7 @@ class _TelaInicialState extends State<TelaInicial> {
                       },
                     ),
                     CustomCard(
+                       color: Colors.brown, // Defina a cor de fundo aqui
                       title: 'Lista de Exercícios',
                       icon: Icons.list_alt,
                       onTap: () {
@@ -235,6 +235,7 @@ class _TelaInicialState extends State<TelaInicial> {
                       },
                     ),
                      CustomCard(
+                      color: Colors.orange, // Defina a cor de fundo aqui
                       title: 'Progresso',
                       icon: Icons.trending_up,
                       onTap: () {
@@ -247,6 +248,7 @@ class _TelaInicialState extends State<TelaInicial> {
                       },
                     ),
                     CustomCard(
+                       color: Colors.red, // Defina a cor de fundo aqui
                       title: 'Alimentos Saudáveis',
                       icon: Icons.restaurant_menu,
                       onTap: () {
@@ -259,6 +261,7 @@ class _TelaInicialState extends State<TelaInicial> {
                       },
                     ),
                     CustomCard(
+                       color: Colors.grey, // Defina a cor de fundo aqui
                       title: 'Configurações',
                       icon: Icons.settings,
                       onTap: () {
@@ -271,6 +274,7 @@ class _TelaInicialState extends State<TelaInicial> {
                       },
                     ),
                     CustomCard(
+                       color: Colors.lightGreenAccent, // Defina a cor de fundo aqui
                       title: 'Suporte',
                       icon: Icons.help_outline,
                       onTap: () {
@@ -323,11 +327,13 @@ class CustomCard extends StatelessWidget {
   final String title;
   final IconData icon;
   final VoidCallback onTap;
+  final Color color; // Adicionamos a propriedade de cor aqui
 
   const CustomCard({
     required this.title,
     required this.icon,
     required this.onTap,
+    required this.color, // Passamos a cor como parâmetro
   });
 
   @override
@@ -339,6 +345,7 @@ class CustomCard extends StatelessWidget {
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(8),
         ),
+        color: color, // Usamos a cor fornecida no fundo do Card
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [

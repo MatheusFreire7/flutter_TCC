@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class AppConfig {
-  static ThemeData themeData = ThemeData.light();
+  static ThemeData themeData = ThemeData.light(useMaterial3: true);
   static Color appBarColor = Colors.white;
   static Color iconColor = Colors.black;
   static bool notificationsEnabled = true;
