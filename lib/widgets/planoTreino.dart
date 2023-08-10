@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_login/settings/theme.dart';
 import 'package:flutter_login/widgets/treino.dart';
 
 class PlanoTreinoPage extends StatefulWidget {
@@ -11,9 +12,20 @@ class _PlanoTreinoPageState extends State<PlanoTreinoPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Plano de Treino'),
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      theme: AppTheme.themeData,
+      home: Scaffold(
+     appBar: AppBar(
+          iconTheme: IconThemeData(color: AppTheme.iconColor),
+          backgroundColor: AppTheme.appBarColor,
+          centerTitle: true,
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back),
+            onPressed: () {
+              Navigator.pop(context);
+            },
+          ),
       ),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -74,6 +86,7 @@ class _PlanoTreinoPageState extends State<PlanoTreinoPage> {
           ),
         ],
       ),
+    ),
     );
   }
 
