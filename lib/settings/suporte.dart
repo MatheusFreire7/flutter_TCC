@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_login/screens/telainicial.dart';
 import 'package:flutter_login/settings/theme.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -89,27 +88,27 @@ class SupportScreen extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
+            const Text(
               'Entre em contato conosco',
               style: TextStyle(
                 fontSize: 24.0,
                 fontWeight: FontWeight.bold,
               ),
             ),
-            SizedBox(height: 16.0),
-            Text(
+            const SizedBox(height: 16.0),
+            const Text(
               'Se você tiver alguma dúvida ou precisar de suporte, não hesite em entrar em contato conosco. Estamos aqui para ajudar!',
               style: TextStyle(fontSize: 16.0),
             ),
-            SizedBox(height: 24.0),
-            Text(
+            const SizedBox(height: 24.0),
+            const Text(
               'Informações de Contato:',
               style: TextStyle(
                 fontSize: 20.0,
                 fontWeight: FontWeight.bold,
               ),
             ),
-            SizedBox(height: 16.0),
+            const SizedBox(height: 16.0),
             ListTile(
               leading: Icon(Icons.email),
               title: Text('E-mail: $email'),

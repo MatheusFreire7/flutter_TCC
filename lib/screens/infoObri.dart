@@ -37,6 +37,15 @@ class _PersonalInfoFormState extends State<PersonalInfoForm> {
               Navigator.pop(context);
             },
           ),
+          title: Text(
+            "Informações Pessoais",
+            style: TextStyle(
+              fontFamily: 'Work Sans',
+              fontSize: 24,
+              fontWeight: FontWeight.bold,
+              color: AppTheme.iconColor, //Deixa a cor do texto dinâmica de acordo com o tema selecionando
+            ),
+          ),
         ),
         body: Padding(
           padding: EdgeInsets.all(16.0),
@@ -45,99 +54,78 @@ class _PersonalInfoFormState extends State<PersonalInfoForm> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: <Widget>[
-                Center(
-                  child: Text(
-                    "Informações Pessoais",
-                    style: TextStyle(
-                      fontFamily: 'Work Sans',
-                      fontSize: 25,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ),
-                SizedBox(height: 16.0),
-                TextFormField(
-                  controller: _ageController,
-                  decoration: InputDecoration(
-                    labelText: 'Idade',
-                    border: OutlineInputBorder(),
-                  ),
-                  keyboardType: TextInputType.number,
-                  validator: (value) {
-                    if (value!.isEmpty) {
-                      return 'Por favor, insira sua idade.';
-                    }
-                    return null;
-                  },
-                ),
-                SizedBox(height: 16.0),
-                TextFormField(
-                  controller: _weightController,
-                  decoration: InputDecoration(
-                    labelText: 'Peso (kg)',
-                    border: OutlineInputBorder(),
-                  ),
-                  keyboardType: TextInputType.number,
-                  validator: (value) {
-                    if (value!.isEmpty) {
-                      return 'Por favor, insira seu peso.';
-                    }
-                    return null;
-                  },
-                ),
-                SizedBox(height: 16.0),
-                TextFormField(
-                  controller: _heightController,
-                  decoration: InputDecoration(
-                    labelText: 'Altura (cm)',
-                    border: OutlineInputBorder(),
-                  ),
-                  keyboardType: TextInputType.number,
-                  validator: (value) {
-                    if (value!.isEmpty) {
-                      return 'Por favor, insira sua altura.';
-                    }
-                    return null;
-                  },
-                ),
-                SizedBox(height: 16.0),
-                DropdownButtonFormField(
-                  value: _gender,
-                  items: ['Masculino', 'Feminino']
-                      .map<DropdownMenuItem<String>>((String value) {
-                    return DropdownMenuItem<String>(
-                      value: value,
-                      child: Text(value),
-                    );
-                  }).toList(),
-                  decoration: InputDecoration(
-                    labelText: 'Gênero',
-                    border: OutlineInputBorder(),
-                  ),
-                  onChanged: (String? newValue) {
-                    setState(() {
-                      _gender = newValue!;
-                    });
-                  },
-                ),
-                SizedBox(height: 16.0),
-                ElevatedButton(
-                  onPressed: () {
-                    if (_formKey.currentState!.validate()) {
-                      // Fazer alguma coisa com os dados do formulário
-                    }
-                  },
-                  style: ElevatedButton.styleFrom(
-                    primary: const Color(0xFF78F259),
-                    minimumSize: const Size(200, 50),
-                  ),
-                  child: Text('Pronto', style: TextStyle(color: Colors.black)),
-                ),
+                _buildTextField("Idade", _ageController),
+                const SizedBox(height: 12.0),
+                _buildTextField("Peso (kg)", _weightController),
+                const SizedBox(height: 12.0),
+                _buildTextField("Altura (cm)", _heightController),
+                const SizedBox(height: 12.0),
+                _buildGenderDropdown(),
+                const SizedBox(height: 24.0),
+                _buildSubmitButton(),
               ],
             ),
           ),
         ),
       ),
+    );
+  }
+
+  Widget _buildTextField(String label, TextEditingController controller) {
+    return TextFormField(
+      controller: controller,
+      decoration: InputDecoration(
+        labelText: label,
+        border: const OutlineInputBorder(),
+      ),
+      keyboardType: TextInputType.number,
+      validator: (value) {
+        if (value!.isEmpty) {
+          return 'Por favor, insira $label.';
+        }
+        return null;
+      },
+    );
+  }
+
+  Widget _buildGenderDropdown() {
+    return DropdownButtonFormField(
+      value: _gender,
+      items: ['Masculino', 'Feminino']
+          .map<DropdownMenuItem<String>>((String value) {
+        return DropdownMenuItem<String>(
+          value: value,
+          child: Text(value),
+        );
+      }).toList(),
+      decoration: const InputDecoration(
+        labelText: 'Gênero',
+        border: OutlineInputBorder(),
+      ),
+      onChanged: (String? newValue) {
+        setState(() {
+          _gender = newValue!;
+        });
+      },
+    );
+  }
+
+  Widget _buildSubmitButton() {
+    return ElevatedButton(
+      onPressed: () {
+        if (_formKey.currentState!.validate()) {
+          // Fazer alguma coisa com os dados do formulário
+        }
+      },
+      style: ElevatedButton.styleFrom(
+         backgroundColor: const Color(0xFF78F259),
+         minimumSize: const Size(30, 55),
+         padding: const EdgeInsets.symmetric(horizontal: 12),
+         shape: RoundedRectangleBorder(
+               borderRadius: BorderRadius.circular(16.0),
+         ),
+      ),
+      child: const Text('Pronto', style: TextStyle(color: Colors.black, fontSize: 18, fontWeight: FontWeight.w900)),
     );
   }
 }

@@ -55,7 +55,7 @@ class _ExerciseListState extends State<ExerciseList> {
     return Scaffold(
       appBar: AppBar(
        backgroundColor: Colors.white,
-       iconTheme: IconThemeData(color: Colors.black),
+       iconTheme: const IconThemeData(color: Colors.black),
         //title: const Text('Lista de Exercícios'),
         centerTitle: true,
         leading: IconButton(

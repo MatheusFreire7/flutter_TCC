@@ -1,7 +1,9 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_login/screens/cadastro.dart';
 import 'package:flutter_login/screens/telainicial.dart';
+import 'package:flutter_login/service/localNotification.dart';
 import 'package:flutter_login/settings/theme.dart';
 import 'package:http/http.dart' as http;
 
@@ -11,6 +13,15 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+
+ @override
+  void initState() {
+    super.initState();
+
+    localNotification.initilize(flutterLocalNotificationsPlugin);
+  }
+
+
   Future<void> login(String email, String password) async {
     try {
       final response = await http.post(
@@ -32,9 +43,9 @@ class _LoginPageState extends State<LoginPage> {
         // Se o login falhar, mostre uma mensagem de erro
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
-            content: const Text(
+            content:  Text(
                 'Login inválido. Verifique suas credenciais e tente novamente.'),
-            duration: const Duration(seconds: 3),
+            duration:  Duration(seconds: 3),
           ),
         );
       }
@@ -47,6 +58,7 @@ class _LoginPageState extends State<LoginPage> {
   final _formKey = GlobalKey<FormState>();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
+  final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
 
   @override
   void dispose() {
@@ -54,6 +66,7 @@ class _LoginPageState extends State<LoginPage> {
     _passwordController.dispose();
     super.dispose();
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -80,7 +93,7 @@ class _LoginPageState extends State<LoginPage> {
                       child: Container(
                         height: 100.0,
                         width: 200.0,
-                        child: Text("FitLife",
+                        child: const Text("FitLife",
                             style: TextStyle(
                               fontFamily: 'Work Sans',
                               fontSize: 64,
@@ -132,14 +145,14 @@ class _LoginPageState extends State<LoginPage> {
                         },
                         style: ElevatedButton.styleFrom(
                           primary: const Color(0xFF78F259),
-                          minimumSize: const Size(30, 50),
+                          minimumSize: const Size(30, 55),
                           padding: const EdgeInsets.symmetric(horizontal: 12),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(16.0),
                           ),
                         ),
                         child: const Text('Entrar',
-                            style: TextStyle(color: Colors.black)),
+                            style: TextStyle(color: Colors.black, fontSize: 18, fontWeight: FontWeight.w900)),
                       ),
                     ),
                     const SizedBox(
@@ -148,7 +161,7 @@ class _LoginPageState extends State<LoginPage> {
                     const Center(
                       child: Text(
                         "Não tem Conta?",
-                        style: TextStyle(color: Colors.grey),
+                        style: TextStyle(color: Colors.grey, fontSize: 16),
                       ),
                     ),
                     const SizedBox(
@@ -157,7 +170,7 @@ class _LoginPageState extends State<LoginPage> {
                     ElevatedButton(
                       style: ElevatedButton.styleFrom(
                         primary: const Color(0xFF78F259),
-                        minimumSize: const Size(30, 50),
+                        minimumSize: const Size(30, 55),
                         padding: const EdgeInsets.symmetric(horizontal: 12),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(16.0),
@@ -166,9 +179,10 @@ class _LoginPageState extends State<LoginPage> {
                       child: const Text(
                         "Cadastre-se",
                         textAlign: TextAlign.center,
-                        style: const TextStyle(color: Colors.black),
+                        style: TextStyle(color: Colors.black, fontSize: 18, fontWeight: FontWeight.w900),
                       ),
                       onPressed: () {
+                        //localNotification.showBigTextNotification(title: "teste", body: "mensagem", flutterLocalNotificationsPlugin: flutterLocalNotificationsPlugin);
                         Navigator.push(
                           context,
                           MaterialPageRoute(

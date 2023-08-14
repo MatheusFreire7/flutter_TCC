@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
 
+import '../settings/theme.dart';
+
 class Progresso extends StatelessWidget {
   final List<charts.Series<ProgressoData, String>> seriesList;
   final bool animate;
@@ -16,9 +18,22 @@ class Progresso extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return MaterialApp(
+       debugShowCheckedModeBanner: false,
+      theme: AppTheme.themeData,
+      home: Scaffold(
       appBar: AppBar(
-        title: Text('Progresso'),
+          iconTheme: IconThemeData(
+            color: AppTheme.iconColor), // Define a cor do ícone na app bar
+            backgroundColor: AppTheme.appBarColor,
+            //title: const Text('Progresso'),
+            centerTitle: true,
+            leading: IconButton(
+              icon: const Icon(Icons.arrow_back),
+              onPressed: () {
+                Navigator.pop(context);
+              },
+            ),
       ),
       body: Padding(
         padding: EdgeInsets.all(16.0),
@@ -48,7 +63,7 @@ class Progresso extends StatelessWidget {
                     fontSize: 12,
                   ),
                 ),
-                domainAxis:const  charts.OrdinalAxisSpec(
+                domainAxis:const charts.OrdinalAxisSpec(
                   renderSpec: charts.SmallTickRendererSpec(
                     labelStyle: charts.TextStyleSpec(
                       color: charts.MaterialPalette.black,
@@ -72,6 +87,7 @@ class Progresso extends StatelessWidget {
           ],
         ),
       ),
+    ),
     );
   }
 }

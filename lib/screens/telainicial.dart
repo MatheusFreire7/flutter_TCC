@@ -2,12 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_login/widgets/alimentSaudavel.dart';
 import 'package:flutter_login/settings/config.dart';
 import 'package:flutter_login/screens/infoObri.dart';
-import 'package:flutter_login/screens/login.dart';
 import 'package:flutter_login/widgets/planoTreino.dart';
 import 'package:flutter_login/widgets/progresso.dart';
-import 'package:flutter_login/widgets/promotionBanner.dart';
 import 'package:flutter_login/settings/suporte.dart';
-import 'package:flutter_login/widgets/testeApi.dart';
 import 'package:flutter_login/settings/theme.dart';
 
 class TelaInicial extends StatefulWidget {
@@ -16,13 +13,6 @@ class TelaInicial extends StatefulWidget {
 }
 
 class _TelaInicialState extends State<TelaInicial> {
-  int _selectedIndex = 0;
-
-  void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -53,7 +43,7 @@ class _TelaInicialState extends State<TelaInicial> {
           child: ListView(
             padding: EdgeInsets.zero,
             children: <Widget>[
-              UserAccountsDrawerHeader(
+              const UserAccountsDrawerHeader(
                 accountName: Text(
                   "Nome do usuário",
                   style: TextStyle(color: Colors.black),
@@ -61,12 +51,12 @@ class _TelaInicialState extends State<TelaInicial> {
                 accountEmail: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    SizedBox(height: 8), 
+                    SizedBox(height: 8),
                     Text(
                       "email_do_usuario@gmail.com",
                       style: TextStyle(color: Colors.black),
                     ),
-                    SizedBox(height: 8), 
+                    SizedBox(height: 8),
                     Text(
                       "IMC Atual:",
                       style: TextStyle(color: Colors.black),
@@ -75,11 +65,15 @@ class _TelaInicialState extends State<TelaInicial> {
                 ),
                 currentAccountPicture: CircleAvatar(
                   backgroundImage: AssetImage('assets/images/user_profile.png'),
-                  backgroundColor: Color(0xFF29B405),
+                  backgroundColor: Colors.lightBlue,
                 ),
-                decoration: BoxDecoration(
-                  color: Color(0xFF78F259),
-                ),
+                   decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      colors: [Colors.cyan, Colors.blue], // Cores do degradê
+                      begin: Alignment.topCenter,
+                      end: Alignment.bottomCenter,
+                    ),
+                  ),
               ),
               ListTile(
                 title: const Text('Informações Pessoais'),
@@ -158,15 +152,23 @@ class _TelaInicialState extends State<TelaInicial> {
                   child: Container(
                     height: 100.0,
                     width: 200.0,
-                    child: Align(
+                    decoration: const BoxDecoration(
+                    gradient: LinearGradient(
+                      colors: [Colors.cyan, Colors.blue], // Cores do degradê
+                      begin: Alignment.topCenter,
+                      end: Alignment.bottomCenter,
+                    ),
+                  ),
+                    child: const Align(
                       alignment: Alignment.center,
-                      child: Text(
+                      child:  Text(
                         "FitLife",
                         style: TextStyle(
                           fontFamily: 'Work Sans',
                           fontSize: 64,
                           fontStyle: FontStyle.italic,
                           fontWeight: FontWeight.bold,
+                          color: Colors.white
                         ),
                       ),
                     ),
@@ -183,20 +185,20 @@ class _TelaInicialState extends State<TelaInicial> {
                   crossAxisSpacing: 16,
                   children: [
                     CustomCard(
-                        color: Colors.indigo, // Defina a cor de fundo aqui
-                        title: 'Informações Pessoais',
-                        icon: Icons.person,
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => PersonalInfoForm(),
-                            ),
-                          );
-                        },
-                      ),
+                      color: Colors.indigo, // Defina a cor de fundo aqui
+                      title: 'Informações Pessoais',
+                      icon: Icons.person,
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => PersonalInfoForm(),
+                          ),
+                        );
+                      },
+                    ),
                     CustomCard(
-                       color: Colors.cyan, // Defina a cor de fundo aqui
+                      color: Colors.cyan, // Defina a cor de fundo aqui
                       title: 'Plano de Treino',
                       icon: Icons.fitness_center,
                       onTap: () {
@@ -209,7 +211,7 @@ class _TelaInicialState extends State<TelaInicial> {
                       },
                     ),
                     CustomCard(
-                       color: Colors.lime, // Defina a cor de fundo aqui
+                      color: Colors.lime, // Defina a cor de fundo aqui
                       title: 'Plano de Dieta',
                       icon: Icons.food_bank,
                       onTap: () {
@@ -222,7 +224,7 @@ class _TelaInicialState extends State<TelaInicial> {
                       },
                     ),
                     CustomCard(
-                       color: Colors.brown, // Defina a cor de fundo aqui
+                      color: Colors.brown, // Defina a cor de fundo aqui
                       title: 'Lista de Exercícios',
                       icon: Icons.list_alt,
                       onTap: () {
@@ -234,12 +236,12 @@ class _TelaInicialState extends State<TelaInicial> {
                         );
                       },
                     ),
-                     CustomCard(
+                    CustomCard(
                       color: Colors.orange, // Defina a cor de fundo aqui
                       title: 'Progresso',
                       icon: Icons.trending_up,
                       onTap: () {
-                       Navigator.push(
+                        Navigator.push(
                           context,
                           MaterialPageRoute(
                             builder: (context) => Progresso.withSampleData(),
@@ -248,20 +250,19 @@ class _TelaInicialState extends State<TelaInicial> {
                       },
                     ),
                     CustomCard(
-                       color: Colors.red, // Defina a cor de fundo aqui
+                      color: Colors.red, // Defina a cor de fundo aqui
                       title: 'Alimentos Saudáveis',
                       icon: Icons.restaurant_menu,
                       onTap: () {
-                       Navigator.push(
+                        Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => AlimentacaoSaudavel()
-                          ),
+                              builder: (context) => AlimentacaoSaudavel()),
                         );
                       },
                     ),
                     CustomCard(
-                       color: Colors.grey, // Defina a cor de fundo aqui
+                      color: Colors.grey, // Defina a cor de fundo aqui
                       title: 'Configurações',
                       icon: Icons.settings,
                       onTap: () {
@@ -274,7 +275,8 @@ class _TelaInicialState extends State<TelaInicial> {
                       },
                     ),
                     CustomCard(
-                       color: Colors.lightGreenAccent, // Defina a cor de fundo aqui
+                      color:
+                          Colors.lightGreenAccent, // Defina a cor de fundo aqui
                       title: 'Suporte',
                       icon: Icons.help_outline,
                       onTap: () {
@@ -292,32 +294,6 @@ class _TelaInicialState extends State<TelaInicial> {
             ),
           ],
         ),
-        // bottomNavigationBar: BottomNavigationBar(
-        //   items: const [
-        //     BottomNavigationBarItem(
-        //       icon: Icon(Icons.home),
-        //       backgroundColor: Colors.blueGrey,
-        //       label: 'Início',
-        //     ),
-        //     BottomNavigationBarItem(
-        //       icon: Icon(Icons.settings),
-        //       backgroundColor: Colors.blueGrey,
-        //       label: 'Configurações',
-        //     ),
-        //     BottomNavigationBarItem(
-        //       icon: Icon(Icons.person),
-        //       backgroundColor: Colors.blueGrey,
-        //       label: 'Login',
-        //     ),
-        //     BottomNavigationBarItem(
-        //       icon: Icon(Icons.fitness_center),
-        //       label: 'Exercícios',
-        //     ),
-        //   ],
-        //   currentIndex: _selectedIndex,
-        //   selectedItemColor: Colors.blue,
-        //   onTap: _onItemTapped,
-        // ),
       ),
     );
   }
@@ -353,11 +329,11 @@ class CustomCard extends StatelessWidget {
               icon,
               size: 48,
             ),
-            SizedBox(height: 8),
+            const SizedBox(height: 8),
             Text(
               title,
               textAlign: TextAlign.center,
-              style: TextStyle(
+              style: const TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.bold,
               ),
@@ -368,6 +344,3 @@ class CustomCard extends StatelessWidget {
     );
   }
 }
-
-
-

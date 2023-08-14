@@ -100,7 +100,7 @@ class _CadastroPageState extends State<CadastroPage> {
           ),
           body: SingleChildScrollView(
             child: Padding(
-              padding: EdgeInsets.all(16.0),
+              padding: const EdgeInsets.all(16.0),
               child: Form(
                 key: _formKey,
                 child: Column(
@@ -110,7 +110,7 @@ class _CadastroPageState extends State<CadastroPage> {
                       child: Container(
                         height: 100.0,
                         width: 200.0,
-                        child: Text("FitLife",
+                        child: const Text("FitLife",
                             style: TextStyle(
                               fontFamily: 'Work Sans',
                               fontSize: 64,
@@ -119,7 +119,7 @@ class _CadastroPageState extends State<CadastroPage> {
                             )),
                       ),
                     ),
-                    SizedBox(height: 3.0),
+                    const SizedBox(height: 3.0),
                     TextFormField(
                       controller: _emailController,
                       decoration: const InputDecoration(
@@ -134,7 +134,7 @@ class _CadastroPageState extends State<CadastroPage> {
                         return null;
                       },
                     ),
-                    SizedBox(height: 16.0),
+                    const SizedBox(height: 16.0),
                     TextFormField(
                       controller: _passwordController,
                       decoration: const InputDecoration(
@@ -149,7 +149,7 @@ class _CadastroPageState extends State<CadastroPage> {
                         return null;
                       },
                     ),
-                    SizedBox(height: 16.0),
+                    const SizedBox(height: 16.0),
                     TextFormField(
                       controller: _confirmPasswordController,
                       decoration: const InputDecoration(
@@ -178,12 +178,15 @@ class _CadastroPageState extends State<CadastroPage> {
                         );
                       },
                       style: ElevatedButton.styleFrom(
-                        primary: Color(0xFF78F259),
-                        minimumSize: const Size(
-                            200, 50), // define o tamanho mínimo do botão
+                        backgroundColor: Color(0xFF78F259),
+                        minimumSize: const Size(30, 55), // define o tamanho mínimo do botão
+                        padding: const EdgeInsets.symmetric(horizontal: 12),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(16.0),
+                        ),
                       ),
                       child: const Text('Cadastrar',
-                          style: TextStyle(color: Colors.black)),
+                          style: TextStyle(color: Colors.black, fontSize: 18, fontWeight: FontWeight.w900)),
                     ),
                   ],
                 ),

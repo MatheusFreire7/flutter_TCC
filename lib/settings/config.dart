@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_login/settings/appConfig.dart';
-import 'package:flutter_login/widgets/distancia.dart';
 import 'package:flutter_login/screens/infoObri.dart';
 import 'package:flutter_login/screens/login.dart';
 import 'package:flutter_login/screens/telainicial.dart';
@@ -78,18 +77,6 @@ class _ConfiguracoesPageState extends State<ConfiguracoesPage> {
                 );
               },
             ),
-            //  ListTile(
-            //   leading: const Icon(Icons.directions_walk),
-            //   title: const Text('Distância Percorrida'),
-            //   onTap: () {
-            //     Navigator.push(
-            //       context,
-            //       MaterialPageRoute(
-            //         builder: (context) => DistanceTracker(),
-            //       ),
-            //     );
-            //   },
-            // ),
             ListTile(
               leading: const Icon(Icons.notifications),
               title: const Text('Notificações'),

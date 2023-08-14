@@ -32,7 +32,7 @@ class _AlimentacaoSaudavelState extends State<AlimentacaoSaudavel> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Alimentação Saudável'),
+        title: const Text('Alimentação Saudável'),
       ),
       body: ListView.builder(
         itemCount: alimentos.length,
@@ -45,12 +45,12 @@ class _AlimentacaoSaudavelState extends State<AlimentacaoSaudavel> {
               subtitle: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  SizedBox(height: 4),
+                  const SizedBox(height: 4),
                   Text('Calorias: ${alimento.calorias.toStringAsFixed(2)}'),
                   Text('Proteínas: ${alimento.proteinas.toStringAsFixed(2)}'),
                   Text('Gorduras: ${alimento.gorduras.toStringAsFixed(2)}'),
                   Text('Carboidratos: ${alimento.carboidratos.toStringAsFixed(2)}'),
-                  SizedBox(height: 4),
+                  const SizedBox(height: 4),
                 ],
               ),
             ),

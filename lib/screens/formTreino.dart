@@ -44,7 +44,7 @@ class _FormScreenState extends State<FormScreen> {
                     child: Container(
                       height: 100.0,
                       width: 200.0,
-                      child: Text(
+                      child: const Text(
                         "FitLife",
                         style: TextStyle(
                           fontFamily: 'Work Sans',
@@ -142,10 +142,14 @@ class _FormScreenState extends State<FormScreen> {
                         ),
                       );
                     },
-                    child: Text('Montar Treino', style: TextStyle(color: Colors.black)),
+                    child: Text('Montar Treino', style: TextStyle(color: Colors.black, fontSize: 18, fontWeight: FontWeight.w900)),
                     style: ElevatedButton.styleFrom(
-                      primary: const Color(0xFF78F259),
-                      minimumSize: const Size(double.infinity, 48),
+                        primary: const Color(0xFF78F259),
+                        minimumSize: const Size(30, 55),
+                        padding: const EdgeInsets.symmetric(horizontal: 12),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(16.0),
+                        ),
                     ),
                   ),
                 ],

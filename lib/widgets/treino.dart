@@ -29,19 +29,19 @@ class TreinoDetalhes extends StatelessWidget {
                 children: [
                   //Image.network(imageUrl),
                   Text(imageUrl),
-                  SizedBox(height: 16.0),
+                  const SizedBox(height: 16.0),
                   Text(
                     title,
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontSize: 20.0,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  SizedBox(height: 8.0),
+                  const SizedBox(height: 8.0),
                   Text(series),
-                  SizedBox(height: 8.0),
+                  const SizedBox(height: 8.0),
                   Text(duration),
-                  SizedBox(height: 8.0),
+                  const SizedBox(height: 8.0),
                   Text(description),
                 ],
               ),
@@ -53,7 +53,7 @@ class TreinoDetalhes extends StatelessWidget {
               onPressed: () {
                 Navigator.pop(context);
               },
-              child: Text('Voltar'),
+              child: const Text('Voltar'),
             ),
           ),
         ],

@@ -4,7 +4,7 @@ class PromotionBanner extends StatelessWidget {
   final String imageUrl;
   final String text;
 
-  PromotionBanner({required this.imageUrl, required this.text});
+  const PromotionBanner({required this.imageUrl, required this.text});
 
   @override
   Widget build(BuildContext context) {
@@ -17,7 +17,7 @@ class PromotionBanner extends StatelessWidget {
         ),
       ),
       child: Padding(
-        padding: EdgeInsets.only(top: 30),
+        padding: const EdgeInsets.only(top: 30),
         child: Center(
           child: Text(
             text,
