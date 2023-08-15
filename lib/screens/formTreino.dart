@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_login/screens/telainicial.dart';
+import 'package:flutter_login/screens/selectTreino.dart';
 import 'package:flutter_login/settings/theme.dart';
 
 class FormScreen extends StatefulWidget {
@@ -126,23 +126,27 @@ class _FormScreenState extends State<FormScreen> {
                   const SizedBox(height: 32),
                   ElevatedButton(
                     onPressed: () {
-                      if (_formKey.currentState!.validate()) {
-                        _formKey.currentState?.save();
-                        // Chamar método para montar o treino
-                        print('Nome: $_name');
-                        print('Sexo: $_sex');
-                        print('Idade: $_age');
-                        print('Altura: $_height');
-                        print('Peso: $_weight');
-                      }
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => TelaInicial(),
-                        ),
-                      );
+                      // if (_formKey.currentState!.validate()) {
+                      //   _formKey.currentState?.save();
+                      //   // Chamar método para montar o treino
+                      //   print('Nome: $_name');
+                      //   print('Sexo: $_sex');
+                      //   print('Idade: $_age');
+                      //   print('Altura: $_height');
+                      //   print('Peso: $_weight');
+                      // }
+                       Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => PlanoTreinoDetalhes(
+                              title: "title",
+                              imageUrl: "imageUrl",
+                              name: "nome",
+                            ),
+                          ),
+                        );
                     },
-                    child: Text('Montar Treino', style: TextStyle(color: Colors.black, fontSize: 18, fontWeight: FontWeight.w900)),
+                    child: Text('Salvar', style: TextStyle(color: Colors.black, fontSize: 18, fontWeight: FontWeight.w900)),
                     style: ElevatedButton.styleFrom(
                         primary: const Color(0xFF78F259),
                         minimumSize: const Size(30, 55),

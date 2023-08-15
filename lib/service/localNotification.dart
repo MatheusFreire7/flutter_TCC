@@ -24,7 +24,7 @@ class localNotification {
       required FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin,
     })async {
       AndroidNotificationDetails androidNotificationDetails = const AndroidNotificationDetails(
-        'default_notification_channel_id',
+        'teste',
         "chanel_name",
         playSound: true,
         importance: Importance.max,
