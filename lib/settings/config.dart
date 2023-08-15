@@ -82,11 +82,10 @@ class _ConfiguracoesPageState extends State<ConfiguracoesPage> {
               title: const Text('Notificações'),
               trailing: Switch(
                 value:
-                    _notificacoesAtivas, // Valor da configuração de notificações
+                  AppTheme.notificationsEnabled, // Valor da configuração de notificações
                 onChanged: (value) {
                   setState(() {
-                    _notificacoesAtivas =
-                        value; // Atualizar o valor da configuração de notificações
+                    AppTheme.setNotification(value);
                   });
                 },
               ),
