@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:flutter_login/screens/telainicial.dart';
 import 'package:flutter_login/settings/theme.dart';
 import 'package:http/http.dart' as http;
 import 'formTreino.dart';
@@ -11,68 +12,76 @@ class CadastroPage extends StatefulWidget {
 
 class _CadastroPageState extends State<CadastroPage> {
   final _formKey = GlobalKey<FormState>();
+   final _usuarioController = TextEditingController();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   final _confirmPasswordController = TextEditingController();
 
-  Future<void> _cadastrar() async {
-    final email = _emailController.text.trim();
-    final password = _passwordController.text.trim();
+ Future<void> _cadastrar() async {
+  final usuario = _usuarioController.text.trim();
+  final email = _emailController.text.trim();
+  final password = _passwordController.text.trim();
 
-    try {
-      final url = Uri.parse('http://localhost:3000/cadastro');
-      final response = await http.post(
-        url,
-        headers: {'Content-Type': 'application/json'},
-        body: jsonEncode({'username': email, 'password': password}),
+  try {
+    final url = Uri.parse('http://localhost:3000/cadastro');
+    final response = await http.post(
+      url,
+      body: jsonEncode({
+        'idUsuario': '0',
+        'nomeUsuario': usuario,
+        'emailUsuario': email,
+        'senhaUsuario': password,
+      }),
+       headers: {'Content-Type': 'application/json'},
+    );
+
+    if (response.statusCode == 200) {
+      // Cadastro realizado com sucesso
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => TelaInicial(),
+        ),
       );
-
-      if (response.statusCode == 200) {
-        // Cadastro realizado com sucesso
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => FormScreen(),
-          ),
-        );
-      } else {
-        // Erro ao realizar cadastro
-        final error = response.body;
-        showDialog(
-          context: context,
-          builder: (context) => AlertDialog(
-            title: Text('Erro'),
-            content: Text(error),
-            actions: <Widget>[
-              TextButton(
-                onPressed: () => Navigator.pop(context),
-                child: Text('Ok'),
-              ),
-            ],
-          ),
-        );
-      }
-    } catch (e) {
-      // Lidar com a exceção aqui
-      print('Erro: $e');
+    } else {
+      // Erro ao realizar cadastro
+      final error = response.body;
       showDialog(
         context: context,
         builder: (context) => AlertDialog(
-          title: const Text('Erro'),
-          content: const Text('Ocorreu um erro ao realizar o cadastro.'),
+          title: Text('Erro'),
+          content: Text(error),
           actions: <Widget>[
             TextButton(
               onPressed: () => Navigator.pop(context),
-              child: const Text('Ok'),
+              child: Text('Ok'),
             ),
           ],
         ),
       );
     }
+  } catch (e) {
+    // Lidar com a exceção aqui
+    print('Erro: $e');
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Erro'),
+        content: const Text('Ocorreu um erro ao realizar o cadastro.'),
+        actions: <Widget>[
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('Ok'),
+          ),
+        ],
+      ),
+    );
   }
+}
 
   @override
   void dispose() {
+   _usuarioController.dispose();
     _emailController.dispose();
     _passwordController.dispose();
     _confirmPasswordController.dispose();
@@ -119,6 +128,22 @@ class _CadastroPageState extends State<CadastroPage> {
                             )),
                       ),
                     ),
+                    const SizedBox(height: 3.0),
+                    TextFormField(
+                      controller: _usuarioController,
+                      decoration: const InputDecoration(
+                        labelText: 'Usuário',
+                        border: OutlineInputBorder(),
+                      ),
+                      keyboardType: TextInputType.emailAddress,
+                      validator: (value) {
+                        if (value!.isEmpty) {
+                          return 'Por favor, insira seu usuário.';
+                        }
+                        return null;
+                      },
+                    ),
+                    const SizedBox(height: 16.0),
                     const SizedBox(height: 3.0),
                     TextFormField(
                       controller: _emailController,
@@ -169,13 +194,13 @@ class _CadastroPageState extends State<CadastroPage> {
                     const SizedBox(height: 16.0),
                     ElevatedButton(
                       onPressed: () {
-                        //_cadastrar();
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => FormScreen(),
-                          ),
-                        );
+                        _cadastrar();
+                        // Navigator.push(
+                        //   context,
+                        //   MaterialPageRoute(
+                        //     builder: (context) => FormScreen(),
+                        //   ),
+                        // );
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Color(0xFF78F259),
