@@ -4,8 +4,10 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_login/screens/cadastro.dart';
 import 'package:flutter_login/screens/telainicial.dart';
 import 'package:flutter_login/service/localNotification.dart';
+import 'package:flutter_login/service/usuario.dart';
 import 'package:flutter_login/settings/theme.dart';
 import 'package:http/http.dart' as http;
+import 'package:provider/provider.dart';
 
 class LoginPage extends StatefulWidget {
   @override
@@ -21,42 +23,53 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   Future<void> login(String usuario, String email, String password) async {
-      print(jsonEncode( {'nomeUsuario': usuario, 'emailUsuario': email, 'senhaUsuario': password}));
-    try {
-      final response = await http.post(
-        Uri.parse('http://localhost:3000/login'),
-        body: jsonEncode({
-          'nomeUsuario': usuario,
-          'emailUsuario': email,
-          'senhaUsuario': password
-        }),
-        headers: {'Content-Type': 'application/json'},
+  try {
+    final response = await http.post(
+      Uri.parse('http://localhost:3000/user/login'),
+      body: jsonEncode({
+        'nomeUsuario': usuario,
+        'emailUsuario': email,
+        'senhaUsuario': password,
+      }),
+      headers: {'Content-Type': 'application/json'},
+    );
+
+    if (response.statusCode == 200) {
+      // Se o login foi bem sucedido, atualize o estado do usuário usando o Provider
+      final usuarioProvider = Provider.of<Usuario>(context, listen: false);
+      usuarioProvider.login(usuario, email);
+
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => TelaInicial()),
       );
-
-      print(jsonEncode( {'nomeUsuario': usuario, 'emailUsuario': email, 'senhaUsuario': password}));
-      print(response.body);
-
-      if (response.statusCode == 200) {
-        // Se o login foi bem sucedido, navegue para a tela inicial
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => TelaInicial()),
-        );
-      } else {
-        // Se o login falhar, mostre uma mensagem de erro
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
+    } else {
+      // Se o login falhar, exiba um AlertDialog
+      showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: Text('Login Falhou'),
             content: Text(
                 'Login inválido. Verifique suas credenciais e tente novamente.'),
-            duration: Duration(seconds: 3),
-          ),
-        );
-      }
-    } catch (e) {
-      // Captura e mostra qualquer exceção lançada durante a execução do código
-      print('Ocorreu uma exceção: $e');
+            actions: <Widget>[
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop(); // Fecha o AlertDialog
+                },
+                child: Text('Ok'),
+              ),
+            ],
+          );
+        },
+      );
     }
+  } catch (e) {
+    // Captura e mostra qualquer exceção lançada durante a execução do código
+    print('Ocorreu uma exceção: $e');
   }
+}
+
 
   final _formKey = GlobalKey<FormState>();
   final _usuarioController = TextEditingController();
@@ -157,39 +170,51 @@ class _LoginPageState extends State<LoginPage> {
                     SizedBox(
                       width: 50,
                       child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          primary: Colors.transparent,
+                          minimumSize: Size(double.infinity, 50.0),
+                          elevation: 0,
+                          padding: EdgeInsets.zero,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(16.0),
+                          ),
+                          shadowColor: Colors.transparent,
+                        ),
                         onPressed: () {
-                            final usuario = _usuarioController.text.trim();
-                        final email = _emailController.text.trim();
-                        final password = _passwordController.text.trim();
-                        login(usuario, email, password);
+                          final usuario = _usuarioController.text.trim();
+                          final email = _emailController.text.trim();
+                          final password = _passwordController.text.trim();
+                          login(usuario, email, password);
                           // Navigator.push(
                           //   context,
                           //   MaterialPageRoute(
                           //       builder: (context) => TelaInicial()),
                           // );
                         },
-                        style: ElevatedButton.styleFrom(
-                          primary: const Color(0xFF78F259),
-                          minimumSize: const Size(30, 55),
-                          padding: const EdgeInsets.symmetric(horizontal: 12),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(16.0),
+                        child: Container(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(20.0),
+                            gradient: LinearGradient(
+                              colors: [Colors.cyan, Colors.blue],
+                              begin: Alignment.topCenter,
+                              end: Alignment.bottomCenter,
+                            ),
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(
+                              vertical: 15.0,
+                              horizontal: 143.0,
+                            ),
+                            child: Text(
+                              'Entrar',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 20,
+                                fontWeight: FontWeight.w900,
+                              ),
+                            ),
                           ),
                         ),
-                        child: const Text('Entrar',
-                            style: TextStyle(
-                                color: Colors.black,
-                                fontSize: 18,
-                                fontWeight: FontWeight.w900)),
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 20,
-                    ),
-                    const Center(
-                      child: Text(
-                        "Não tem Conta?",
-                        style: TextStyle(color: Colors.grey, fontSize: 16),
                       ),
                     ),
                     const SizedBox(
@@ -197,30 +222,46 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                     ElevatedButton(
                       style: ElevatedButton.styleFrom(
-                        primary: const Color(0xFF78F259),
-                        minimumSize: const Size(30, 55),
-                        padding: const EdgeInsets.symmetric(horizontal: 12),
+                        primary: Colors.transparent,
+                        minimumSize: Size(double.infinity, 50.0),
+                        elevation: 0,
+                        padding: EdgeInsets.zero,
                         shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(16.0),
+                          borderRadius: BorderRadius.circular(20.0),
                         ),
-                      ),
-                      child: const Text(
-                        "Cadastre-se",
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                            color: Colors.black,
-                            fontSize: 18,
-                            fontWeight: FontWeight.w900),
+                        shadowColor: Colors.transparent,
                       ),
                       onPressed: () {
-                        localNotification.showBigTextNotification(title: "teste", body: "mensagem", flutterLocalNotificationsPlugin: flutterLocalNotificationsPlugin);
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => CadastroPage(),
-                          ),
+                              builder: (context) => CadastroPage()),
                         );
                       },
+                      child: Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(20.0),
+                          gradient: LinearGradient(
+                            colors: [Colors.cyan, Colors.blue],
+                            begin: Alignment.topCenter,
+                            end: Alignment.bottomCenter,
+                          ),
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(
+                            vertical: 15.0,
+                            horizontal: 120.0,
+                          ),
+                          child: Text(
+                            'Cadastre-se',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 20,
+                              fontWeight: FontWeight.w900,
+                            ),
+                          ),
+                        ),
+                      ),
                     ),
                   ],
                 ),

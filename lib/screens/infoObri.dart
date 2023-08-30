@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_login/service/usuario.dart';
 import 'package:flutter_login/settings/theme.dart';
+import 'package:http/http.dart' as http;
+import 'package:provider/provider.dart';
 
 class PersonalInfoForm extends StatefulWidget {
   @override
@@ -12,6 +15,41 @@ class _PersonalInfoFormState extends State<PersonalInfoForm> {
   final _weightController = TextEditingController();
   final _heightController = TextEditingController();
   String _gender = 'Masculino';
+
+
+  // Função para fazer a solicitação à API externa
+  Future<void> _updateUserData() async {
+    final age = _ageController.text;
+    final weight = _weightController.text;
+    final height = _heightController.text;
+    final gender = _gender;
+
+    final apiUrl = 'https://localhost:3000/infouser/atualizar/:idUsuario';
+
+    try {
+      final response = await http.post(
+        Uri.parse(apiUrl),
+        body: {
+          'idade': age,
+          'peso': weight,
+          'altura': height,
+          'genero': gender,
+        },
+      );
+
+      // Verifique a resposta da API e lide com ela conforme necessário.
+      if (response.statusCode == 200) {
+        // Dados atualizados com sucesso.
+        print('Dados atualizados com sucesso!');
+      } else {
+        // Algo deu errado na solicitação.
+        print('Erro ao atualizar dados: ${response.statusCode}');
+      }
+    } catch (error) {
+      // Erro de conexão ou outro erro.
+      print('Erro: $error');
+    }
+  }
 
   @override
   void dispose() {
@@ -43,7 +81,8 @@ class _PersonalInfoFormState extends State<PersonalInfoForm> {
               fontFamily: 'Work Sans',
               fontSize: 24,
               fontWeight: FontWeight.bold,
-              color: AppTheme.iconColor, //Deixa a cor do texto dinâmica de acordo com o tema selecionando
+              color: AppTheme
+                  .iconColor, //Deixa a cor do texto dinâmica de acordo com o tema selecionando
             ),
           ),
         ),
@@ -63,6 +102,8 @@ class _PersonalInfoFormState extends State<PersonalInfoForm> {
                 _buildGenderDropdown(),
                 const SizedBox(height: 24.0),
                 _buildSubmitButton(),
+                const SizedBox(height: 24.0),
+                _buildAlterButton()
               ],
             ),
           ),
@@ -111,21 +152,85 @@ class _PersonalInfoFormState extends State<PersonalInfoForm> {
   }
 
   Widget _buildSubmitButton() {
-    return ElevatedButton(
-      onPressed: () {
-        if (_formKey.currentState!.validate()) {
-          // Fazer alguma coisa com os dados do formulário
-        }
-      },
-      style: ElevatedButton.styleFrom(
-         backgroundColor: const Color(0xFF78F259),
-         minimumSize: const Size(30, 55),
-         padding: const EdgeInsets.symmetric(horizontal: 12),
-         shape: RoundedRectangleBorder(
-               borderRadius: BorderRadius.circular(16.0),
-         ),
+    return Container(
+      width: double.infinity,
+      height: 50.0, // Defina a altura desejada aqui
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(16.0),
+        gradient: LinearGradient(
+          colors: [Colors.cyan, Colors.blue],
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+        ),
       ),
-      child: const Text('Pronto', style: TextStyle(color: Colors.black, fontSize: 18, fontWeight: FontWeight.w900)),
+      child: ElevatedButton(
+        onPressed: () {
+          final usuario = Provider.of<Usuario>(context, listen: false);
+          print(usuario.email); // Acessa o atributo email do usuário
+        },
+        style: ElevatedButton.styleFrom(
+          primary: Colors.transparent,
+          onPrimary: Colors.transparent,
+          elevation: 0,
+          padding: EdgeInsets.zero,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16.0),
+          ),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 12.0, horizontal: 24.0),
+          child: const Text(
+            'Pronto',
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: 18,
+              fontWeight: FontWeight.w900,
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildAlterButton() {
+    return Container(
+      width: double.infinity,
+      height: 50.0,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(16.0),
+        gradient: LinearGradient(
+          colors: [Colors.cyan, Colors.blue],
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+        ),
+      ),
+      child: ElevatedButton(
+        onPressed: () {
+          if (_formKey.currentState!.validate()) {
+            _updateUserData(); // Chame a função para atualizar os dados
+          }
+        },
+        style: ElevatedButton.styleFrom(
+          primary: Colors.transparent,
+          onPrimary: Colors.transparent,
+          elevation: 0,
+          padding: EdgeInsets.zero,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16.0),
+          ),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 12.0, horizontal: 24.0),
+          child: const Text(
+            'Alterar',
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: 18,
+              fontWeight: FontWeight.w900,
+            ),
+          ),
+        ),
+      ),
     );
   }
 }

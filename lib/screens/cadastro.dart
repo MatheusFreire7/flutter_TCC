@@ -1,8 +1,10 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:flutter_login/screens/selectTreino.dart';
 import 'package:flutter_login/screens/telainicial.dart';
 import 'package:flutter_login/settings/theme.dart';
 import 'package:http/http.dart' as http;
+import '../service/usuario.dart';
 import 'formTreino.dart';
 
 class CadastroPage extends StatefulWidget {
@@ -12,76 +14,77 @@ class CadastroPage extends StatefulWidget {
 
 class _CadastroPageState extends State<CadastroPage> {
   final _formKey = GlobalKey<FormState>();
-   final _usuarioController = TextEditingController();
+  final _usuarioController = TextEditingController();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   final _confirmPasswordController = TextEditingController();
 
- Future<void> _cadastrar() async {
-  final usuario = _usuarioController.text.trim();
-  final email = _emailController.text.trim();
-  final password = _passwordController.text.trim();
+  Future<void> cadastrar() async {
+    final usuario = _usuarioController.text.trim();
+    final email = _emailController.text.trim();
+    final password = _passwordController.text.trim();
 
-  try {
-    final url = Uri.parse('http://localhost:3000/cadastro');
-    final response = await http.post(
-      url,
-      body: jsonEncode({
-        'idUsuario': '0',
-        'nomeUsuario': usuario,
-        'emailUsuario': email,
-        'senhaUsuario': password,
-      }),
-       headers: {'Content-Type': 'application/json'},
-    );
-
-    if (response.statusCode == 200) {
-      // Cadastro realizado com sucesso
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => TelaInicial(),
-        ),
+    try {
+      final url = Uri.parse('http://localhost:3000/user/cadastro');
+      final response = await http.post(
+        url,
+        body: jsonEncode({
+          'idUsuario': '0',
+          'nomeUsuario': usuario,
+          'emailUsuario': email,
+          'senhaUsuario': password,
+        }),
+        headers: {'Content-Type': 'application/json'},
       );
-    } else {
-      // Erro ao realizar cadastro
-      final error = response.body;
+
+      if (response.statusCode == 201) {
+        // Cadastro realizado com sucesso
+       Usuario usuarioNovo = new Usuario(0, usuario, email);
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => TelaInicial(),
+          ),
+        );
+      } else {
+        // Erro ao realizar cadastro
+        final error = response.body;
+        showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+            title: Text('Erro'),
+            content: Text(error),
+            actions: <Widget>[
+              TextButton(
+                onPressed: () => Navigator.pop(context),
+                child: Text('Ok'),
+              ),
+            ],
+          ),
+        );
+      }
+    } catch (e) {
+      // Lidar com a exceção aqui
+      print('Erro: $e');
       showDialog(
         context: context,
         builder: (context) => AlertDialog(
-          title: Text('Erro'),
-          content: Text(error),
+          title: const Text('Erro'),
+          content: const Text('Ocorreu um erro ao realizar o cadastro.'),
           actions: <Widget>[
             TextButton(
               onPressed: () => Navigator.pop(context),
-              child: Text('Ok'),
+              child: const Text('Ok'),
             ),
           ],
         ),
       );
     }
-  } catch (e) {
-    // Lidar com a exceção aqui
-    print('Erro: $e');
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: const Text('Erro'),
-        content: const Text('Ocorreu um erro ao realizar o cadastro.'),
-        actions: <Widget>[
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: const Text('Ok'),
-          ),
-        ],
-      ),
-    );
   }
-}
 
   @override
   void dispose() {
-   _usuarioController.dispose();
+    _usuarioController.dispose();
     _emailController.dispose();
     _passwordController.dispose();
     _confirmPasswordController.dispose();
@@ -193,25 +196,52 @@ class _CadastroPageState extends State<CadastroPage> {
                     ),
                     const SizedBox(height: 16.0),
                     ElevatedButton(
-                      onPressed: () {
-                        _cadastrar();
-                        // Navigator.push(
-                        //   context,
-                        //   MaterialPageRoute(
-                        //     builder: (context) => FormScreen(),
-                        //   ),
-                        // );
-                      },
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: Color(0xFF78F259),
-                        minimumSize: const Size(30, 55), // define o tamanho mínimo do botão
-                        padding: const EdgeInsets.symmetric(horizontal: 12),
+                        primary: Colors.transparent,
+                        minimumSize: Size(double.infinity, 50.0),
+                        elevation: 0,
+                        padding: EdgeInsets.zero,
                         shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(16.0),
+                          borderRadius: BorderRadius.circular(20.0),
+                        ),
+                        shadowColor: Colors.transparent,
+                      ),
+                      onPressed: () {
+                        // cadastrar();
+                           Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => PlanoTreinoDetalhes(  
+                                  title: "Título do Plano",
+                                  imageUrl: "url_da_imagem",
+                                  name: "Nome do Plano",),
+                            ),
+                          );
+                      },
+                      child: Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(20.0),
+                          gradient: LinearGradient(
+                            colors: [Colors.cyan, Colors.blue],
+                            begin: Alignment.topCenter,
+                            end: Alignment.bottomCenter,
+                          ),
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(
+                            vertical: 15.0,
+                            horizontal: 120.0,
+                          ),
+                          child: Text(
+                            'Cadastrar',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 20,
+                              fontWeight: FontWeight.w900,
+                            ),
+                          ),
                         ),
                       ),
-                      child: const Text('Cadastrar',
-                          style: TextStyle(color: Colors.black, fontSize: 18, fontWeight: FontWeight.w900)),
                     ),
                   ],
                 ),

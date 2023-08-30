@@ -7,6 +7,8 @@ import 'package:flutter_login/widgets/progresso.dart';
 import 'package:flutter_login/settings/suporte.dart';
 import 'package:flutter_login/settings/theme.dart';
 
+import '../widgets/testeApi.dart';
+
 class TelaInicial extends StatefulWidget {
   @override
   _TelaInicialState createState() => _TelaInicialState();
@@ -114,7 +116,7 @@ class _TelaInicialState extends State<TelaInicial> {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => TelaInicial(),
+                      builder: (context) => ExerciseList(),
                     ),
                   );
                 },

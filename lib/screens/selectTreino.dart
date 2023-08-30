@@ -61,6 +61,46 @@ class PlanoTreinoDetalhes extends StatelessWidget {
                     MySquare(
                       child: plano,
                     ),
+                  const SizedBox(height: 16.0),
+                ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        primary: Colors.transparent,
+                        minimumSize: Size(double.infinity, 50.0),
+                        elevation: 0,
+                        padding: EdgeInsets.zero,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(20.0),
+                        ),
+                        shadowColor: Colors.transparent,
+                      ),
+                      onPressed: () {
+                        //Ir para a tela inicial
+                      },
+                      child: Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(20.0),
+                          gradient: LinearGradient(
+                            colors: [Colors.cyan, Colors.blue],
+                            begin: Alignment.topCenter,
+                            end: Alignment.bottomCenter,
+                          ),
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(
+                            vertical: 15.0,
+                            horizontal: 120.0,
+                          ),
+                          child: Text(
+                            'Próximo',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 20,
+                              fontWeight: FontWeight.w900,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
                 ],
               ),
             ),
