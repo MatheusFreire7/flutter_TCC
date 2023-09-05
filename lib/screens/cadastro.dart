@@ -24,7 +24,9 @@ class _CadastroPageState extends State<CadastroPage> {
     final email = _emailController.text.trim();
     final password = _passwordController.text.trim();
 
-    try {
+    if(usuario != "" && email != "" && password != "")
+    {
+       try {
       final url = Uri.parse('http://localhost:3000/user/cadastro');
       final response = await http.post(
         url,
@@ -69,7 +71,7 @@ class _CadastroPageState extends State<CadastroPage> {
       showDialog(
         context: context,
         builder: (context) => AlertDialog(
-          title: const Text('Erro'),
+          title: const Text('Erro de Cadastro'),
           content: const Text('Ocorreu um erro ao realizar o cadastro.'),
           actions: <Widget>[
             TextButton(
@@ -80,6 +82,23 @@ class _CadastroPageState extends State<CadastroPage> {
         ),
       );
     }
+    }
+    else{
+        showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: const Text('Erro de Cadastro'),
+          content: const Text('Preencha todas as credenciais. Tente Novamente.'),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: const Text('Ok'),
+            ),
+          ],
+        ),
+      );
+    }
+   
   }
 
   @override
@@ -207,16 +226,16 @@ class _CadastroPageState extends State<CadastroPage> {
                         shadowColor: Colors.transparent,
                       ),
                       onPressed: () {
-                        // cadastrar();
-                           Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => PlanoTreinoDetalhes(  
-                                  title: "Título do Plano",
-                                  imageUrl: "url_da_imagem",
-                                  name: "Nome do Plano",),
-                            ),
-                          );
+                         cadastrar();
+                          //  Navigator.push(
+                          //   context,
+                          //   MaterialPageRoute(
+                          //     builder: (context) => PlanoTreinoDetalhes(  
+                          //         title: "Título do Plano",
+                          //         imageUrl: "url_da_imagem",
+                          //         name: "Nome do Plano",),
+                          //   ),
+                          // );
                       },
                       child: Container(
                         decoration: BoxDecoration(

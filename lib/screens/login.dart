@@ -23,53 +23,75 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   Future<void> login(String usuario, String email, String password) async {
-  try {
-    final response = await http.post(
-      Uri.parse('http://localhost:3000/user/login'),
-      body: jsonEncode({
-        'nomeUsuario': usuario,
-        'emailUsuario': email,
-        'senhaUsuario': password,
-      }),
-      headers: {'Content-Type': 'application/json'},
-    );
+    if (usuario != " " && email != "" && password != "") {
+      try {
+        final response = await http.post(
+          Uri.parse('http://localhost:3000/user/login'),
+          body: jsonEncode({
+            'nomeUsuario': usuario,
+            'emailUsuario': email,
+            'senhaUsuario': password,
+          }),
+          headers: {'Content-Type': 'application/json'},
+        );
 
-    if (response.statusCode == 200) {
-      // Se o login foi bem sucedido, atualize o estado do usuário usando o Provider
-      final usuarioProvider = Provider.of<Usuario>(context, listen: false);
-      usuarioProvider.login(usuario, email);
+        if (response.statusCode == 200) {
+          // Se o login foi bem sucedido, atualize o estado do usuário usando o Provider
+          final usuarioProvider = Provider.of<Usuario>(context, listen: false);
+          usuarioProvider.login(usuario, email);
 
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => TelaInicial()),
-      );
-    } else {
-      // Se o login falhar, exiba um AlertDialog
-      showDialog(
-        context: context,
-        builder: (context) {
-          return AlertDialog(
-            title: Text('Login Falhou'),
-            content: Text(
-                'Login inválido. Verifique suas credenciais e tente novamente.'),
-            actions: <Widget>[
-              TextButton(
-                onPressed: () {
-                  Navigator.of(context).pop(); // Fecha o AlertDialog
-                },
-                child: Text('Ok'),
-              ),
-            ],
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => TelaInicial()),
           );
-        },
-      );
+        } else {
+          // Se o login falhar, exiba um AlertDialog
+          showDialog(
+            context: context,
+            builder: (context) {
+              return AlertDialog(
+                title: Text('Login Falhou'),
+                content: Text(
+                    'Login inválido. Verifique suas credenciais e tente novamente.'),
+                actions: <Widget>[
+                  TextButton(
+                    onPressed: () {
+                      Navigator.of(context).pop(); // Fecha o AlertDialog
+                    },
+                    child: Text('Ok'),
+                  ),
+                ],
+              );
+            },
+          );
+        }
+      } catch (e) {
+        // Captura e mostra qualquer exceção lançada durante a execução do código
+        print('Ocorreu uma exceção: $e');
+      }
     }
-  } catch (e) {
-    // Captura e mostra qualquer exceção lançada durante a execução do código
-    print('Ocorreu uma exceção: $e');
+    else{
+        // Se o Usuário não preencher toadas as informações
+          showDialog(
+            context: context,
+            builder: (context) {
+              return AlertDialog(
+                title: Text('Login Falhou'),
+                content: Text(
+                    'Preencha todas as credenciais e tente novamente.'),
+                actions: <Widget>[
+                  TextButton(
+                    onPressed: () {
+                      Navigator.of(context).pop(); // Fecha o AlertDialog
+                    },
+                    child: Text('Ok'),
+                  ),
+                ],
+              );
+            },
+          );
+    }
   }
-}
-
 
   final _formKey = GlobalKey<FormState>();
   final _usuarioController = TextEditingController();
@@ -181,9 +203,9 @@ class _LoginPageState extends State<LoginPage> {
                           shadowColor: Colors.transparent,
                         ),
                         onPressed: () {
-                          final usuario = _usuarioController.text.trim();
-                          final email = _emailController.text.trim();
-                          final password = _passwordController.text.trim();
+                          final usuario = _usuarioController.text;
+                          final email = _emailController.text;
+                          final password = _passwordController.text;
                           login(usuario, email, password);
                           // Navigator.push(
                           //   context,
