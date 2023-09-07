@@ -126,6 +126,7 @@ class _FormScreenState extends State<FormScreen> {
                   const SizedBox(height: 32),
                   ElevatedButton(
                     onPressed: () {
+      
                       // if (_formKey.currentState!.validate()) {
                       //   _formKey.currentState?.save();
                       //   // Chamar método para montar o treino

@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_login/service/sharedUser.dart';
 import 'package:flutter_login/service/usuario.dart';
 import 'package:flutter_login/settings/theme.dart';
 import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class PersonalInfoForm extends StatefulWidget {
   @override
@@ -15,7 +17,6 @@ class _PersonalInfoFormState extends State<PersonalInfoForm> {
   final _weightController = TextEditingController();
   final _heightController = TextEditingController();
   String _gender = 'Masculino';
-
 
   // Função para fazer a solicitação à API externa
   Future<void> _updateUserData() async {
@@ -164,9 +165,14 @@ class _PersonalInfoFormState extends State<PersonalInfoForm> {
         ),
       ),
       child: ElevatedButton(
-        onPressed: () {
-          final usuario = Provider.of<Usuario>(context, listen: false);
-          print(usuario.email); // Acessa o atributo email do usuário
+        onPressed: () async {
+          UserData? userData = await SharedUser.getUserData();
+          if (userData != null) {
+            int idUsuario = userData.idUsuario;
+            print(idUsuario);
+          } else {
+            print("Erro ao acessar informações do usuário");
+          }
         },
         style: ElevatedButton.styleFrom(
           primary: Colors.transparent,

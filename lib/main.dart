@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_login/screens/cadastro.dart';
+import 'package:flutter_login/service/sharedUser.dart';
 import 'package:flutter_login/service/usuario.dart';
 import 'package:flutter_login/settings/config.dart';
 import 'package:flutter_login/screens/formTreino.dart';
@@ -10,6 +11,11 @@ import 'screens/login.dart';
 import 'package:provider/provider.dart';
 
 void main() {
+  // // Chame a função clearUserData ao sair do aplicativo.
+  // WidgetsBinding.instance.addPostFrameCallback((_) {
+  //   SharedUser.clearUserData();
+  // });
+
   runApp(
     ChangeNotifierProvider(
       create: (context) => Usuario.vazio(),

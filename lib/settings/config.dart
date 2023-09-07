@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_login/service/sharedUser.dart';
 import 'package:flutter_login/settings/appConfig.dart';
 import 'package:flutter_login/screens/infoObri.dart';
 import 'package:flutter_login/screens/login.dart';
 import 'package:flutter_login/screens/telainicial.dart';
 import 'package:flutter_login/settings/theme.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 ThemeData _themeData = AppTheme.themeData; // Use sua classe de tema global aqui
 
@@ -81,8 +83,8 @@ class _ConfiguracoesPageState extends State<ConfiguracoesPage> {
               leading: const Icon(Icons.notifications),
               title: const Text('Notificações'),
               trailing: Switch(
-                value:
-                  AppTheme.notificationsEnabled, // Valor da configuração de notificações
+                value: AppTheme
+                    .notificationsEnabled, // Valor da configuração de notificações
                 onChanged: (value) {
                   setState(() {
                     AppTheme.setNotification(value);
@@ -139,9 +141,11 @@ class _ConfiguracoesPageState extends State<ConfiguracoesPage> {
                   showDialog(
                     context: context,
                     builder: (BuildContext context) {
-                      double metaNova = AppConfig.metaDiaria; // Armazene o valor atualizado temporariamente
+                      double metaNova = AppConfig
+                          .metaDiaria; // Armazene o valor atualizado temporariamente
                       return AlertDialog(
-                        title: const Text('Definir Meta Diária de Km percorridos'),
+                        title:
+                            const Text('Definir Meta Diária de Km percorridos'),
                         content: TextField(
                           keyboardType: TextInputType.number,
                           onChanged: (value) {
@@ -160,7 +164,8 @@ class _ConfiguracoesPageState extends State<ConfiguracoesPage> {
                             child: const Text('Salvar'),
                             onPressed: () {
                               setState(() {
-                                AppConfig.metaDiaria = metaNova; // Atualize o valor na classe AppConfig
+                                AppConfig.metaDiaria =
+                                    metaNova; // Atualize o valor na classe AppConfig
                               });
                               Navigator.of(context).pop();
                             },
@@ -176,6 +181,7 @@ class _ConfiguracoesPageState extends State<ConfiguracoesPage> {
               leading: const Icon(Icons.arrow_back),
               title: const Text('Sair'),
               onTap: () {
+                SharedUser.clearUserData();
                 Navigator.push(
                   context,
                   MaterialPageRoute(

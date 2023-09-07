@@ -1,13 +1,14 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_login/screens/cadastro.dart';
 import 'package:flutter_login/screens/telainicial.dart';
-import 'package:flutter_login/service/localNotification.dart';
 import 'package:flutter_login/service/usuario.dart';
 import 'package:flutter_login/settings/theme.dart';
 import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+import '../service/sharedUser.dart';
 
 class LoginPage extends StatefulWidget {
   @override
@@ -15,15 +16,21 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  @override
-  void initState() {
-    super.initState();
+  final _formKey = GlobalKey<FormState>();
+  final _usuarioController = TextEditingController();
+  final _emailController = TextEditingController();
+  final _passwordController = TextEditingController();
 
-    localNotification.initilize(flutterLocalNotificationsPlugin);
+  @override
+  void dispose() {
+    _usuarioController.dispose();
+    _emailController.dispose();
+    _passwordController.dispose();
+    super.dispose();
   }
 
   Future<void> login(String usuario, String email, String password) async {
-    if (usuario != " " && email != "" && password != "") {
+    if (usuario.isNotEmpty && email.isNotEmpty && password.isNotEmpty) {
       try {
         final response = await http.post(
           Uri.parse('http://localhost:3000/user/login'),
@@ -36,16 +43,31 @@ class _LoginPageState extends State<LoginPage> {
         );
 
         if (response.statusCode == 200) {
-          // Se o login foi bem sucedido, atualize o estado do usuário usando o Provider
-          final usuarioProvider = Provider.of<Usuario>(context, listen: false);
-          usuarioProvider.login(usuario, email);
+          final userData = jsonDecode(response.body);
+
+          final userId = userData['user']['id'];
+          final username = userData['user']['username'];
+          final userEmail = userData['user']['email'];
+
+          final userDataObject = UserData(
+            idUsuario: userId,
+            usuario: username,
+            email: userEmail,
+            genero: '', // Preencha com o valor correto, se disponível no servidor
+            altura: 0.0, // Preencha com o valor correto, se disponível no servidor
+            peso: 0.0, // Preencha com o valor correto, se disponível no servidor
+            imc: 0.0, // Preencha com o valor correto, se disponível no servidor
+            idPlanoTreino: 0, // Preencha com o valor correto, se disponível no servidor
+            idPlanoAlimentacao:0, // Preencha com o valor correto, se disponível no servidor
+          );
+
+          await SharedUser.saveUserData(userDataObject);
 
           Navigator.push(
             context,
             MaterialPageRoute(builder: (context) => TelaInicial()),
           );
         } else {
-          // Se o login falhar, exiba um AlertDialog
           showDialog(
             context: context,
             builder: (context) {
@@ -56,7 +78,7 @@ class _LoginPageState extends State<LoginPage> {
                 actions: <Widget>[
                   TextButton(
                     onPressed: () {
-                      Navigator.of(context).pop(); // Fecha o AlertDialog
+                      Navigator.of(context).pop();
                     },
                     child: Text('Ok'),
                   ),
@@ -66,46 +88,27 @@ class _LoginPageState extends State<LoginPage> {
           );
         }
       } catch (e) {
-        // Captura e mostra qualquer exceção lançada durante a execução do código
         print('Ocorreu uma exceção: $e');
       }
-    }
-    else{
-        // Se o Usuário não preencher toadas as informações
-          showDialog(
-            context: context,
-            builder: (context) {
-              return AlertDialog(
-                title: Text('Login Falhou'),
-                content: Text(
-                    'Preencha todas as credenciais e tente novamente.'),
-                actions: <Widget>[
-                  TextButton(
-                    onPressed: () {
-                      Navigator.of(context).pop(); // Fecha o AlertDialog
-                    },
-                    child: Text('Ok'),
-                  ),
-                ],
-              );
-            },
+    } else {
+      showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: Text('Login Falhou'),
+            content: Text('Preencha todas as credenciais e tente novamente.'),
+            actions: <Widget>[
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: Text('Ok'),
+              ),
+            ],
           );
+        },
+      );
     }
-  }
-
-  final _formKey = GlobalKey<FormState>();
-  final _usuarioController = TextEditingController();
-  final _emailController = TextEditingController();
-  final _passwordController = TextEditingController();
-  final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
-      FlutterLocalNotificationsPlugin();
-
-  @override
-  void dispose() {
-    _usuarioController.dispose();
-    _emailController.dispose();
-    _passwordController.dispose();
-    super.dispose();
   }
 
   @override
