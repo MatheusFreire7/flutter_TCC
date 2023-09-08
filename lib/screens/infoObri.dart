@@ -16,23 +16,70 @@ class _PersonalInfoFormState extends State<PersonalInfoForm> {
   final _ageController = TextEditingController();
   final _weightController = TextEditingController();
   final _heightController = TextEditingController();
+  int idUsuario = 0;
   String _gender = 'Masculino';
 
-  // Função para fazer a solicitação à API externa
+  Future<void> _createUserData({
+    required int idUsuario,
+    required double peso,
+    required int idade,
+    required String genero,
+    required double altura,
+  }) async {
+    final url = Uri.parse('http://localhost:3000/infouser/cadastro');
+
+    final novoInfoUser = {
+      'idUsuario': idUsuario,
+      'peso': peso,
+      'idade': idade,
+      'genero': genero.toString(),
+      'altura': altura,
+    };
+
+    try {
+      final response = await http.post(
+        url,
+        body: novoInfoUser,
+      );
+
+      if (response.statusCode == 201) {
+        // Requisição bem-sucedida, você pode tratar a resposta aqui
+        print('Cadastro realizado com sucesso');
+      } else {
+        // Trate os erros aqui
+        print(
+            'Erro ao cadastrar usuário. Código de resposta: ${response.statusCode}');
+      }
+    } catch (error) {
+      // Trate os erros de conexão ou outros erros
+      print('Erro: $error');
+    }
+  }
+
   Future<void> _updateUserData() async {
     final age = _ageController.text;
     final weight = _weightController.text;
     final height = _heightController.text;
     final gender = _gender;
 
-    final apiUrl = 'https://localhost:3000/infouser/atualizar/:idUsuario';
+    final userData = await SharedUser.getUserData();
+    if (userData != null) {
+      idUsuario = userData.idUsuario as int;
+    }
+
+    print(idUsuario);
+    print(age);
+    print(height);
+    print(gender);
+
+    final apiUrl = 'https://localhost:3000/infouser/atualizar/:$idUsuario';
 
     try {
       final response = await http.post(
         Uri.parse(apiUrl),
         body: {
-          'idade': age,
           'peso': weight,
+          'idade': age,
           'altura': height,
           'genero': gender,
         },
@@ -166,12 +213,23 @@ class _PersonalInfoFormState extends State<PersonalInfoForm> {
       ),
       child: ElevatedButton(
         onPressed: () async {
-          UserData? userData = await SharedUser.getUserData();
-          if (userData != null) {
-            int idUsuario = userData.idUsuario;
-            print(idUsuario);
-          } else {
-            print("Erro ao acessar informações do usuário");
+          if (_formKey.currentState!.validate()) {
+            final userData = await SharedUser.getUserData();
+            if (userData != null) {
+              idUsuario = userData.idUsuario;
+            }
+
+            final age = int.tryParse(_ageController.text) ?? 0;
+            final weight = double.tryParse(_weightController.text) ?? 0.0;
+            final height = double.tryParse(_heightController.text) ?? 0.0;
+
+            _createUserData(
+              idUsuario: idUsuario,
+              peso: weight,
+              idade: age,
+              genero: _gender,
+              altura: height,
+            );
           }
         },
         style: ElevatedButton.styleFrom(

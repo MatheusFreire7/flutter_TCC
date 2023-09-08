@@ -17,25 +17,22 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   final _formKey = GlobalKey<FormState>();
-  final _usuarioController = TextEditingController();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
 
   @override
   void dispose() {
-    _usuarioController.dispose();
     _emailController.dispose();
     _passwordController.dispose();
     super.dispose();
   }
 
-  Future<void> login(String usuario, String email, String password) async {
-    if (usuario.isNotEmpty && email.isNotEmpty && password.isNotEmpty) {
+  Future<void> login(String email, String password) async {
+    if (email.isNotEmpty && password.isNotEmpty) {
       try {
         final response = await http.post(
           Uri.parse('http://localhost:3000/user/login'),
           body: jsonEncode({
-            'nomeUsuario': usuario,
             'emailUsuario': email,
             'senhaUsuario': password,
           }),
@@ -147,22 +144,6 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                     const SizedBox(height: 3.0),
                     TextFormField(
-                      controller: _usuarioController,
-                      decoration: const InputDecoration(
-                        labelText: 'Usuário',
-                        border: const OutlineInputBorder(),
-                      ),
-                      keyboardType: TextInputType.name,
-                      validator: (value) {
-                        if (value!.isEmpty) {
-                          return 'Por favor, insira seu Usuário.';
-                        }
-                        return null;
-                      },
-                    ),
-                    const SizedBox(height: 16.0),
-                    const SizedBox(height: 3.0),
-                    TextFormField(
                       controller: _emailController,
                       decoration: const InputDecoration(
                         labelText: 'Email',
@@ -206,10 +187,9 @@ class _LoginPageState extends State<LoginPage> {
                           shadowColor: Colors.transparent,
                         ),
                         onPressed: () {
-                          final usuario = _usuarioController.text;
                           final email = _emailController.text;
                           final password = _passwordController.text;
-                          login(usuario, email, password);
+                          login(email, password);
                           // Navigator.push(
                           //   context,
                           //   MaterialPageRoute(

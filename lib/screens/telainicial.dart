@@ -7,6 +7,7 @@ import 'package:flutter_login/widgets/progresso.dart';
 import 'package:flutter_login/settings/suporte.dart';
 import 'package:flutter_login/settings/theme.dart';
 
+import '../service/sharedUser.dart';
 import '../widgets/testeApi.dart';
 
 class TelaInicial extends StatefulWidget {
@@ -15,6 +16,25 @@ class TelaInicial extends StatefulWidget {
 }
 
 class _TelaInicialState extends State<TelaInicial> {
+
+  String _userName = "Nome do usuário";
+  String _userEmail = "email_do_usuario@gmail.com";
+
+  @override
+  void initState() {
+    super.initState();
+    _loadUserData();
+  }
+
+  Future<void> _loadUserData() async {
+    final userData = await SharedUser.getUserData();
+    if (userData != null) {
+      setState(() {
+        _userName = userData.usuario;
+        _userEmail = userData.email;
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -45,20 +65,20 @@ class _TelaInicialState extends State<TelaInicial> {
           child: ListView(
             padding: EdgeInsets.zero,
             children: <Widget>[
-              const UserAccountsDrawerHeader(
+               UserAccountsDrawerHeader(
                 accountName: Text(
-                  "Nome do usuário",
-                  style: TextStyle(color: Colors.black),
+                _userName,
+                style: TextStyle(color: Colors.black),
                 ),
                 accountEmail: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    SizedBox(height: 8),
+                    SizedBox(height: 3),
                     Text(
-                      "email_do_usuario@gmail.com",
+                      _userEmail,
                       style: TextStyle(color: Colors.black),
                     ),
-                    SizedBox(height: 8),
+                    SizedBox(height: 3),
                     Text(
                       "IMC Atual:",
                       style: TextStyle(color: Colors.black),
@@ -69,13 +89,13 @@ class _TelaInicialState extends State<TelaInicial> {
                   backgroundImage: AssetImage('assets/images/user_profile.png'),
                   backgroundColor: Colors.lightBlue,
                 ),
-                   decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                      colors: [Colors.cyan, Colors.blue], // Cores do degradê
-                      begin: Alignment.topCenter,
-                      end: Alignment.bottomCenter,
-                    ),
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    colors: [Colors.cyan, Colors.blue], // Cores do degradê
+                    begin: Alignment.topCenter,
+                    end: Alignment.bottomCenter,
                   ),
+                ),
               ),
               ListTile(
                 title: const Text('Informações Pessoais'),
@@ -155,23 +175,22 @@ class _TelaInicialState extends State<TelaInicial> {
                     height: 100.0,
                     width: 200.0,
                     decoration: const BoxDecoration(
-                    gradient: LinearGradient(
-                      colors: [Colors.cyan, Colors.blue], // Cores do degradê
-                      begin: Alignment.topCenter,
-                      end: Alignment.bottomCenter,
+                      gradient: LinearGradient(
+                        colors: [Colors.cyan, Colors.blue], // Cores do degradê
+                        begin: Alignment.topCenter,
+                        end: Alignment.bottomCenter,
+                      ),
                     ),
-                  ),
                     child: const Align(
                       alignment: Alignment.center,
-                      child:  Text(
+                      child: Text(
                         "FitLife",
                         style: TextStyle(
-                          fontFamily: 'Work Sans',
-                          fontSize: 64,
-                          fontStyle: FontStyle.italic,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white
-                        ),
+                            fontFamily: 'Work Sans',
+                            fontSize: 64,
+                            fontStyle: FontStyle.italic,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white),
                       ),
                     ),
                   ),
@@ -238,19 +257,19 @@ class _TelaInicialState extends State<TelaInicial> {
                         );
                       },
                     ),
-                    CustomCard(
-                      color: Colors.orange, // Defina a cor de fundo aqui
-                      title: 'Progresso',
-                      icon: Icons.trending_up,
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => Progresso.withSampleData(),
-                          ),
-                        );
-                      },
-                    ),
+                    // CustomCard(
+                    //   color: Colors.orange, // Defina a cor de fundo aqui
+                    //   title: 'Progresso',
+                    //   icon: Icons.trending_up,
+                    //   onTap: () {
+                    //     Navigator.push(
+                    //       context,
+                    //       MaterialPageRoute(
+                    //         builder: (context) => Progresso.withSampleData(),
+                    //       ),
+                    //     );
+                    //   },
+                    // ),
                     CustomCard(
                       color: Colors.red, // Defina a cor de fundo aqui
                       title: 'Alimentos Saudáveis',
@@ -276,20 +295,20 @@ class _TelaInicialState extends State<TelaInicial> {
                         );
                       },
                     ),
-                    CustomCard(
-                      color:
-                          Colors.lightGreenAccent, // Defina a cor de fundo aqui
-                      title: 'Suporte',
-                      icon: Icons.help_outline,
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => SupportScreen(),
-                          ),
-                        );
-                      },
-                    ),
+                    // CustomCard(
+                    //   color:
+                    //       Colors.lightGreenAccent, // Defina a cor de fundo aqui
+                    //   title: 'Suporte',
+                    //   icon: Icons.help_outline,
+                    //   onTap: () {
+                    //     Navigator.push(
+                    //       context,
+                    //       MaterialPageRoute(
+                    //         builder: (context) => SupportScreen(),
+                    //       ),
+                    //     );
+                    //   },
+                    // ),
                   ],
                 ),
               ),
