@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_login/service/sharedUser.dart';
 import 'package:flutter_login/service/usuario.dart';
@@ -16,24 +18,29 @@ class _PersonalInfoFormState extends State<PersonalInfoForm> {
   final _ageController = TextEditingController();
   final _weightController = TextEditingController();
   final _heightController = TextEditingController();
-  int idUsuario = 0;
+  String idUsuario = "";
   String _gender = 'Masculino';
 
   Future<void> _createUserData({
-    required int idUsuario,
-    required double peso,
-    required int idade,
+    required String idUsuario,
+    required String peso,
+    required String idade,
     required String genero,
-    required double altura,
+    required String altura,
   }) async {
     final url = Uri.parse('http://localhost:3000/infouser/cadastro');
 
+    if (genero == "masculino") {
+      genero = "M";
+    } else
+      genero = "F";
+
     final novoInfoUser = {
       'idUsuario': idUsuario,
-      'peso': peso,
-      'idade': idade,
-      'genero': genero.toString(),
-      'altura': altura,
+      'peso': peso.toString(),
+      'idade': idade.toString(),
+      'genero': genero,
+      'altura': altura.toString()
     };
 
     try {
@@ -64,29 +71,24 @@ class _PersonalInfoFormState extends State<PersonalInfoForm> {
 
     final userData = await SharedUser.getUserData();
     if (userData != null) {
-      idUsuario = userData.idUsuario as int;
+      idUsuario = userData.idUsuario.toString();
     }
 
-    print(idUsuario);
-    print(age);
-    print(height);
-    print(gender);
-
-    final apiUrl = 'https://localhost:3000/infouser/atualizar/:$idUsuario';
+    final apiUrl = 'http://localhost:3000/infouser/atualizar/$idUsuario';
 
     try {
-      final response = await http.post(
+      final response = await http.put(
         Uri.parse(apiUrl),
         body: {
-          'peso': weight,
-          'idade': age,
-          'altura': height,
-          'genero': gender,
+          'peso': weight.toString(),
+          'idade': age.toString(),
+          'genero': "M",
+          'altura': height.toString()
         },
       );
 
       // Verifique a resposta da API e lide com ela conforme necessário.
-      if (response.statusCode == 200) {
+      if (response.statusCode == 201) {
         // Dados atualizados com sucesso.
         print('Dados atualizados com sucesso!');
       } else {
@@ -216,7 +218,7 @@ class _PersonalInfoFormState extends State<PersonalInfoForm> {
           if (_formKey.currentState!.validate()) {
             final userData = await SharedUser.getUserData();
             if (userData != null) {
-              idUsuario = userData.idUsuario;
+              idUsuario = userData.idUsuario.toString();
             }
 
             final age = int.tryParse(_ageController.text) ?? 0;
@@ -225,10 +227,10 @@ class _PersonalInfoFormState extends State<PersonalInfoForm> {
 
             _createUserData(
               idUsuario: idUsuario,
-              peso: weight,
-              idade: age,
+              peso: _weightController.text,
+              idade: _ageController.text,
               genero: _gender,
-              altura: height,
+              altura: _heightController.text,
             );
           }
         },

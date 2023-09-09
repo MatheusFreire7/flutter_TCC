@@ -4,6 +4,7 @@ import 'package:flutter_login/screens/selectTreino.dart';
 import 'package:flutter_login/screens/telainicial.dart';
 import 'package:flutter_login/settings/theme.dart';
 import 'package:http/http.dart' as http;
+import '../service/sharedUser.dart';
 import '../service/usuario.dart';
 import 'formTreino.dart';
 
@@ -24,55 +25,85 @@ class _CadastroPageState extends State<CadastroPage> {
     final email = _emailController.text.trim();
     final password = _passwordController.text.trim();
 
-    if(usuario != "" && email != "" && password != "")
-    {
-       try {
-      final url = Uri.parse('http://localhost:3000/user/cadastro');
-      final response = await http.post(
-        url,
-        body: jsonEncode({
-          'idUsuario': '0',
-          'nomeUsuario': usuario,
-          'emailUsuario': email,
-          'senhaUsuario': password,
-        }),
-        headers: {'Content-Type': 'application/json'},
-      );
-
-      if (response.statusCode == 201) {
-        // Cadastro realizado com sucesso
-       Usuario usuarioNovo = new Usuario(0, usuario, email);
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => TelaInicial(),
-          ),
+    if (usuario != "" && email != "" && password != "") {
+      try {
+        final url = Uri.parse('http://localhost:3000/user/cadastro');
+        final response = await http.post(
+          url,
+          body: jsonEncode({
+            'idUsuario': '0',
+            'nomeUsuario': usuario,
+            'emailUsuario': email,
+            'senhaUsuario': password,
+          }),
+          headers: {'Content-Type': 'application/json'},
         );
-      } else {
-        // Erro ao realizar cadastro
-        final error = response.body;
+
+        if (response.statusCode == 201) {
+          final username = usuario;
+          final userEmail = email;
+
+          final userDataObject = UserData(
+            idUsuario: 0,
+            usuario: username,
+            email: userEmail,
+            genero: '', 
+            altura: 0.0, 
+            peso:  0.0,
+            imc: 0.0,
+            idPlanoTreino: 0, 
+            idPlanoAlimentacao: 0,
+          );
+
+         await SharedUser.saveUserData(userDataObject);
+
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => TelaInicial(),
+            ),
+          );
+        } else {
+          // Erro ao realizar cadastro
+          final error = response.body;
+          showDialog(
+            context: context,
+            builder: (context) => AlertDialog(
+              title: Text('Erro'),
+              content: Text(error),
+              actions: <Widget>[
+                TextButton(
+                  onPressed: () => Navigator.pop(context),
+                  child: Text('Ok'),
+                ),
+              ],
+            ),
+          );
+        }
+      } catch (e) {
+        // Lidar com a exceção aqui
+        print('Erro: $e');
         showDialog(
           context: context,
           builder: (context) => AlertDialog(
-            title: Text('Erro'),
-            content: Text(error),
+            title: const Text('Erro de Cadastro'),
+            content: const Text('Ocorreu um erro ao realizar o cadastro.'),
             actions: <Widget>[
               TextButton(
                 onPressed: () => Navigator.pop(context),
-                child: Text('Ok'),
+                child: const Text('Ok'),
               ),
             ],
           ),
         );
       }
-    } catch (e) {
-      // Lidar com a exceção aqui
-      print('Erro: $e');
+    } else {
       showDialog(
         context: context,
         builder: (context) => AlertDialog(
           title: const Text('Erro de Cadastro'),
-          content: const Text('Ocorreu um erro ao realizar o cadastro.'),
+          content:
+              const Text('Preencha todas as credenciais. Tente Novamente.'),
           actions: <Widget>[
             TextButton(
               onPressed: () => Navigator.pop(context),
@@ -82,23 +113,6 @@ class _CadastroPageState extends State<CadastroPage> {
         ),
       );
     }
-    }
-    else{
-        showDialog(
-        context: context,
-        builder: (context) => AlertDialog(
-          title: const Text('Erro de Cadastro'),
-          content: const Text('Preencha todas as credenciais. Tente Novamente.'),
-          actions: <Widget>[
-            TextButton(
-              onPressed: () => Navigator.pop(context),
-              child: const Text('Ok'),
-            ),
-          ],
-        ),
-      );
-    }
-   
   }
 
   @override
@@ -226,16 +240,16 @@ class _CadastroPageState extends State<CadastroPage> {
                         shadowColor: Colors.transparent,
                       ),
                       onPressed: () {
-                         cadastrar();
-                          //  Navigator.push(
-                          //   context,
-                          //   MaterialPageRoute(
-                          //     builder: (context) => PlanoTreinoDetalhes(  
-                          //         title: "Título do Plano",
-                          //         imageUrl: "url_da_imagem",
-                          //         name: "Nome do Plano",),
-                          //   ),
-                          // );
+                        cadastrar();
+                        //  Navigator.push(
+                        //   context,
+                        //   MaterialPageRoute(
+                        //     builder: (context) => PlanoTreinoDetalhes(
+                        //         title: "Título do Plano",
+                        //         imageUrl: "url_da_imagem",
+                        //         name: "Nome do Plano",),
+                        //   ),
+                        // );
                       },
                       child: Container(
                         decoration: BoxDecoration(
