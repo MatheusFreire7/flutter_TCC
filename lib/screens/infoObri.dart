@@ -68,7 +68,7 @@ class _PersonalInfoFormState extends State<PersonalInfoForm> {
     final weight = _weightController.text;
     final height = _heightController.text;
     final gender = _gender;
-
+    String genero = " ";
     final userData = await SharedUser.getUserData();
     if (userData != null) {
       idUsuario = userData.idUsuario.toString();
@@ -76,13 +76,18 @@ class _PersonalInfoFormState extends State<PersonalInfoForm> {
 
     final apiUrl = 'http://localhost:3000/infouser/atualizar/$idUsuario';
 
+    if (gender == "masculino") {
+      genero = "M";
+    } else
+      genero = "F";
+
     try {
       final response = await http.put(
         Uri.parse(apiUrl),
         body: {
           'peso': weight.toString(),
           'idade': age.toString(),
-          'genero': "M",
+          'genero': genero,
           'altura': height.toString()
         },
       );
