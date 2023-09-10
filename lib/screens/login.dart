@@ -2,12 +2,8 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_login/screens/cadastro.dart';
 import 'package:flutter_login/screens/telainicial.dart';
-import 'package:flutter_login/service/usuario.dart';
 import 'package:flutter_login/settings/theme.dart';
 import 'package:http/http.dart' as http;
-import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-
 import '../service/sharedUser.dart';
 
 class LoginPage extends StatefulWidget {
@@ -41,7 +37,6 @@ class _LoginPageState extends State<LoginPage> {
 
         if (response.statusCode == 200) {
           final userData = jsonDecode(response.body);
-
           final userId = userData['user']['id'];
           final username = userData['user']['username'];
           final userEmail = userData['user']['email'];
@@ -50,12 +45,12 @@ class _LoginPageState extends State<LoginPage> {
             idUsuario: userId,
             usuario: username,
             email: userEmail,
-            genero: '', // Preencha com o valor correto, se disponível no servidor
-            altura: 0.0, // Preencha com o valor correto, se disponível no servidor
-            peso: 0.0, // Preencha com o valor correto, se disponível no servidor
-            imc: 0.0, // Preencha com o valor correto, se disponível no servidor
-            idPlanoTreino: 0, // Preencha com o valor correto, se disponível no servidor
-            idPlanoAlimentacao:0, // Preencha com o valor correto, se disponível no servidor
+            genero: '',
+            altura: 0.0,
+            peso: 0.0, 
+            imc: 0.0, 
+            idPlanoTreino: 0, 
+            idPlanoAlimentacao:0, 
           );
 
           await SharedUser.saveUserData(userDataObject);
@@ -108,72 +103,71 @@ class _LoginPageState extends State<LoginPage> {
     }
   }
 
+ 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: AppTheme.themeData,
       home: Scaffold(
-          appBar: AppBar(
-            iconTheme: IconThemeData(
-                color: AppTheme.iconColor), // Define a cor do ícone na app bar
-            backgroundColor: AppTheme.appBarColor,
-            //title: const Text('Login'),
-            centerTitle: true,
+        appBar: AppBar(
+          iconTheme: IconThemeData(
+            color: AppTheme.iconColor,
           ),
-          body: SingleChildScrollView(
-            child: Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Form(
-                key: _formKey,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: <Widget>[
-                    Center(
-                      child: Container(
-                        height: 100.0,
-                        width: 200.0,
-                        child: const Text("FitLife",
-                            style: TextStyle(
-                              fontFamily: 'Work Sans',
-                              fontSize: 64,
-                              fontStyle: FontStyle.italic,
-                              fontWeight: FontWeight.bold,
-                            )),
+          backgroundColor: AppTheme.appBarColor,
+          centerTitle: true,
+        ),
+        body: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Form(
+              key: _formKey,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: <Widget>[
+                  Center(
+                    child: Container(
+                      height: 100.0,
+                      width: 200.0,
+                      child: const Text(
+                        "FitLife",
+                        style: TextStyle(
+                          fontFamily: 'Work Sans',
+                          fontSize: 64,
+                          fontStyle: FontStyle.italic,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                     ),
-                    const SizedBox(height: 3.0),
-                    TextFormField(
-                      controller: _emailController,
-                      decoration: const InputDecoration(
-                        labelText: 'Email',
-                        border: const OutlineInputBorder(),
-                      ),
-                      keyboardType: TextInputType.emailAddress,
-                      validator: (value) {
-                        if (value!.isEmpty) {
-                          return 'Por favor, insira seu email.';
-                        }
-                        return null;
-                      },
+                  ),
+                  const SizedBox(height: 20.0),
+                  TextFormField(
+                    controller: _emailController,
+                    decoration: InputDecoration(
+                      labelText: 'Email',
+                      prefixIcon: Icon(Icons.email),
+                      border: OutlineInputBorder(),
                     ),
-                    const SizedBox(height: 16.0),
-                    TextFormField(
-                      controller: _passwordController,
-                      decoration: const InputDecoration(
-                        labelText: 'Senha',
-                        border: OutlineInputBorder(),
-                      ),
-                      obscureText: true,
-                      validator: (value) {
-                        if (value!.isEmpty) {
-                          return 'Por favor, insira sua senha.';
-                        }
-                        return null;
-                      },
+                    keyboardType: TextInputType.emailAddress,
+                    validator: (value) {
+                      // Validação de email aqui
+                    },
+                  ),
+                  const SizedBox(height: 16.0),
+                  TextFormField(
+                    controller: _passwordController,
+                    decoration: InputDecoration(
+                      labelText: 'Senha',
+                      prefixIcon: Icon(Icons.lock),
+                      border: OutlineInputBorder(),
                     ),
-                    const SizedBox(height: 16.0),
-                    SizedBox(
+                    obscureText: true,
+                    validator: (value) {
+                      // Validação de senha aqui
+                    },
+                  ),
+                  const SizedBox(height: 20.0),
+              SizedBox(
                       width: 50,
                       child: ElevatedButton(
                         style: ElevatedButton.styleFrom(
@@ -205,12 +199,12 @@ class _LoginPageState extends State<LoginPage> {
                               end: Alignment.bottomCenter,
                             ),
                           ),
-                          child: Padding(
+                          child: const Padding(
                             padding: const EdgeInsets.symmetric(
                               vertical: 15.0,
                               horizontal: 143.0,
                             ),
-                            child: Text(
+                            child:const  Text(
                               'Entrar',
                               style: TextStyle(
                                 color: Colors.white,
@@ -222,57 +216,31 @@ class _LoginPageState extends State<LoginPage> {
                         ),
                       ),
                     ),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        primary: Colors.transparent,
-                        minimumSize: Size(double.infinity, 50.0),
-                        elevation: 0,
-                        padding: EdgeInsets.zero,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(20.0),
+                  const SizedBox(height: 10),
+                  TextButton(
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => CadastroPage(),
                         ),
-                        shadowColor: Colors.transparent,
-                      ),
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => CadastroPage()),
-                        );
-                      },
-                      child: Container(
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(20.0),
-                          gradient: LinearGradient(
-                            colors: [Colors.cyan, Colors.blue],
-                            begin: Alignment.topCenter,
-                            end: Alignment.bottomCenter,
-                          ),
-                        ),
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(
-                            vertical: 15.0,
-                            horizontal: 120.0,
-                          ),
-                          child: Text(
-                            'Cadastre-se',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 20,
-                              fontWeight: FontWeight.w900,
-                            ),
-                          ),
-                        ),
+                      );
+                    },
+                    child: const Text(
+                      'Cadastre-se',
+                      style: TextStyle(
+                        color: Colors.blue,
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
                       ),
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
             ),
-          )),
+          ),
+        ),
+      ),
     );
   }
 }

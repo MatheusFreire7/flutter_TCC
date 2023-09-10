@@ -1,12 +1,10 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:flutter_login/screens/selectTreino.dart';
 import 'package:flutter_login/screens/telainicial.dart';
 import 'package:flutter_login/settings/theme.dart';
 import 'package:http/http.dart' as http;
 import '../service/sharedUser.dart';
 import '../service/usuario.dart';
-import 'formTreino.dart';
 
 class CadastroPage extends StatefulWidget {
   @override
@@ -25,7 +23,7 @@ class _CadastroPageState extends State<CadastroPage> {
     final email = _emailController.text.trim();
     final password = _passwordController.text.trim();
 
-    if (usuario != "" && email != "" && password != "") {
+    if (usuario.isNotEmpty && email.isNotEmpty && password.isNotEmpty) {
       try {
         final url = Uri.parse('http://localhost:3000/user/cadastro');
         final response = await http.post(
@@ -47,15 +45,15 @@ class _CadastroPageState extends State<CadastroPage> {
             idUsuario: 0,
             usuario: username,
             email: userEmail,
-            genero: '', 
-            altura: 0.0, 
-            peso:  0.0,
+            genero: '',
+            altura: 0.0,
+            peso: 0.0,
             imc: 0.0,
-            idPlanoTreino: 0, 
+            idPlanoTreino: 0,
             idPlanoAlimentacao: 0,
           );
 
-         await SharedUser.saveUserData(userDataObject);
+          await SharedUser.saveUserData(userDataObject);
 
           Navigator.push(
             context,
@@ -64,7 +62,6 @@ class _CadastroPageState extends State<CadastroPage> {
             ),
           );
         } else {
-          // Erro ao realizar cadastro
           final error = response.body;
           showDialog(
             context: context,
@@ -81,7 +78,6 @@ class _CadastroPageState extends State<CadastroPage> {
           );
         }
       } catch (e) {
-        // Lidar com a exceção aqui
         print('Erro: $e');
         showDialog(
           context: context,
@@ -127,160 +123,155 @@ class _CadastroPageState extends State<CadastroPage> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-        debugShowCheckedModeBanner: false,
-        theme: AppTheme.themeData,
-        home: Scaffold(
-          appBar: AppBar(
-            iconTheme: IconThemeData(
-                color: AppTheme.iconColor), // Define a cor do ícone na app bar
-            backgroundColor: AppTheme.appBarColor,
-            //title: const Text('Cadastro'),
-            centerTitle: true,
-            leading: IconButton(
-              icon: const Icon(Icons.arrow_back),
-              onPressed: () {
-                Navigator.pop(context);
-              },
-            ),
+      debugShowCheckedModeBanner: false,
+      theme: AppTheme.themeData,
+      home: Scaffold(
+        appBar: AppBar(
+          iconTheme: IconThemeData(
+            color: AppTheme.iconColor,
           ),
-          body: SingleChildScrollView(
-            child: Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Form(
-                key: _formKey,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: <Widget>[
-                    Center(
-                      child: Container(
-                        height: 100.0,
-                        width: 200.0,
-                        child: const Text("FitLife",
-                            style: TextStyle(
-                              fontFamily: 'Work Sans',
-                              fontSize: 64,
-                              fontStyle: FontStyle.italic,
-                              fontWeight: FontWeight.bold,
-                            )),
-                      ),
+          backgroundColor: AppTheme.appBarColor,
+          centerTitle: true,
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back),
+            onPressed: () {
+              Navigator.pop(context);
+            },
+          ),
+        ),
+        body: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Form(
+              key: _formKey,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: <Widget>[
+                  Center(
+                    child: Container(
+                      height: 100.0,
+                      width: 200.0,
+                      child: const Text("FitLife",
+                          style: TextStyle(
+                            fontFamily: 'Work Sans',
+                            fontSize: 64,
+                            fontStyle: FontStyle.italic,
+                            fontWeight: FontWeight.bold,
+                          )),
                     ),
-                    const SizedBox(height: 3.0),
-                    TextFormField(
-                      controller: _usuarioController,
-                      decoration: const InputDecoration(
-                        labelText: 'Usuário',
-                        border: OutlineInputBorder(),
-                      ),
-                      keyboardType: TextInputType.emailAddress,
-                      validator: (value) {
-                        if (value!.isEmpty) {
-                          return 'Por favor, insira seu usuário.';
-                        }
-                        return null;
-                      },
+                  ),
+                  const SizedBox(height: 20.0),
+                  TextFormField(
+                    controller: _usuarioController,
+                    decoration: InputDecoration(
+                      labelText: 'Usuário',
+                      border: OutlineInputBorder(),
+                      prefixIcon: Icon(Icons.person), // Ícone de usuário
                     ),
-                    const SizedBox(height: 16.0),
-                    const SizedBox(height: 3.0),
-                    TextFormField(
-                      controller: _emailController,
-                      decoration: const InputDecoration(
-                        labelText: 'Email',
-                        border: OutlineInputBorder(),
-                      ),
-                      keyboardType: TextInputType.emailAddress,
-                      validator: (value) {
-                        if (value!.isEmpty) {
-                          return 'Por favor, insira seu email.';
-                        }
-                        return null;
-                      },
+                    keyboardType: TextInputType.emailAddress,
+                    validator: (value) {
+                      if (value!.isEmpty) {
+                        return 'Por favor, insira seu usuário.';
+                      }
+                      return null;
+                    },
+                  ),
+                  const SizedBox(height: 16.0),
+                  TextFormField(
+                    controller: _emailController,
+                    decoration: InputDecoration(
+                      labelText: 'Email',
+                      border: OutlineInputBorder(),
+                      prefixIcon: Icon(Icons.email), // Ícone de email
                     ),
-                    const SizedBox(height: 16.0),
-                    TextFormField(
-                      controller: _passwordController,
-                      decoration: const InputDecoration(
-                        labelText: 'Senha',
-                        border: OutlineInputBorder(),
-                      ),
-                      obscureText: true,
-                      validator: (value) {
-                        if (value!.isEmpty) {
-                          return 'Por favor, insira sua senha.';
-                        }
-                        return null;
-                      },
+                    keyboardType: TextInputType.emailAddress,
+                    validator: (value) {
+                      if (value!.isEmpty) {
+                        return 'Por favor, insira seu email.';
+                      }
+                      return null;
+                    },
+                  ),
+                  const SizedBox(height: 16.0),
+                  TextFormField(
+                    controller: _passwordController,
+                    decoration: InputDecoration(
+                      labelText: 'Senha',
+                      border: OutlineInputBorder(),
+                      prefixIcon: Icon(Icons.lock), // Ícone de cadeado
                     ),
-                    const SizedBox(height: 16.0),
-                    TextFormField(
-                      controller: _confirmPasswordController,
-                      decoration: const InputDecoration(
-                        labelText: 'Confirmar Senha',
-                        border: OutlineInputBorder(),
-                      ),
-                      obscureText: true,
-                      validator: (value) {
-                        if (value!.isEmpty) {
-                          return 'Por favor, confirme sua senha.';
-                        } else if (value != _passwordController.text) {
-                          return 'As senhas não correspondem.';
-                        }
-                        return null;
-                      },
+                    obscureText: true,
+                    validator: (value) {
+                      if (value!.isEmpty) {
+                        return 'Por favor, insira sua senha.';
+                      }
+                      return null;
+                    },
+                  ),
+                  const SizedBox(height: 16.0),
+                  TextFormField(
+                    controller: _confirmPasswordController,
+                    decoration: InputDecoration(
+                      labelText: 'Confirmar Senha',
+                      border: OutlineInputBorder(),
+                      prefixIcon: Icon(Icons.lock), // Ícone de cadeado
                     ),
-                    const SizedBox(height: 16.0),
-                    ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        primary: Colors.transparent,
-                        minimumSize: Size(double.infinity, 50.0),
-                        elevation: 0,
-                        padding: EdgeInsets.zero,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(20.0),
-                        ),
-                        shadowColor: Colors.transparent,
+                    obscureText: true,
+                    validator: (value) {
+                      if (value!.isEmpty) {
+                        return 'Por favor, confirme sua senha.';
+                      } else if (value != _passwordController.text) {
+                        return 'As senhas não correspondem.';
+                      }
+                      return null;
+                    },
+                  ),
+                  const SizedBox(height: 16.0),
+                  ElevatedButton(
+                    onPressed: () {
+                      cadastrar();
+                    },
+                    style: ElevatedButton.styleFrom(
+                      primary: Colors.transparent,
+                      minimumSize: Size(double.infinity, 50.0),
+                      elevation: 0,
+                      padding: EdgeInsets.zero,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(20.0),
                       ),
-                      onPressed: () {
-                        cadastrar();
-                        //  Navigator.push(
-                        //   context,
-                        //   MaterialPageRoute(
-                        //     builder: (context) => PlanoTreinoDetalhes(
-                        //         title: "Título do Plano",
-                        //         imageUrl: "url_da_imagem",
-                        //         name: "Nome do Plano",),
-                        //   ),
-                        // );
-                      },
-                      child: Container(
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(20.0),
-                          gradient: LinearGradient(
-                            colors: [Colors.cyan, Colors.blue],
-                            begin: Alignment.topCenter,
-                            end: Alignment.bottomCenter,
-                          ),
-                        ),
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(
-                            vertical: 15.0,
-                            horizontal: 120.0,
-                          ),
-                          child: Text(
-                            'Cadastrar',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 20,
-                              fontWeight: FontWeight.w900,
-                            ),
-                          ),
+                      shadowColor: Colors.transparent,
+                    ),
+                    child: Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(20.0),
+                        gradient: LinearGradient(
+                          colors: [Colors.cyan, Colors.blue],
+                          begin: Alignment.topCenter,
+                          end: Alignment.bottomCenter,
                         ),
                       ),
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(
+                          vertical: 15.0,
+                          horizontal: 120.0,
+                        ),
+                        child: Text(
+                          'Cadastrar',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 20,
+                            fontWeight: FontWeight.w900,
+                          ),
+                        ),
+                      ),
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
             ),
           ),
-        ));
+        ),
+      ),
+    );
   }
 }
