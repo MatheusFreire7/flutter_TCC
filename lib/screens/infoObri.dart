@@ -30,6 +30,8 @@ class _PersonalInfoFormState extends State<PersonalInfoForm> {
   }) async {
     final url = Uri.parse('http://localhost:3000/infouser/cadastro');
 
+    print(idUsuario);
+
     if (genero == "masculino") {
       genero = "M";
     } else

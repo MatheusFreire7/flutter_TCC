@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:flutter_login/screens/login.dart';
 import 'package:flutter_login/screens/telainicial.dart';
 import 'package:flutter_login/settings/theme.dart';
 import 'package:http/http.dart' as http;
@@ -58,11 +59,12 @@ class _CadastroPageState extends State<CadastroPage> {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => TelaInicial(),
+              builder: (context) => LoginPage(),
             ),
           );
         } else {
           final error = response.body;
+          print(error);
           showDialog(
             context: context,
             builder: (context) => AlertDialog(

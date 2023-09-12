@@ -15,6 +15,7 @@ class _LoginPageState extends State<LoginPage> {
   final _formKey = GlobalKey<FormState>();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
+  
 
   @override
   void dispose() {
@@ -22,6 +23,42 @@ class _LoginPageState extends State<LoginPage> {
     _passwordController.dispose();
     super.dispose();
   }
+
+Future<List<UserData>> getDadosUser(int userId) async {
+  try {
+    final response = await http.get(
+      Uri.parse('http://localhost:3000/infouser/get/$userId'),
+      headers: {'Content-Type': 'application/json'},
+    );
+
+    if (response.statusCode == 200) {
+      final List<Map<String, dynamic>> jsonDataList =
+          List<Map<String, dynamic>>.from(json.decode(response.body));
+      
+      final List<UserData> userDataList = jsonDataList.map((jsonMap) {
+        return UserData(
+          idUsuario: jsonMap['idUsuario'],
+          usuario: '', 
+          email: '',   
+          genero: jsonMap['genero'],
+          altura: jsonMap['alturaCM'].toDouble(),
+          peso: jsonMap['pesoKg'].toDouble(),
+          imc: 0.0,   
+          idPlanoTreino: 0, 
+          idPlanoAlimentacao: 0, 
+        );
+      }).toList();
+
+      return userDataList;
+    } else {
+      return []; // Retorna uma lista vazia em caso de erro 
+    }
+  } catch (e) {
+    print(e);
+    return []; // Retorna uma lista vazia em caso de erro 
+  }
+}
+
 
   Future<void> login(String email, String password) async {
     if (email.isNotEmpty && password.isNotEmpty) {
@@ -35,26 +72,37 @@ class _LoginPageState extends State<LoginPage> {
           headers: {'Content-Type': 'application/json'},
         );
 
-        if (response.statusCode == 200) {
-          final userData = jsonDecode(response.body);
-          final userId = userData['user']['id'];
-          final username = userData['user']['username'];
-          final userEmail = userData['user']['email'];
+       if (response.statusCode == 200) {
+        final userData = jsonDecode(response.body);
+        final userId = userData['user']['id'];
+        final username = userData['user']['username'];
+        final userEmail = userData['user']['email'];
 
-          final userDataObject = UserData(
+        final userDataList = await getDadosUser(userId);
+
+        if (userDataList.isNotEmpty) {
+          final userDataObject = userDataList.first;
+          userDataObject.usuario = username;
+          userDataObject.email = userEmail;
+         final alturaMetros = userDataObject.altura / 100; // Converter altura para metros
+         userDataObject.imc = userDataObject.peso / (alturaMetros * alturaMetros); 
+          await SharedUser.saveUserData(userDataObject);
+        } else {
+          final userDataObjectNew = UserData(
             idUsuario: userId,
             usuario: username,
             email: userEmail,
             genero: '',
             altura: 0.0,
-            peso: 0.0, 
-            imc: 0.0, 
-            idPlanoTreino: 0, 
-            idPlanoAlimentacao:0, 
+            peso: 0.0,
+            imc: 0.0,
+            idPlanoTreino: 0,
+            idPlanoAlimentacao: 0,
           );
+          await SharedUser.saveUserData(userDataObjectNew);
+        }
 
-          await SharedUser.saveUserData(userDataObject);
-
+        
           Navigator.push(
             context,
             MaterialPageRoute(builder: (context) => TelaInicial()),
@@ -103,7 +151,6 @@ class _LoginPageState extends State<LoginPage> {
     }
   }
 
- 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(

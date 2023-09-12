@@ -19,6 +19,7 @@ class _TelaInicialState extends State<TelaInicial> {
 
   String _userName = "Nome do usuário";
   String _userEmail = "email_do_usuario@gmail.com";
+  double _imc = 0.0;
 
   @override
   void initState() {
@@ -32,6 +33,7 @@ class _TelaInicialState extends State<TelaInicial> {
       setState(() {
         _userName = userData.usuario;
         _userEmail = userData.email;
+        _imc = userData.imc;
       });
     }
   }
@@ -67,7 +69,7 @@ class _TelaInicialState extends State<TelaInicial> {
             children: <Widget>[
                UserAccountsDrawerHeader(
                 accountName: Text(
-                _userName,
+                "Username: ${_userName}",
                 style: TextStyle(color: Colors.black),
                 ),
                 accountEmail: Column(
@@ -75,12 +77,12 @@ class _TelaInicialState extends State<TelaInicial> {
                   children: [
                     SizedBox(height: 3),
                     Text(
-                      _userEmail,
+                      "E-mail:${_userEmail}",
                       style: TextStyle(color: Colors.black),
                     ),
                     SizedBox(height: 3),
                     Text(
-                      "IMC Atual:",
+                     "IMC: ${_imc.toStringAsFixed(2)}",
                       style: TextStyle(color: Colors.black),
                     ),
                   ],

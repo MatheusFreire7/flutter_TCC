@@ -1,17 +1,17 @@
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
 class UserData {
-  final int idUsuario;
-  final String usuario;
-  final String email;
-  final String genero;
-  final double altura;
-  final double peso;
-  final double imc;
-  final int idPlanoTreino;
-  final int idPlanoAlimentacao;
+  int idUsuario;
+  String usuario;
+  String email;
+  String genero;
+  double altura;
+  double peso;
+  double imc;
+  int idPlanoTreino;
+  int idPlanoAlimentacao;
 
-  UserData({
+  UserData( {
     required this.idUsuario,
     required this.usuario,
     required this.email,
@@ -22,20 +22,21 @@ class UserData {
     required this.idPlanoTreino,
     required this.idPlanoAlimentacao,
   });
+  
 
-  factory UserData.fromJson(Map<String, dynamic> json) {
-    return UserData(
-      idUsuario: json['idUsuario'] ?? 0,
-      usuario: json['usuario'] ?? '',
-      email: json['email'] ?? '',
-      genero: json['genero'] ?? '',
-      altura: json['altura'] ?? 0.0,
-      peso: json['peso'] ?? 0.0,
-      imc: json['imc'] ?? 0.0,
-      idPlanoTreino: json['idPlanoTreino'] ?? 0,
-      idPlanoAlimentacao: json['idPlanoAlimentacao'] ?? 0,
-    );
-  }
+factory UserData.fromJson(Map<String, dynamic> json) {
+  return UserData(
+    idUsuario: json['idUsuario'] as int,
+    usuario: json['usuario'] as String,
+    email: json['email'] as String,
+    genero: json['genero'] as String,
+    altura: (json['altura'] as num).toDouble(),
+    peso: (json['peso'] as num).toDouble(),
+    imc: (json['imc'] as num).toDouble(),
+    idPlanoTreino: json['idPlanoTreino'] as int,
+    idPlanoAlimentacao: json['idPlanoAlimentacao'] as int,
+  );
+}
 
   Map<String, dynamic> toJson() {
     return {
