@@ -68,23 +68,24 @@ class _TelaInicialState extends State<TelaInicial> {
             padding: EdgeInsets.zero,
             children: <Widget>[
                UserAccountsDrawerHeader(
-                accountName: Text(
-                "Username: ${_userName}",
-                style: TextStyle(color: Colors.black),
-                ),
+                 accountName:
+                  Row(children: [
+                    Text("Username: " ,style: const TextStyle(fontWeight: FontWeight.bold)),
+                    Text("${_userName}")
+                  ]),
                 accountEmail: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     SizedBox(height: 3),
-                    Text(
-                      "E-mail:${_userEmail}",
-                      style: TextStyle(color: Colors.black),
-                    ),
+                    Row(children: [
+                    Text("E-mail: " ,style: const TextStyle(fontWeight: FontWeight.bold)),
+                    Text("${_userEmail}")
+                  ]),
                     SizedBox(height: 3),
-                    Text(
-                     "IMC: ${_imc.toStringAsFixed(2)}",
-                      style: TextStyle(color: Colors.black),
-                    ),
+                     Row(children: [
+                    Text("IMC: " ,style: const TextStyle(fontWeight: FontWeight.bold)),
+                    Text("${_imc.toStringAsFixed(1)}")
+                  ]),
                   ],
                 ),
                 currentAccountPicture: CircleAvatar(

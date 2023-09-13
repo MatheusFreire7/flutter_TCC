@@ -131,23 +131,31 @@ Future<List<UserData>> getDadosUser(int userId) async {
         print('Ocorreu uma exceção: $e');
       }
     } else {
-      showDialog(
+     showDialog(
         context: context,
-        builder: (context) {
-          return AlertDialog(
-            title: Text('Login Falhou'),
-            content: Text('Preencha todas as credenciais e tente novamente.'),
-            actions: <Widget>[
-              TextButton(
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-                child: Text('Ok'),
+        builder: (BuildContext context) {
+          return Dialog(
+            shape: RoundedRectangleBorder(
+                borderRadius:
+                    BorderRadius.circular(20.0)),
+            child: Container(
+              height: 200,
+              child: Padding(
+                padding: const EdgeInsets.all(12.0),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Center(child: Text(
+                      "Preencha todas as credenciais e tente novamente.",
+                      style: TextStyle(fontSize: 20, ),)                    
+                    ),
+                  ],
+                ),
               ),
-            ],
+            ),
           );
-        },
-      );
+        });
     }
   }
 
