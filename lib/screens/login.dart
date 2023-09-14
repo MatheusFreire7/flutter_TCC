@@ -42,6 +42,7 @@ Future<List<UserData>> getDadosUser(int userId) async {
           email: '',   
           genero: jsonMap['genero'],
           altura: jsonMap['alturaCM'].toDouble(),
+          idade: jsonMap['idade'].toInt(),
           peso: jsonMap['pesoKg'].toDouble(),
           imc: 0.0,   
           idPlanoTreino: 0, 
@@ -94,6 +95,7 @@ Future<List<UserData>> getDadosUser(int userId) async {
             email: userEmail,
             genero: '',
             altura: 0.0,
+            idade: 0,
             peso: 0.0,
             imc: 0.0,
             idPlanoTreino: 0,
@@ -112,9 +114,13 @@ Future<List<UserData>> getDadosUser(int userId) async {
             context: context,
             builder: (context) {
               return AlertDialog(
+               shape: RoundedRectangleBorder(
+                borderRadius:
+                    BorderRadius.circular(30.0)),
+                  titleTextStyle: TextStyle(fontSize: 25, fontWeight: FontWeight.bold, color: Colors.blue), 
                 title: Text('Login Falhou'),
                 content: Text(
-                    'Login inválido. Verifique suas credenciais e tente novamente.'),
+                    'Login inválido. Verifique suas credenciais e tente novamente.', style: TextStyle(fontSize: 20, fontWeight: FontWeight.w200),),
                 actions: <Widget>[
                   TextButton(
                     onPressed: () {
@@ -137,18 +143,25 @@ Future<List<UserData>> getDadosUser(int userId) async {
           return Dialog(
             shape: RoundedRectangleBorder(
                 borderRadius:
-                    BorderRadius.circular(20.0)),
+                    BorderRadius.circular(30.0)),
             child: Container(
               height: 200,
-              child: Padding(
-                padding: const EdgeInsets.all(12.0),
+              width: 300,
+              child: const Padding(
+                padding: EdgeInsets.all(12.0),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Center(child: Text(
-                      "Preencha todas as credenciais e tente novamente.",
-                      style: TextStyle(fontSize: 20, ),)                    
+                    Center(
+                      child: Text(
+                      "Preencha todas as credenciais e tente novamente!",
+                      style: TextStyle(
+                        fontSize: 20, 
+                        fontWeight: FontWeight.bold,
+                        color:Colors.blue
+                        ),
+                      )                    
                     ),
                   ],
                 ),

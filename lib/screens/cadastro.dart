@@ -48,6 +48,7 @@ class _CadastroPageState extends State<CadastroPage> {
             email: userEmail,
             genero: '',
             altura: 0.0,
+            idade: 0,
             peso: 0.0,
             imc: 0.0,
             idPlanoTreino: 0,

@@ -8,6 +8,7 @@ class UserData {
   double altura;
   double peso;
   double imc;
+  int idade;
   int idPlanoTreino;
   int idPlanoAlimentacao;
 
@@ -17,6 +18,7 @@ class UserData {
     required this.email,
     required this.genero,
     required this.altura,
+    required this.idade,
     required this.peso,
     required this.imc,
     required this.idPlanoTreino,
@@ -31,6 +33,7 @@ factory UserData.fromJson(Map<String, dynamic> json) {
     email: json['email'] as String,
     genero: json['genero'] as String,
     altura: (json['altura'] as num).toDouble(),
+    idade: (json['idade'] as num).toInt(),
     peso: (json['peso'] as num).toDouble(),
     imc: (json['imc'] as num).toDouble(),
     idPlanoTreino: json['idPlanoTreino'] as int,
@@ -45,6 +48,7 @@ factory UserData.fromJson(Map<String, dynamic> json) {
       'email': email,
       'genero': genero,
       'altura': altura,
+      'idade': idade,
       'peso': peso,
       'imc': imc,
       'idPlanoTreino': idPlanoTreino,

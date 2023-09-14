@@ -3,7 +3,6 @@ import 'package:flutter_login/widgets/alimentSaudavel.dart';
 import 'package:flutter_login/settings/config.dart';
 import 'package:flutter_login/screens/infoObri.dart';
 import 'package:flutter_login/widgets/planoTreino.dart';
-import 'package:flutter_login/widgets/progresso.dart';
 import 'package:flutter_login/settings/suporte.dart';
 import 'package:flutter_login/settings/theme.dart';
 

@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_login/screens/telainicial.dart';
 import 'package:flutter_login/service/sharedUser.dart';
 import 'package:flutter_login/service/usuario.dart';
 import 'package:flutter_login/settings/theme.dart';
@@ -20,6 +21,31 @@ class _PersonalInfoFormState extends State<PersonalInfoForm> {
   final _heightController = TextEditingController();
   String idUsuario = "";
   String _gender = 'Masculino';
+  String _userName  = "";
+  String _userEmail  = "";
+  double _imc = 0.0;
+  double _altura = 0.0;
+  double _peso = 0.0;
+  int _idade = 0;
+
+    Future<void> _loadUserData() async {
+    final userData = await SharedUser.getUserData();
+    if (userData != null) {
+      setState(() {
+        _userName = userData.usuario;
+        _userEmail = userData.email;
+        _imc = userData.imc;
+        _altura = userData.altura;
+        _idade = userData.idade;
+        _peso = userData.peso;
+        if(userData.genero == 'M')
+          _gender = 'Masculino';
+        else
+          _gender = 'Feminino';
+      });
+    }
+  }
+
 
   Future<void> _createUserData({
     required String idUsuario,
@@ -30,9 +56,9 @@ class _PersonalInfoFormState extends State<PersonalInfoForm> {
   }) async {
     final url = Uri.parse('http://localhost:3000/infouser/cadastro');
 
-    print(idUsuario);
+      final dadosUser = await SharedUser.getUserData();
 
-    if (genero == "masculino") {
+    if (genero == "Masculino") {
       genero = "M";
     } else
       genero = "F";
@@ -45,24 +71,115 @@ class _PersonalInfoFormState extends State<PersonalInfoForm> {
       'altura': altura.toString()
     };
 
-    try {
+    if(dadosUser!.imc == 0.0)
+    {
+      try {
       final response = await http.post(
         url,
         body: novoInfoUser,
       );
 
+      double peso = 0.0;
+      double altura = 0.0;
+
+        peso = double.parse(dadosUser!.peso.toString());
+        altura = dadosUser!.altura / 100.0; // Converter altura para metros
+
+      UserData userData = new UserData(
+        idUsuario: dadosUser!.idUsuario, 
+        usuario: dadosUser.usuario,
+        email: dadosUser.email, 
+        genero: genero, 
+        altura: altura, 
+        idade: int.parse(idade),
+        peso: peso, 
+        imc: peso / (altura * altura),
+        idPlanoTreino: 0,
+        idPlanoAlimentacao: 0);
+
+      await SharedUser.saveUserData(userData);
+
       if (response.statusCode == 201) {
         // Requisição bem-sucedida, você pode tratar a resposta aqui
         print('Cadastro realizado com sucesso');
+        showDialog(
+            context: context,
+            builder: (context) {
+              return AlertDialog(
+               shape: RoundedRectangleBorder(
+                borderRadius:
+                    BorderRadius.circular(30.0)),
+                  titleTextStyle: TextStyle(fontSize: 25, fontWeight: FontWeight.bold, color: Colors.blue), 
+                title: Text('Cadastro foi incluído'),
+                content: Text(
+                    'Cadastro de informações foi realizado com sucesso!', style: TextStyle(fontSize: 20, fontWeight: FontWeight.w200),),
+                actions: <Widget>[
+                  TextButton(
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                    child: Text('Ok'),
+                  ),
+                ],
+              );
+            },
+          );
       } else {
-        // Trate os erros aqui
-        print(
-            'Erro ao cadastrar usuário. Código de resposta: ${response.statusCode}');
+        print('Erro ao cadastrar usuário. Código de resposta: ${response.statusCode}');
+        showDialog(
+            context: context,
+            builder: (context) {
+              return AlertDialog(
+               shape: RoundedRectangleBorder(
+                borderRadius:
+                    BorderRadius.circular(30.0)),
+                  titleTextStyle: TextStyle(fontSize: 25, fontWeight: FontWeight.bold, color: Colors.red), 
+                title: Text('Erro ao Cadastrar'),
+                content: Text(
+                    'Ocorre um Erro ao cadastrar usuário.!', style: TextStyle(fontSize: 20, fontWeight: FontWeight.w200),),
+                actions: <Widget>[
+                  TextButton(
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                    child: Text('Ok'),
+                  ),
+                ],
+              );
+            },
+          );
       }
     } catch (error) {
-      // Trate os erros de conexão ou outros erros
+      // Erro de Conexão
       print('Erro: $error');
     }
+    }
+    else
+    {
+       showDialog(
+            context: context,
+            builder: (context) {
+              return AlertDialog(
+               shape: RoundedRectangleBorder(
+                borderRadius:
+                    BorderRadius.circular(30.0)),
+                  titleTextStyle: TextStyle(fontSize: 25, fontWeight: FontWeight.bold, color: Colors.blue), 
+                title: Text('Erro ao Cadastrar'),
+                content: Text(
+                    'Você já possui Informações Cadastradas!', style: TextStyle(fontSize: 20, fontWeight: FontWeight.w200),),
+                actions: <Widget>[
+                  TextButton(
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                    child: Text('Ok'),
+                  ),
+                ],
+              );
+            },
+          );
+    }
+    
   }
 
   Future<void> _updateUserData() async {
@@ -78,7 +195,7 @@ class _PersonalInfoFormState extends State<PersonalInfoForm> {
 
     final apiUrl = 'http://localhost:3000/infouser/atualizar/$idUsuario';
 
-    if (gender == "masculino") {
+    if (gender == "Masculino") {
       genero = "M";
     } else
       genero = "F";
@@ -94,10 +211,41 @@ class _PersonalInfoFormState extends State<PersonalInfoForm> {
         },
       );
 
+      final userData = await SharedUser.getUserData();
+      userData?.peso = double.parse(weight);
+      userData?.idade = int.parse(age);
+      userData?.genero = genero;
+      userData?.altura = double.parse(height);
+
+      await SharedUser.saveUserData(userData!);
+
       // Verifique a resposta da API e lide com ela conforme necessário.
       if (response.statusCode == 201) {
         // Dados atualizados com sucesso.
         print('Dados atualizados com sucesso!');
+
+        showDialog(
+            context: context,
+            builder: (context) {
+              return AlertDialog(
+               shape: RoundedRectangleBorder(
+                borderRadius:
+                    BorderRadius.circular(30.0)),
+                  titleTextStyle: TextStyle(fontSize: 25, fontWeight: FontWeight.bold, color: Colors.blue), 
+                title: Text('Dados Foram Atualizados'),
+                content: Text(
+                    'Dados atualizados com sucesso!', style: TextStyle(fontSize: 20, fontWeight: FontWeight.w200),),
+                actions: <Widget>[
+                  TextButton(
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                    child: Text('Ok'),
+                  ),
+                ],
+              );
+            },
+          );
       } else {
         // Algo deu errado na solicitação.
         print('Erro ao atualizar dados: ${response.statusCode}');
@@ -106,6 +254,18 @@ class _PersonalInfoFormState extends State<PersonalInfoForm> {
       // Erro de conexão ou outro erro.
       print('Erro: $error');
     }
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _loadUserData();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _loadUserData();
   }
 
   @override
@@ -130,6 +290,11 @@ class _PersonalInfoFormState extends State<PersonalInfoForm> {
             icon: const Icon(Icons.arrow_back),
             onPressed: () {
               Navigator.pop(context);
+              Navigator.of(context).pushReplacement(
+                MaterialPageRoute(
+                  builder: (context) => TelaInicial(),
+                ),
+              ); 
             },
           ),
           title: Text(
@@ -150,11 +315,11 @@ class _PersonalInfoFormState extends State<PersonalInfoForm> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: <Widget>[
-                _buildTextField("Idade", _ageController),
+                _buildTextField("Idade: ${_idade}", _ageController),
                 const SizedBox(height: 12.0),
-                _buildTextField("Peso (kg)", _weightController),
+                _buildTextField("Peso (kg): ${_peso}", _weightController),
                 const SizedBox(height: 12.0),
-                _buildTextField("Altura (cm)", _heightController),
+                _buildTextField("Altura (cm): ${_altura}", _heightController),
                 const SizedBox(height: 12.0),
                 _buildGenderDropdown(),
                 const SizedBox(height: 24.0),
