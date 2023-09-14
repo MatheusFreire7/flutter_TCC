@@ -2,6 +2,8 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
+import '../settings/theme.dart';
+
 class AlimentacaoSaudavel extends StatefulWidget {
   @override
   _AlimentacaoSaudavelState createState() => _AlimentacaoSaudavelState();
@@ -30,10 +32,23 @@ class _AlimentacaoSaudavelState extends State<AlimentacaoSaudavel> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      theme: AppTheme.themeData,
+      home:Scaffold(
       appBar: AppBar(
-        title: const Text('Alimentação Saudável'),
-      ),
+          iconTheme: IconThemeData(
+            color: AppTheme.iconColor,
+          ),
+          backgroundColor: AppTheme.appBarColor,
+          centerTitle: true,
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back),
+            onPressed: () {
+              Navigator.pop(context);
+            },
+          ),
+        ),
       body: ListView.builder(
         itemCount: alimentos.length,
         itemBuilder: (context, index) {
@@ -57,6 +72,7 @@ class _AlimentacaoSaudavelState extends State<AlimentacaoSaudavel> {
           );
         },
       ),
+    ),
     );
   }
 }

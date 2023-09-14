@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_login/widgets/alimentSaudavel.dart';
 import 'package:flutter_login/settings/config.dart';
 import 'package:flutter_login/screens/infoObri.dart';
+import 'package:flutter_login/widgets/planoAlimentacao.dart';
 import 'package:flutter_login/widgets/planoTreino.dart';
 import 'package:flutter_login/settings/suporte.dart';
 import 'package:flutter_login/settings/theme.dart';
@@ -127,7 +128,7 @@ class _TelaInicialState extends State<TelaInicial> {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => TelaInicial(),
+                      builder: (context) => PlanoAlimentacaoPage(),
                     ),
                   );
                 },
@@ -241,7 +242,7 @@ class _TelaInicialState extends State<TelaInicial> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => TelaInicial(),
+                            builder: (context) => PlanoAlimentacaoPage(),
                           ),
                         );
                       },
