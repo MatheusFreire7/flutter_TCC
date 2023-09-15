@@ -5,7 +5,6 @@ import 'package:flutter_login/screens/infoObri.dart';
 import 'package:flutter_login/screens/login.dart';
 import 'package:flutter_login/screens/telainicial.dart';
 import 'package:flutter_login/settings/theme.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 ThemeData _themeData = AppTheme.themeData; // Use sua classe de tema global aqui
 
@@ -15,11 +14,8 @@ class ConfiguracoesPage extends StatefulWidget {
 }
 
 class _ConfiguracoesPageState extends State<ConfiguracoesPage> {
-  bool _notificacoesAtivas = true;
   Color _appBarColor = Colors.white;
   Color _iconColor = Colors.black; // Cor padrão do ícone na app bar
-  String _unidadeMedida = 'kg'; // Unidade de medida padrão
-  double _metaDiaria = 0.0; // Meta diária padrão
 
   ThemeData _themeData =
       AppTheme.themeData; // Use sua classe de tema global aqui

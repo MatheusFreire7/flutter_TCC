@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_login/settings/theme.dart';
-import 'package:flutter_login/widgets/treino.dart';
 
 class PlanoAlimentacaoPage extends StatefulWidget {
   @override

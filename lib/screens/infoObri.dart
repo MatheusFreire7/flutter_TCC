@@ -1,13 +1,10 @@
 import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_login/screens/telainicial.dart';
 import 'package:flutter_login/service/sharedUser.dart';
-import 'package:flutter_login/service/usuario.dart';
 import 'package:flutter_login/settings/theme.dart';
 import 'package:http/http.dart' as http;
-import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+
 
 class PersonalInfoForm extends StatefulWidget {
   @override
