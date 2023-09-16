@@ -183,27 +183,39 @@ Future<Uint8List?> _loadUserImage() async {
           child: ListView(
             padding: EdgeInsets.zero,
             children: <Widget>[
-              UserAccountsDrawerHeader(
-                accountName: Row(children: [
-                  Text("Username: ",
-                      style: const TextStyle(fontWeight: FontWeight.bold)),
-                  Text("${_userName}")
-                ]),
+            UserAccountsDrawerHeader(
+                accountName: Row(
+                  children: [
+                    Icon(Icons.person, color: Colors.black, size: 16.0), // Ícone de usuário
+                    SizedBox(width: 8.0), 
+                    Text("Username:", style: TextStyle(fontSize: 14.0, fontWeight: FontWeight.bold)),
+                    SizedBox(width: 4.0), 
+                    Text("${_userName}", style: TextStyle(fontSize: 14.0))
+                  ],
+                ),
                 accountEmail: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    SizedBox(height: 3),
-                    Row(children: [
-                      Text("E-mail: ",
-                          style: const TextStyle(fontWeight: FontWeight.bold)),
-                      Text("${_userEmail}")
-                    ]),
-                    SizedBox(height: 3),
-                    Row(children: [
-                      Text("IMC: ",
-                          style: const TextStyle(fontWeight: FontWeight.bold)),
-                      Text("${_imc.toStringAsFixed(1)}")
-                    ]),
+                    SizedBox(height: 5.0), 
+                    Row(
+                      children: [
+                        Icon(Icons.email, color: Colors.black, size: 16.0), // Ícone de e-mail
+                        SizedBox(width: 8.0), 
+                        Text("E-mail:", style: TextStyle(fontSize: 14.0, fontWeight: FontWeight.bold)),
+                        SizedBox(width: 4.0),
+                        Text("${_userEmail}", style: TextStyle(fontSize: 14.0))
+                      ],
+                    ),
+                    SizedBox(height: 8.0), 
+                    Row(
+                      children: [
+                        Icon(Icons.monitor_weight, color: Colors.black, size: 16.0), // Ícone para o IMC
+                        SizedBox(width: 8.0), 
+                        Text("IMC:", style: TextStyle(fontSize: 14.0, fontWeight: FontWeight.bold)),
+                        SizedBox(width: 4.0), 
+                        Text("${_imc.toStringAsFixed(1)}", style: TextStyle(fontSize: 14.0))
+                      ],
+                    ),
                   ],
                 ),
                 currentAccountPicture: GestureDetector(
@@ -214,6 +226,7 @@ Future<Uint8List?> _loadUserImage() async {
                             .image
                         : AssetImage('assets/images/user_profile.png'),
                     backgroundColor: Colors.lightBlue,
+                    radius: 30.0, // Tamanho do avatar
                   ),
                 ),
                 decoration: BoxDecoration(
@@ -224,8 +237,9 @@ Future<Uint8List?> _loadUserImage() async {
                   ),
                 ),
               ),
-              ListTile(
-                title: const Text('Informações Pessoais'),
+           ListTile(
+                title: Text('Informações Pessoais', style: TextStyle(fontSize: 16.0)),
+                leading: Icon(Icons.person_outline, color: Colors.blue),
                 onTap: () {
                   Navigator.push(
                     context,
@@ -236,7 +250,8 @@ Future<Uint8List?> _loadUserImage() async {
                 },
               ),
               ListTile(
-                title: const Text('Plano de Treino'),
+                title: Text('Plano de Treino', style: TextStyle(fontSize: 16.0)),
+                leading: Icon(Icons.fitness_center, color: Colors.green),
                 onTap: () {
                   Navigator.push(
                     context,
@@ -247,7 +262,8 @@ Future<Uint8List?> _loadUserImage() async {
                 },
               ),
               ListTile(
-                title: const Text('Plano de Dieta'),
+                title: Text('Plano de Dieta', style: TextStyle(fontSize: 16.0)),
+                leading: Icon(Icons.restaurant_menu, color: Colors.red),
                 onTap: () {
                   Navigator.push(
                     context,
@@ -258,7 +274,8 @@ Future<Uint8List?> _loadUserImage() async {
                 },
               ),
               ListTile(
-                title: const Text('Lista de Exercícios'),
+                title: Text('Lista de Exercícios', style: TextStyle(fontSize: 16.0)),
+                leading: Icon(Icons.list_alt, color: Colors.purple),
                 onTap: () {
                   Navigator.push(
                     context,
@@ -268,8 +285,21 @@ Future<Uint8List?> _loadUserImage() async {
                   );
                 },
               ),
+                ListTile(
+                title: Text('Lista de Alimentos', style: TextStyle(fontSize: 16.0)),
+                leading: Icon(Icons.restaurant_menu, color: Colors.orange),
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => AlimentacaoSaudavel(),
+                    ),
+                  );
+                },
+              ),
               ListTile(
-                title: const Text('Suporte'),
+                title: Text('Suporte', style: TextStyle(fontSize: 16.0)),
+                leading: Icon(Icons.help, color: Colors.brown),
                 onTap: () {
                   Navigator.push(
                     context,
@@ -280,7 +310,8 @@ Future<Uint8List?> _loadUserImage() async {
                 },
               ),
               ListTile(
-                title: const Text('Configurações'),
+                title: Text('Configurações', style: TextStyle(fontSize: 16.0)),
+                leading: Icon(Icons.settings, color: Colors.grey),
                 onTap: () {
                   Navigator.push(
                     context,
@@ -333,7 +364,7 @@ Future<Uint8List?> _loadUserImage() async {
                   crossAxisSpacing: 16,
                   children: [
                     CustomCard(
-                      color: Colors.indigo, // Defina a cor de fundo aqui
+                      color: Colors.blue, // Defina a cor de fundo aqui
                       title: 'Informações Pessoais',
                       icon: Icons.person,
                       onTap: () {
@@ -346,7 +377,7 @@ Future<Uint8List?> _loadUserImage() async {
                       },
                     ),
                     CustomCard(
-                      color: Colors.cyan, // Defina a cor de fundo aqui
+                      color: Colors.green, // Defina a cor de fundo aqui
                       title: 'Plano de Treino',
                       icon: Icons.fitness_center,
                       onTap: () {
@@ -359,7 +390,7 @@ Future<Uint8List?> _loadUserImage() async {
                       },
                     ),
                     CustomCard(
-                      color: Colors.lime, // Defina a cor de fundo aqui
+                      color: Colors.red, // Defina a cor de fundo aqui
                       title: 'Plano de Dieta',
                       icon: Icons.food_bank,
                       onTap: () {
@@ -372,7 +403,7 @@ Future<Uint8List?> _loadUserImage() async {
                       },
                     ),
                     CustomCard(
-                      color: Colors.brown, // Defina a cor de fundo aqui
+                      color: Colors.purple, // Defina a cor de fundo aqui
                       title: 'Lista de Exercícios',
                       icon: Icons.list_alt,
                       onTap: () {
@@ -398,7 +429,7 @@ Future<Uint8List?> _loadUserImage() async {
                     //   },
                     // ),
                     CustomCard(
-                      color: Colors.red, // Defina a cor de fundo aqui
+                      color: Colors.orange, // Defina a cor de fundo aqui
                       title: 'Alimentos Saudáveis',
                       icon: Icons.restaurant_menu,
                       onTap: () {
