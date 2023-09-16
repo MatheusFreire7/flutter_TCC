@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:flutter_login/widgets/alimentSaudavel.dart';
@@ -10,7 +11,6 @@ import 'package:flutter_login/settings/theme.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:localstorage/localstorage.dart';
 import 'package:file_picker/file_picker.dart';
-import 'package:path_provider/path_provider.dart';
 import '../service/imageStorage.dart';
 import '../service/sharedUser.dart';
 import '../widgets/testeApi.dart';
@@ -34,55 +34,24 @@ class _TelaInicialState extends State<TelaInicial> {
   void initState() {
     super.initState();
     _loadUserData();
+    _loadUserImage();
   }
 
-  Future<void> _pickImage() async {
-    FilePickerResult? result = await FilePicker.platform.pickFiles(
-      type: FileType.image,
-      allowMultiple: false,
-    );
-
-    if (result != null && result.files.isNotEmpty) {
-      final platformFile = result.files.single;
-      String? selectedImagePath;
-
-      if (platformFile.bytes != null && platformFile.bytes!.isNotEmpty) {
-        if (kIsWeb) {
-            // Ambiente web: use LocalStorage para armazenar a imagem
-            final localStorage = LocalStorage('my_app');
-            await localStorage.ready;
-
-            final userId = getUserUniqueId(); // Substitua pelo ID único do usuário
-            await localStorage.setItem(userId.toString(), platformFile.bytes); // Salva a imagem com a chave sendo o ID do usuário
-            selectedImagePath = userId.toString(); // O caminho da imagem agora é o ID do usuário
-
-            //final imagePath = await localStorage.getItem(userId.toString());
-            //print('Imagem salva no LocalStorage com a chave: $userId, caminho da imagem: $imagePath');
-        } else {
-          // Dispositivos móveis: salve a imagem localmente no diretório do usuário
-          final userId = getUserUniqueId();
-          selectedImagePath = await _saveUserImage(userId.toString(), platformFile.bytes!);
-        }
-      }
-
-      setState(() {
-        _selectedImagePath = selectedImagePath;
-        _selectedImageBytes = platformFile.bytes;
-      });
-    }
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _loadUserImage();
   }
-
-  Future<Uint8List?> _loadImageFromLocalStorage() async {
-    final userId = await getUserUniqueId();
-    await localStorage.ready;
-    return await localStorage.getItem(userId);
-  }
-
-
 
   Future<void> _saveImageToLocalStorage(Uint8List imageBytes) async {
     final userId = await getUserUniqueId();
-    await localStorage.setItem(userId, imageBytes);
+    final localStorage = LocalStorage('my_app');
+    await localStorage.ready;
+
+    // Codifica a lista de bytes em uma representação de texto
+    final encodedImage = base64Encode(imageBytes);
+
+    await localStorage.setItem(userId, encodedImage);
   }
 
   Future<String?> _saveUserImage(String userId, Uint8List imageBytes) async {
@@ -97,79 +66,87 @@ class _TelaInicialState extends State<TelaInicial> {
     return userData!.idUsuario.toString();
   }
 
-// Future<void> _pickImage() async {
-//   FilePickerResult? result = await FilePicker.platform.pickFiles(
-//     type: FileType.image,
-//     allowMultiple: false,
-//   );
+Future<Uint8List?> _loadUserImage() async {
+  if (kIsWeb) {
+    final userId = await getUserUniqueId();
+    final localStorage = LocalStorage('my_app');
+    await localStorage.ready;
 
-//   if (result != null && result.files.isNotEmpty) {
-//     final platformFile = result.files.single;
-//     setState(() {
-//       if (platformFile.bytes != null && platformFile.bytes!.isNotEmpty) {
-//         // Se for ambiente web, use os bytes para exibir a imagem
-//         // Isso é necessário para o Flutter Web
-//         // Defina a imagem como null se não for selecionada
-//         _selectedImageBytes = platformFile.bytes;
-//       } else {
-//         _selectedImageBytes = null;
-//       }
-//     });
-//   }
-// }
+    if (userId != null) {
+      final dynamic encodedImage = await localStorage.getItem(userId.toString());
 
-Future<void> _pickImageLocal() async {
-  FilePickerResult? result = await FilePicker.platform.pickFiles(
-    type: FileType.image,
-    allowMultiple: false,
-  );
+      if (encodedImage is String) {
+        // Decodifica a representação de texto para obter a lista de bytes
+        final imageBytes = base64Decode(encodedImage);
+        _selectedImageBytes = imageBytes;
 
-  if (result != null && result.files.isNotEmpty) {
-    final platformFile = result.files.single;
+        return Uint8List.fromList(imageBytes);
+      }
+    }
+  } else {
+    return _selectedImageBytes;
+  }
 
-    if (platformFile.bytes != null && platformFile.bytes!.isNotEmpty) {
-      await _saveImageToLocalStorage(platformFile.bytes!);
+  return null;
+}
+
+
+  Future<void> _pickImage() async {
+    FilePickerResult? result = await FilePicker.platform.pickFiles(
+      type: FileType.image,
+      allowMultiple: false,
+    );
+
+    if (result != null && result.files.isNotEmpty) {
+      final platformFile = result.files.single;
+      String? selectedImagePath;
+
+      if (platformFile.bytes != null && platformFile.bytes!.isNotEmpty) {
+        if (kIsWeb) {
+          final localStorage = LocalStorage('my_app');
+          await localStorage.ready;
+
+          final userId = await getUserUniqueId();
+          await localStorage.setItem(userId.toString(), platformFile.bytes);
+          selectedImagePath = userId.toString();
+        } else {
+          final userId = await getUserUniqueId();
+          selectedImagePath = await _saveUserImage(userId.toString(), platformFile.bytes!);
+        }
+      }
+
       setState(() {
+        _selectedImagePath = selectedImagePath;
         _selectedImageBytes = platformFile.bytes;
       });
     }
   }
-}
 
+  Future<void> _pickImageLocal() async {
+    FilePickerResult? result = await FilePicker.platform.pickFiles(
+      type: FileType.image,
+      allowMultiple: false,
+    );
+
+    if (result != null && result.files.isNotEmpty) {
+      final platformFile = result.files.single;
+
+      if (platformFile.bytes != null && platformFile.bytes!.isNotEmpty) {
+        await _saveImageToLocalStorage(platformFile.bytes!);
+        setState(() {
+          _selectedImageBytes = platformFile.bytes;
+        });
+      }
+    }
+  }
 
   Future<void> _loadUserData() async {
     final userData = await SharedUser.getUserData();
     if (userData != null) {
-      String?
-          tempImagePath; // Variável temporária para armazenar o caminho da imagem
-
       setState(() {
         _userName = userData.usuario;
         _userEmail = userData.email;
         _imc = userData.imc;
-      });
-
-      // Carrega o caminho da imagem do LocalStorage
-      if (kIsWeb) {
-        final userId = getUserUniqueId();
-        final localStorage = LocalStorage('my_app');
-        await localStorage.ready;
-        final dynamic imagePath = await localStorage.getItem(userId.toString());
-
-        if (imagePath is String) {
-          setState(() {
-            _selectedImagePath = imagePath;
-          });
-        } else {
-          print('O valor do caminho da imagem não é uma String.');
-        }
-      } else {
-        // No caso de dispositivos móveis, irá carregar o caminho da imagem no método _pickImage
-      }
-
-      // Atualize o caminho da imagem usando setState fora do bloco assíncrono, pois não é permitido setState async no Flutter
-      setState(() {
-        _selectedImagePath = tempImagePath;
       });
     }
   }
@@ -227,7 +204,7 @@ Future<void> _pickImageLocal() async {
                   ],
                 ),
                 currentAccountPicture: GestureDetector(
-                  onTap: _pickImage,
+                  onTap: () => _pickImageLocal(),
                   child: CircleAvatar(
                     backgroundImage: _selectedImageBytes != null
                         ? Image.memory(Uint8List.fromList(_selectedImageBytes!))
