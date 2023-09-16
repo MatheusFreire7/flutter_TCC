@@ -11,6 +11,7 @@ import 'package:flutter_login/settings/theme.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:localstorage/localstorage.dart';
 import 'package:file_picker/file_picker.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../service/imageStorage.dart';
 import '../service/sharedUser.dart';
 import '../widgets/testeApi.dart';
@@ -24,8 +25,7 @@ class _TelaInicialState extends State<TelaInicial> {
   String _userName = "Nome do usuário";
   String _userEmail = "email_do_usuario@gmail.com";
   double _imc = 0.0;
-  String?
-      _selectedImagePath; // Variável para armazenar o caminho da imagem selecionada
+  String?_selectedImagePath; // Variável para armazenar o caminho da imagem selecionada
   Uint8List? _selectedImageBytes;
   final ImageStorage _imageStorage = ImageStorage();
   final LocalStorage localStorage = LocalStorage('my_app');
@@ -71,15 +71,16 @@ Future<Uint8List?> _loadUserImage() async {
     final userId = await getUserUniqueId();
     final localStorage = LocalStorage('my_app');
     await localStorage.ready;
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    final encodedImage = prefs.getString('user_profile${userId}.png');
 
     if (userId != null) {
-      final dynamic encodedImage = await localStorage.getItem(userId.toString());
+     // final dynamic encodedImage = await localStorage.getItem(userId.toString());
 
       if (encodedImage is String) {
         // Decodifica a representação de texto para obter a lista de bytes
         final imageBytes = base64Decode(encodedImage);
         _selectedImageBytes = imageBytes;
-
         return Uint8List.fromList(imageBytes);
       }
     }
@@ -132,7 +133,9 @@ Future<Uint8List?> _loadUserImage() async {
       final platformFile = result.files.single;
 
       if (platformFile.bytes != null && platformFile.bytes!.isNotEmpty) {
+        final encodedImage = base64Encode(platformFile.bytes!);
         await _saveImageToLocalStorage(platformFile.bytes!);
+        await SharedUser.saveImageToSharedPreferences(encodedImage);
         setState(() {
           _selectedImageBytes = platformFile.bytes;
         });

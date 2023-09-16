@@ -86,4 +86,11 @@ class SharedUser {
     final userData = await getUserData();
     return userData != null;
   }
+
+  static Future<void> saveImageToSharedPreferences(String encodedImage) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+     final userData = await SharedUser.getUserData();
+    await prefs.setString('user_profile${userData!.idUsuario}.png', encodedImage);
+  }
+
 }

@@ -177,7 +177,7 @@ class _ConfiguracoesPageState extends State<ConfiguracoesPage> {
               leading: const Icon(Icons.arrow_back),
               title: const Text('Sair'),
               onTap: () {
-                SharedUser.clearUserData();
+                //SharedUser.clearUserData();
                 Navigator.push(
                   context,
                   MaterialPageRoute(
