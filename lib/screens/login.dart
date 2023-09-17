@@ -15,7 +15,7 @@ class _LoginPageState extends State<LoginPage> {
   final _formKey = GlobalKey<FormState>();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
-  
+  bool _isPasswordVisible = false;
 
   @override
   void dispose() {
@@ -103,74 +103,162 @@ Future<List<UserData>> getDadosUser(int userId) async {
           );
           await SharedUser.saveUserData(userDataObjectNew);
         }
-
-        
           Navigator.push(
             context,
             MaterialPageRoute(builder: (context) => TelaInicial()),
           );
         } else {
-          showDialog(
+        // ignore: use_build_context_synchronously
+        showDialog(
             context: context,
-            builder: (context) {
+            builder: (BuildContext context) {
               return AlertDialog(
-               shape: RoundedRectangleBorder(
-                borderRadius:
-                    BorderRadius.circular(30.0)),
-                  titleTextStyle: TextStyle(fontSize: 25, fontWeight: FontWeight.bold, color: Colors.blue), 
-                title: Text('Login Falhou'),
-                content: Text(
-                    'Login inválido. Verifique suas credenciais e tente novamente.', style: TextStyle(fontSize: 20, fontWeight: FontWeight.w200),),
-                actions: <Widget>[
-                  TextButton(
-                    onPressed: () {
-                      Navigator.of(context).pop();
-                    },
-                    child: Text('Ok'),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(20.0),
+                ),
+                title: const Text(
+                  'Login Falhou',
+                  style: TextStyle(
+                    fontSize: 25,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.blue,
                   ),
-                ],
+                ),
+                content: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    const Text(
+                      'Login inválido. Verifique suas credenciais e tente novamente.',
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.w200,
+                      ),
+                    ),
+                    const SizedBox(height: 20),
+                    ElevatedButton(
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                      style: ElevatedButton.styleFrom(
+                        primary: Colors.blue,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                      ),
+                      child: const Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Text(
+                          'OK',
+                          style: TextStyle(
+                            fontSize: 18,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
               );
             },
           );
         }
       } catch (e) {
         print('Ocorreu uma exceção: $e');
+          showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return AlertDialog(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(20.0),
+                ),
+                title: const Text(
+                  'Erro de Conexão com o Servidor',
+                  style: TextStyle(
+                    fontSize: 25,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.red,
+                  ),
+                ),
+                content:const Text(
+                  'Ocorreu um erro ao processar a solicitação. Por favor, tente novamente mais tarde.',
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.w400,
+                  ),
+                ),
+                actions: <Widget>[
+                  TextButton(
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                    child: const Text(
+                      'Ok',
+                      style: TextStyle(
+                        fontSize: 18,
+                        color: Colors.red,
+                      ),
+                    ),
+                  ),
+                ],
+              );
+            },
+          );
       }
     } else {
-     showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return Dialog(
-            shape: RoundedRectangleBorder(
-                borderRadius:
-                    BorderRadius.circular(30.0)),
-            child: Container(
-              height: 200,
-              width: 300,
-              child: const Padding(
-                padding: EdgeInsets.all(12.0),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Center(
-                      child: Text(
-                      "Preencha todas as credenciais e tente novamente!",
-                      style: TextStyle(
-                        fontSize: 20, 
-                        fontWeight: FontWeight.bold,
-                        color:Colors.blue
-                        ),
-                      )                    
-                    ),
-                  ],
+          showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(20.0),
+              ),
+              title: const Text(
+                'Credenciais Inválidas',
+                style: TextStyle(
+                  fontSize: 25,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.red,
                 ),
               ),
-            ),
-          );
-        });
+              content: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                const Text(
+                    'Não foi possível fazer login. Preencha todas as suas credenciais e tente novamente.',
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.w400,
+                    ),
+                  ),
+                  const SizedBox(height: 20),
+                  ElevatedButton(
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                    style: ElevatedButton.styleFrom(
+                      primary: Colors.red,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                    ),
+                    child: const Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text(
+                        'OK',
+                        style: TextStyle(
+                          fontSize: 18,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            );
+          },
+        );
+      }
     }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -227,15 +315,27 @@ Future<List<UserData>> getDadosUser(int userId) async {
                     decoration: InputDecoration(
                       labelText: 'Senha',
                       prefixIcon: Icon(Icons.lock),
+                      suffixIcon: GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            _isPasswordVisible = !_isPasswordVisible;
+                          });
+                        },
+                        child: Icon(
+                          _isPasswordVisible
+                              ? Icons.visibility
+                              : Icons.visibility_off,
+                        ),
+                      ),
                       border: OutlineInputBorder(),
                     ),
-                    obscureText: true,
+                    obscureText: !_isPasswordVisible,
                     validator: (value) {
                       // Validação de senha aqui
                     },
                   ),
                   const SizedBox(height: 20.0),
-              SizedBox(
+                  SizedBox(
                       width: 50,
                       child: ElevatedButton(
                         style: ElevatedButton.styleFrom(
@@ -294,14 +394,46 @@ Future<List<UserData>> getDadosUser(int userId) async {
                         ),
                       );
                     },
-                    child: const Text(
-                      'Cadastre-se',
-                      style: TextStyle(
-                        color: Colors.blue,
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
+                    child:Center(
+                        child: TextButton(
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => CadastroPage(),
+                              ),
+                            );
+                          },
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center, // Centraliza horizontalmente
+                            children: [
+                              const Text(
+                                "Não Possui Conta? ",
+                                style: TextStyle(fontSize: 18, color: Colors.black),
+                              ),
+                            const SizedBox(width: 1), 
+                            GestureDetector(
+                                 onTap: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => CadastroPage(),
+                                    ),
+                                  );
+                                },
+                                child: const Text(
+                                'Cadastre-se',
+                                style: TextStyle(
+                                  color: Colors.blue,
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ), 
+                            ),    
+                            ],
+                          ),
+                        ),
+                      )
                   ),
                 ],
               ),

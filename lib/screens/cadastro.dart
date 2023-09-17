@@ -16,6 +16,7 @@ class _CadastroPageState extends State<CadastroPage> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   final _confirmPasswordController = TextEditingController();
+  bool _isPasswordVisible = false;
 
   Future<void> cadastrar() async {
     final usuario = _usuarioController.text.trim();
@@ -200,8 +201,20 @@ class _CadastroPageState extends State<CadastroPage> {
                       labelText: 'Senha',
                       border: OutlineInputBorder(),
                       prefixIcon: Icon(Icons.lock), // Ícone de cadeado
+                      suffixIcon: GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            _isPasswordVisible = !_isPasswordVisible;
+                          });
+                        },
+                        child: Icon(
+                          _isPasswordVisible
+                              ? Icons.visibility
+                              : Icons.visibility_off,
+                        ),
+                      ),
                     ),
-                    obscureText: true,
+                     obscureText: !_isPasswordVisible,
                     validator: (value) {
                       if (value!.isEmpty) {
                         return 'Por favor, insira sua senha.';
@@ -216,8 +229,20 @@ class _CadastroPageState extends State<CadastroPage> {
                       labelText: 'Confirmar Senha',
                       border: OutlineInputBorder(),
                       prefixIcon: Icon(Icons.lock), // Ícone de cadeado
+                      suffixIcon: GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            _isPasswordVisible = !_isPasswordVisible;
+                          });
+                        },
+                        child: Icon(
+                          _isPasswordVisible
+                              ? Icons.visibility
+                              : Icons.visibility_off,
+                        ),
+                      ),
                     ),
-                    obscureText: true,
+                    obscureText: !_isPasswordVisible,
                     validator: (value) {
                       if (value!.isEmpty) {
                         return 'Por favor, confirme sua senha.';
