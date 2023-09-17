@@ -186,10 +186,10 @@ Future<Uint8List?> _loadUserImage() async {
             UserAccountsDrawerHeader(
                 accountName: Row(
                   children: [
-                    Icon(Icons.person, color: Colors.black, size: 16.0), // Ícone de usuário
-                    SizedBox(width: 8.0), 
-                    Text("Username:", style: TextStyle(fontSize: 14.0, fontWeight: FontWeight.bold)),
-                    SizedBox(width: 4.0), 
+                    const Icon(Icons.person, color: Colors.black, size: 16.0), // Ícone de usuário
+                    const SizedBox(width: 8.0), 
+                    const Text("Username:", style: TextStyle(fontSize: 14.0, fontWeight: FontWeight.bold)),
+                    const SizedBox(width: 4.0), 
                     Text("${_userName}", style: TextStyle(fontSize: 14.0))
                   ],
                 ),
@@ -199,20 +199,20 @@ Future<Uint8List?> _loadUserImage() async {
                     SizedBox(height: 5.0), 
                     Row(
                       children: [
-                        Icon(Icons.email, color: Colors.black, size: 16.0), // Ícone de e-mail
-                        SizedBox(width: 8.0), 
-                        Text("E-mail:", style: TextStyle(fontSize: 14.0, fontWeight: FontWeight.bold)),
-                        SizedBox(width: 4.0),
+                        const Icon(Icons.email, color: Colors.black, size: 16.0), // Ícone de e-mail
+                        const SizedBox(width: 8.0), 
+                        const Text("E-mail:", style: TextStyle(fontSize: 14.0, fontWeight: FontWeight.bold)),
+                        const SizedBox(width: 4.0),
                         Text("${_userEmail}", style: TextStyle(fontSize: 14.0))
                       ],
                     ),
                     SizedBox(height: 8.0), 
                     Row(
                       children: [
-                        Icon(Icons.monitor_weight, color: Colors.black, size: 16.0), // Ícone para o IMC
-                        SizedBox(width: 8.0), 
-                        Text("IMC:", style: TextStyle(fontSize: 14.0, fontWeight: FontWeight.bold)),
-                        SizedBox(width: 4.0), 
+                        const Icon(Icons.monitor_weight, color: Colors.black, size: 16.0), // Ícone para o IMC
+                        const SizedBox(width: 8.0), 
+                        const Text("IMC:", style: TextStyle(fontSize: 14.0, fontWeight: FontWeight.bold)),
+                        const SizedBox(width: 4.0), 
                         Text("${_imc.toStringAsFixed(1)}", style: TextStyle(fontSize: 14.0))
                       ],
                     ),
@@ -229,7 +229,7 @@ Future<Uint8List?> _loadUserImage() async {
                     radius: 30.0, // Tamanho do avatar
                   ),
                 ),
-                decoration: BoxDecoration(
+                decoration: const BoxDecoration(
                   gradient: LinearGradient(
                     colors: [Colors.cyan, Colors.blue], // Cores do degradê
                     begin: Alignment.topCenter,
@@ -238,8 +238,8 @@ Future<Uint8List?> _loadUserImage() async {
                 ),
               ),
            ListTile(
-                title: Text('Informações Pessoais', style: TextStyle(fontSize: 16.0)),
-                leading: Icon(Icons.person_outline, color: Colors.blue),
+                title: const Text('Informações Pessoais', style: TextStyle(fontSize: 16.0)),
+                leading:const  Icon(Icons.person_outline, color: Colors.blue),
                 onTap: () {
                   Navigator.push(
                     context,
@@ -250,8 +250,8 @@ Future<Uint8List?> _loadUserImage() async {
                 },
               ),
               ListTile(
-                title: Text('Plano de Treino', style: TextStyle(fontSize: 16.0)),
-                leading: Icon(Icons.fitness_center, color: Colors.green),
+                title: const Text('Plano de Treino', style: TextStyle(fontSize: 16.0)),
+                leading: const  Icon(Icons.fitness_center, color: Colors.green),
                 onTap: () {
                   Navigator.push(
                     context,
@@ -262,8 +262,8 @@ Future<Uint8List?> _loadUserImage() async {
                 },
               ),
               ListTile(
-                title: Text('Plano de Dieta', style: TextStyle(fontSize: 16.0)),
-                leading: Icon(Icons.restaurant_menu, color: Colors.red),
+                title: const Text('Plano de Dieta', style: TextStyle(fontSize: 16.0)),
+                leading:const  Icon(Icons.restaurant_menu, color: Colors.red),
                 onTap: () {
                   Navigator.push(
                     context,
@@ -274,8 +274,8 @@ Future<Uint8List?> _loadUserImage() async {
                 },
               ),
               ListTile(
-                title: Text('Lista de Exercícios', style: TextStyle(fontSize: 16.0)),
-                leading: Icon(Icons.list_alt, color: Colors.purple),
+                title: const Text('Lista de Exercícios', style: TextStyle(fontSize: 16.0)),
+                leading: const Icon(Icons.list_alt, color: Colors.purple),
                 onTap: () {
                   Navigator.push(
                     context,
@@ -286,8 +286,8 @@ Future<Uint8List?> _loadUserImage() async {
                 },
               ),
                 ListTile(
-                title: Text('Lista de Alimentos', style: TextStyle(fontSize: 16.0)),
-                leading: Icon(Icons.restaurant_menu, color: Colors.orange),
+                title: const Text('Lista de Alimentos', style: TextStyle(fontSize: 16.0)),
+                leading: const Icon(Icons.restaurant_menu, color: Colors.orange),
                 onTap: () {
                   Navigator.push(
                     context,
@@ -298,8 +298,8 @@ Future<Uint8List?> _loadUserImage() async {
                 },
               ),
               ListTile(
-                title: Text('Suporte', style: TextStyle(fontSize: 16.0)),
-                leading: Icon(Icons.help, color: Colors.brown),
+                title: const Text('Suporte', style: TextStyle(fontSize: 16.0)),
+                leading: const  Icon(Icons.help, color: Colors.brown),
                 onTap: () {
                   Navigator.push(
                     context,
@@ -310,8 +310,8 @@ Future<Uint8List?> _loadUserImage() async {
                 },
               ),
               ListTile(
-                title: Text('Configurações', style: TextStyle(fontSize: 16.0)),
-                leading: Icon(Icons.settings, color: Colors.grey),
+                title: const Text('Configurações', style: TextStyle(fontSize: 16.0)),
+                leading: const Icon(Icons.settings, color: Colors.grey),
                 onTap: () {
                   Navigator.push(
                     context,

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_login/screens/cadastro.dart';
+import 'package:flutter_login/screens/inicio.dart';
 import 'package:flutter_login/settings/config.dart';
 import 'package:flutter_login/screens/formTreino.dart';
 import 'package:flutter_login/screens/infoObri.dart';
@@ -33,8 +34,9 @@ class LoginApp extends StatelessWidget {
             title: 'FitLife',
             theme: AppTheme.themeData,
             debugShowCheckedModeBanner: false,
-            initialRoute: "login",
+            initialRoute: "inicio",
             routes: {
+              "inicio": (context) => FitnessAppHomeScreen(),
               "login": (context) => LoginPage(),
               "cadastro": (context) => CadastroPage(),
               "inicial": (context) => TelaInicial(),

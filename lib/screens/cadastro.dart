@@ -53,9 +53,7 @@ class _CadastroPageState extends State<CadastroPage> {
             idPlanoTreino: 0,
             idPlanoAlimentacao: 0,
           );
-
           await SharedUser.saveUserData(userDataObject);
-
           Navigator.push(
             context,
             MaterialPageRoute(
@@ -65,52 +63,126 @@ class _CadastroPageState extends State<CadastroPage> {
         } else {
           final error = response.body;
           print(error);
+           // ignore: use_build_context_synchronously
           showDialog(
-            context: context,
-            builder: (context) => AlertDialog(
-              title: Text('Erro'),
-              content: Text(error),
-              actions: <Widget>[
-                TextButton(
-                  onPressed: () => Navigator.pop(context),
-                  child: Text('Ok'),
+              context: context,
+              builder: (context) => AlertDialog(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(20.0),
                 ),
-              ],
-            ),
-          );
+                title: const Text(
+                  'Erro',
+                  style: TextStyle(
+                    fontSize: 25,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.red,
+                  ),
+                ),
+                content:  const Text(
+                  'Falha ao Cadastrar. Verifique as Credencias e Tente Novamente',
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.w400,
+                  ),
+                ),
+                actions: <Widget>[
+                  TextButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    child: const Text(
+                      'Ok',
+                      style: TextStyle(
+                        fontSize: 18,
+                        color: Colors.red,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            );
         }
       } catch (e) {
         print('Erro: $e');
         showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return AlertDialog(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(20.0),
+                ),
+                title: const Text(
+                  'Erro de Conexão com o Servidor',
+                  style: TextStyle(
+                    fontSize: 25,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.red,
+                  ),
+                ),
+                content: const Text(
+                  'Ocorreu um erro ao processar a solicitação. Por favor, tente novamente mais tarde.',
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.w400,
+                  ),
+                ),
+                actions: <Widget>[
+                  TextButton(
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                    child: const Text(
+                      'Ok',
+                      style: TextStyle(
+                        fontSize: 18,
+                        color: Colors.red,
+                      ),
+                    ),
+                  ),
+                ],
+              );
+            },
+          );
+        }
+    } else {
+       showDialog(
           context: context,
           builder: (context) => AlertDialog(
-            title: const Text('Erro de Cadastro'),
-            content: const Text('Ocorreu um erro ao realizar o cadastro.'),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(20.0),
+            ),
+            title: const Text(
+              'Erro de Cadastro',
+              style: TextStyle(
+                fontSize: 25,
+                fontWeight: FontWeight.bold,
+                color: Colors.red,
+              ),
+            ),
+            content: const Text(
+              'Preencha todas as credenciais e tente novamente.',
+              style: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.w400,
+              ),
+            ),
             actions: <Widget>[
               TextButton(
-                onPressed: () => Navigator.pop(context),
-                child: const Text('Ok'),
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                child: const Text(
+                  'Ok',
+                  style: TextStyle(
+                    fontSize: 18,
+                    color: Colors.red,
+                  ),
+                ),
               ),
             ],
           ),
         );
-      }
-    } else {
-      showDialog(
-        context: context,
-        builder: (context) => AlertDialog(
-          title: const Text('Erro de Cadastro'),
-          content:
-              const Text('Preencha todas as credenciais. Tente Novamente.'),
-          actions: <Widget>[
-            TextButton(
-              onPressed: () => Navigator.pop(context),
-              child: const Text('Ok'),
-            ),
-          ],
-        ),
-      );
-    }
+     }
   }
 
   @override
@@ -165,7 +237,7 @@ class _CadastroPageState extends State<CadastroPage> {
                   const SizedBox(height: 20.0),
                   TextFormField(
                     controller: _usuarioController,
-                    decoration: InputDecoration(
+                    decoration: const InputDecoration(
                       labelText: 'Usuário',
                       border: OutlineInputBorder(),
                       prefixIcon: Icon(Icons.person), // Ícone de usuário
@@ -181,7 +253,7 @@ class _CadastroPageState extends State<CadastroPage> {
                   const SizedBox(height: 16.0),
                   TextFormField(
                     controller: _emailController,
-                    decoration: InputDecoration(
+                    decoration: const InputDecoration(
                       labelText: 'Email',
                       border: OutlineInputBorder(),
                       prefixIcon: Icon(Icons.email), // Ícone de email
@@ -270,13 +342,13 @@ class _CadastroPageState extends State<CadastroPage> {
                     child: Container(
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(20.0),
-                        gradient: LinearGradient(
+                        gradient: const LinearGradient(
                           colors: [Colors.cyan, Colors.blue],
                           begin: Alignment.topCenter,
                           end: Alignment.bottomCenter,
                         ),
                       ),
-                      child: Padding(
+                      child:const Padding(
                         padding: const EdgeInsets.symmetric(
                           vertical: 15.0,
                           horizontal: 120.0,
