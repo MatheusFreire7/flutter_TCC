@@ -46,7 +46,7 @@ class LoginApp extends StatelessWidget {
             },
           );
         } else {
-          return CircularProgressIndicator(); // Mostrar um indicador de carregamento enquanto o LocalStorage está sendo inicializado.
+          return CircularProgressIndicator(); 
         }
       },
     );
