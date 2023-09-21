@@ -40,6 +40,7 @@ class _TelaInicialState extends State<TelaInicial> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
+    _loadUserData();
     _loadUserImage();
   }
 
@@ -251,7 +252,7 @@ Future<Uint8List?> _loadUserImage() async {
               ),
               ListTile(
                 title: const Text('Plano de Treino', style: TextStyle(fontSize: 16.0)),
-                leading: const  Icon(Icons.fitness_center, color: Colors.green),
+                leading: const  Icon(Icons.food_bank, color: Colors.green),
                 onTap: () {
                   Navigator.push(
                     context,
@@ -268,7 +269,7 @@ Future<Uint8List?> _loadUserImage() async {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => PlanoAlimentacaoPage(),
+                      builder: (context) => Diet()//PlanoAlimentacaoPage(),
                     ),
                   );
                 },
@@ -397,7 +398,7 @@ Future<Uint8List?> _loadUserImage() async {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => PlanoAlimentacaoPage(),
+                            builder: (context) => Diet()//PlanoAlimentacaoPage(),
                           ),
                         );
                       },

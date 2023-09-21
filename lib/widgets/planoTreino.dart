@@ -8,7 +8,39 @@ class PlanoTreinoPage extends StatefulWidget {
 }
 
 class _PlanoTreinoPageState extends State<PlanoTreinoPage> {
-  String _selectedDay = 'Segunda-feira';
+  
+  String _selectedDay = ''; // Inicialmente vazio, será preenchido com o dia atual
+
+     @override
+  void initState() {
+    super.initState();
+    // Obtenha o dia da semana atual e atribua à variável _selectedDay
+    _selectedDay = _getCurrentDayOfWeek();
+  }
+
+  String _getCurrentDayOfWeek() {
+    final now = DateTime.now();
+    final dayOfWeek = now.weekday; // Retorna um número de 1 (segunda-feira) a 7 (domingo)
+    
+    switch (dayOfWeek) {
+      case 1:
+        return 'Segunda-feira';
+      case 2:
+        return 'Terça-feira';
+      case 3:
+        return 'Quarta-feira';
+      case 4:
+        return 'Quinta-feira';
+      case 5:
+        return 'Sexta-feira';
+      case 6:
+        return 'Sábado';
+      case 7:
+        return 'Domingo';
+      default:
+        return '';
+    }
+  }
 
   @override
   Widget build(BuildContext context) {

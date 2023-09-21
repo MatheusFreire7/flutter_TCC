@@ -24,7 +24,7 @@ class AlimentoDetalhes extends StatelessWidget {
       home: Scaffold(
         appBar: AppBar(
           iconTheme: IconThemeData(
-          color: AppTheme.iconColor), // Define a cor do ícone na app bar
+          color: AppTheme.iconColor),
           backgroundColor: AppTheme.appBarColor,
           centerTitle: true,
           leading: IconButton(
