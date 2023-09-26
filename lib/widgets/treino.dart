@@ -25,7 +25,7 @@ class TreinoDetalhes extends StatelessWidget {
       home: Scaffold(
         appBar: AppBar(
           iconTheme: IconThemeData(
-          color: AppTheme.iconColor), // Define a cor do ícone na app bar
+          color: AppTheme.iconColor),
           backgroundColor: AppTheme.appBarColor,
           title: Text('Detalhes do Exercício: $title'),
           centerTitle: true,

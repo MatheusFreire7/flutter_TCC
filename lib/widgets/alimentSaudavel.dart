@@ -23,7 +23,7 @@ class _AlimentacaoSaudavelState extends State<AlimentacaoSaudavel> {
     if (response.statusCode == 200) {
       final data = jsonDecode(response.body);
       setState(() {
-        alimentos = List<Alimento>.from(data.map((item) => Alimento.fromJson(item)));
+         alimentos = List<Alimento>.from(data.map((item) => Alimento.fromJson(item)));
       });
     } else {
       print('Erro ao carregar os alimentos: ${response.statusCode}');
