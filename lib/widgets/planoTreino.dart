@@ -68,7 +68,7 @@ class _PlanoTreinoPageState extends State<PlanoTreinoPage> {
           //   height: 200,
           //   fit: BoxFit.cover,
           // ),
-          SizedBox(height: 16.0),
+          const SizedBox(height: 16.0),
           DropdownButton<String>(
             value: _selectedDay,
             onChanged: (String? newValue) {
@@ -91,7 +91,7 @@ class _PlanoTreinoPageState extends State<PlanoTreinoPage> {
               );
             }).toList(),
           ),
-          SizedBox(height: 16.0),
+          const SizedBox(height: 16.0),
           Expanded(
             child: ListView(
               padding: EdgeInsets.all(16.0),
@@ -128,9 +128,9 @@ class _PlanoTreinoPageState extends State<PlanoTreinoPage> {
       children: [
         Text(
           day,
-          style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+          style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
         ),
-        SizedBox(height: 8.0),
+        const SizedBox(height: 8.0),
         Column(children: exercises),
       ],
     );
@@ -159,10 +159,10 @@ class _PlanoTreinoPageState extends State<PlanoTreinoPage> {
       //   height: 80,
       //   fit: BoxFit.cover,
       // ),
-      leading: Text('image'),
+      leading: const Text('image'),
       title: Text(title),
       subtitle: Text('$series - $duration'),
-      trailing: Icon(Icons.arrow_forward_ios),
+      trailing: const Icon(Icons.arrow_forward_ios),
     );
   }
 }

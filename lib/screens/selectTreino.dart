@@ -79,14 +79,14 @@ class PlanoTreinoDetalhes extends StatelessWidget {
                       child: Container(
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(20.0),
-                          gradient: LinearGradient(
+                          gradient: const LinearGradient(
                             colors: [Colors.cyan, Colors.blue],
                             begin: Alignment.topCenter,
                             end: Alignment.bottomCenter,
                           ),
                         ),
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(
+                        child: const Padding(
+                          padding: EdgeInsets.symmetric(
                             vertical: 15.0,
                             horizontal: 120.0,
                           ),

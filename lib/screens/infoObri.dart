@@ -376,7 +376,7 @@ class _PersonalInfoFormState extends State<PersonalInfoForm> {
       height: 50.0, // Defina a altura desejada aqui
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(16.0),
-        gradient: LinearGradient(
+        gradient: const LinearGradient(
           colors: [Colors.cyan, Colors.blue],
           begin: Alignment.topCenter,
           end: Alignment.bottomCenter,
@@ -412,9 +412,9 @@ class _PersonalInfoFormState extends State<PersonalInfoForm> {
             borderRadius: BorderRadius.circular(16.0),
           ),
         ),
-        child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 12.0, horizontal: 24.0),
-          child: const Text(
+        child: const Padding(
+          padding: EdgeInsets.symmetric(vertical: 12.0, horizontal: 24.0),
+          child: Text(
             'Pronto',
             style: TextStyle(
               color: Colors.white,
@@ -433,7 +433,7 @@ class _PersonalInfoFormState extends State<PersonalInfoForm> {
       height: 50.0,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(16.0),
-        gradient: LinearGradient(
+        gradient: const LinearGradient(
           colors: [Colors.cyan, Colors.blue],
           begin: Alignment.topCenter,
           end: Alignment.bottomCenter,
@@ -454,9 +454,9 @@ class _PersonalInfoFormState extends State<PersonalInfoForm> {
             borderRadius: BorderRadius.circular(16.0),
           ),
         ),
-        child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 12.0, horizontal: 24.0),
-          child: const Text(
+        child: const Padding(
+          padding: EdgeInsets.symmetric(vertical: 12.0, horizontal: 24.0),
+          child: Text(
             'Alterar',
             style: TextStyle(
               color: Colors.white,

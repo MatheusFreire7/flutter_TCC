@@ -299,7 +299,7 @@ Future<List<UserData>> getDadosUser(int userId) async {
                   const SizedBox(height: 20.0),
                   TextFormField(
                     controller: _emailController,
-                    decoration: InputDecoration(
+                    decoration: const InputDecoration(
                       labelText: 'Email',
                       prefixIcon: Icon(Icons.email),
                       border: OutlineInputBorder(),
@@ -361,18 +361,18 @@ Future<List<UserData>> getDadosUser(int userId) async {
                         child: Container(
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(20.0),
-                            gradient: LinearGradient(
+                            gradient: const LinearGradient(
                               colors: [Colors.cyan, Colors.blue],
                               begin: Alignment.topCenter,
                               end: Alignment.bottomCenter,
                             ),
                           ),
                           child: const Padding(
-                            padding: const EdgeInsets.symmetric(
+                            padding:  EdgeInsets.symmetric(
                               vertical: 15.0,
                               horizontal: 143.0,
                             ),
-                            child:const  Text(
+                            child: Text(
                               'Entrar',
                               style: TextStyle(
                                 color: Colors.white,

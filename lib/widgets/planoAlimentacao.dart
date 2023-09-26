@@ -54,9 +54,7 @@ class _DietState extends State<Diet> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.only(top: 20.0),
-      child: SafeArea(
+    return  SafeArea(
         child: DefaultTabController(
           length: 3,
           child: MaterialApp(
@@ -72,7 +70,7 @@ class _DietState extends State<Diet> {
                   ),
                   backgroundColor: AppTheme.appBarColor,
                   leading: IconButton(
-                    icon: Icon(Icons.arrow_back),
+                    icon: const Icon(Icons.arrow_back),
                     onPressed: () {
                       Navigator.push(
                         context,
@@ -84,7 +82,7 @@ class _DietState extends State<Diet> {
                   ),
                   bottom: PreferredSize(
                     preferredSize:
-                        Size.fromHeight(100), // Aumente a altura para acomodar o seletor de dia da semana
+                        const Size.fromHeight(100), // Aumente a altura para acomodar o seletor de dia da semana
                     child: Column(
                       children: [
                         DropdownButton<String>(
@@ -94,7 +92,7 @@ class _DietState extends State<Diet> {
                               value: day,
                               child: Text(
                                 day,
-                                style: TextStyle(
+                                style: const TextStyle(
                                   fontSize: 16.0,
                                   fontWeight: FontWeight.bold,
                                   color: Colors.blue
@@ -125,13 +123,13 @@ class _DietState extends State<Diet> {
                           unselectedLabelColor: Colors.grey[400],
                           indicatorWeight: 4.0,
                           indicatorSize: TabBarIndicatorSize.label,
-                          indicatorColor: Color.fromRGBO(215, 225, 255, 1.0),
+                          indicatorColor:const Color.fromRGBO(215, 225, 255, 1.0),
                           isScrollable: true, 
                         ),
                       ],
                     ),
                   ),
-                  title: Text("Plano de Alimentação", style: TextStyle(fontSize: 30, color: Colors.red, fontWeight: FontWeight.w700,)),
+                  title: const Text("Plano de Alimentação", style: TextStyle(fontSize: 30, color: Colors.red, fontWeight: FontWeight.w700,)),
                   centerTitle: true, // Centralizar o título
                 ),
                 body: TabBarView(
@@ -158,7 +156,6 @@ class _DietState extends State<Diet> {
             ),
           ),
         ),
-      ),
     );
   }
 }
@@ -171,26 +168,26 @@ Widget _buildMealExample(String mealName, List<MealItem> mealItems) {
       children: [
         Text(
           mealName,
-          style: TextStyle(
+          style: const TextStyle(
             fontSize: 18.0,
             fontWeight: FontWeight.bold,
           ),
         ),
-        SizedBox(height: 8.0),
+        const SizedBox(height: 8.0),
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: mealItems.map((mealItem) {
             return ListTile(
-              leading: Icon(Icons.fastfood), // Ícone de comida
+              leading: const Icon(Icons.fastfood), // Ícone de comida
               title: Text(
                 mealItem.food,
-                style: TextStyle(
+                style: const TextStyle(
                   fontSize: 16.0,
                 ),
               ),
               subtitle: Text(
                 'Quantidade: ${mealItem.quantity}',
-                style: TextStyle(
+                style: const TextStyle(
                   fontSize: 14.0,
                 ),
               ),

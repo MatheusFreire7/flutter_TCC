@@ -14,7 +14,7 @@ class MySquare extends StatelessWidget {
         height: 100,
         color: Colors.deepPurple[100],
         child: Center(
-          child: Text(child, style: TextStyle(
+          child: Text(child, style: const TextStyle(
             fontSize: 40
             )
           ),
