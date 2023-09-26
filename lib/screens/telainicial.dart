@@ -276,7 +276,7 @@ Future<Uint8List?> _loadUserImage() async {
               ),
               ListTile(
                 title: const Text('Lista de Exercícios', style: TextStyle(fontSize: 16.0)),
-                leading: const Icon(Icons.list_alt, color: Colors.purple),
+                leading: const Icon(Icons.list_alt, color: Colors.lime),
                 onTap: () {
                   Navigator.push(
                     context,
@@ -404,7 +404,7 @@ Future<Uint8List?> _loadUserImage() async {
                       },
                     ),
                     CustomCard(
-                      color: Colors.purple, // Defina a cor de fundo aqui
+                      color: Colors.lime, // Defina a cor de fundo aqui
                       title: 'Lista de Exercícios',
                       icon: Icons.list_alt,
                       onTap: () {
@@ -416,19 +416,6 @@ Future<Uint8List?> _loadUserImage() async {
                         );
                       },
                     ),
-                    // CustomCard(
-                    //   color: Colors.orange, // Defina a cor de fundo aqui
-                    //   title: 'Progresso',
-                    //   icon: Icons.trending_up,
-                    //   onTap: () {
-                    //     Navigator.push(
-                    //       context,
-                    //       MaterialPageRoute(
-                    //         builder: (context) => Progresso.withSampleData(),
-                    //       ),
-                    //     );
-                    //   },
-                    // ),
                     CustomCard(
                       color: Colors.orange, // Defina a cor de fundo aqui
                       title: 'Alimentos Saudáveis',
@@ -454,20 +441,6 @@ Future<Uint8List?> _loadUserImage() async {
                         );
                       },
                     ),
-                    // CustomCard(
-                    //   color:
-                    //       Colors.lightGreenAccent, // Defina a cor de fundo aqui
-                    //   title: 'Suporte',
-                    //   icon: Icons.help_outline,
-                    //   onTap: () {
-                    //     Navigator.push(
-                    //       context,
-                    //       MaterialPageRoute(
-                    //         builder: (context) => SupportScreen(),
-                    //       ),
-                    //     );
-                    //   },
-                    // ),
                   ],
                 ),
               ),
