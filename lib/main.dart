@@ -6,6 +6,7 @@ import 'package:flutter_login/screens/formTreino.dart';
 import 'package:flutter_login/screens/infoObri.dart';
 import 'package:flutter_login/screens/telainicial.dart';
 import 'package:flutter_login/settings/theme.dart';
+import 'package:flutter_login/widgets/alimentSaudavel.dart';
 import 'package:flutter_login/widgets/planoAlimentacao.dart';
 import 'package:localstorage/localstorage.dart';
 import 'screens/login.dart';
@@ -45,6 +46,7 @@ class LoginApp extends StatelessWidget {
               "info": (context) => PersonalInfoForm(),
               "config": (context) => ConfiguracoesPage(),
               "planoAlimentacao": (context) => Diet(),
+              "alimento": (context) => AlimentacaoSaudavel(),
             },
           );
         } else {
