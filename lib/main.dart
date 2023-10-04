@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_login/screens/cadastro.dart';
-import 'package:flutter_login/screens/inicio.dart';
-import 'package:flutter_login/settings/config.dart';
-import 'package:flutter_login/screens/formTreino.dart';
-import 'package:flutter_login/screens/infoObri.dart';
+import 'package:flutter_login/screens/Cadastro.dart';
+import 'package:flutter_login/screens/TelaInicio.dart';
+import 'package:flutter_login/settings/Config.dart';
+import 'package:flutter_login/screens/FormPlano.dart';
+import 'package:flutter_login/screens/InfoObri.dart';
 import 'package:flutter_login/screens/telainicial.dart';
 import 'package:flutter_login/settings/theme.dart';
-import 'package:flutter_login/widgets/alimentSaudavel.dart';
-import 'package:flutter_login/widgets/planoAlimentacao.dart';
+import 'package:flutter_login/widgets/AlimentSaudavel.dart';
+import 'package:flutter_login/widgets/PlanoAlimentacao.dart';
+import 'package:flutter_login/widgets/treino.dart';
 import 'package:localstorage/localstorage.dart';
 import 'screens/login.dart';
 

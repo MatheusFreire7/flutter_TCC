@@ -1,20 +1,20 @@
 import 'dart:convert';
 import 'dart:typed_data';
 import 'package:flutter/material.dart';
-import 'package:flutter_login/widgets/alimentSaudavel.dart';
-import 'package:flutter_login/settings/config.dart';
-import 'package:flutter_login/screens/infoObri.dart';
-import 'package:flutter_login/widgets/planoAlimentacao.dart';
-import 'package:flutter_login/widgets/planoTreino.dart';
-import 'package:flutter_login/settings/suporte.dart';
+import 'package:flutter_login/widgets/AlimentSaudavel.dart';
+import 'package:flutter_login/settings/Config.dart';
+import 'package:flutter_login/screens/InfoObri.dart';
+import 'package:flutter_login/widgets/PlanoAlimentacao.dart';
+import 'package:flutter_login/widgets/PlanoTreino.dart';
+import 'package:flutter_login/settings/Suporte.dart';
 import 'package:flutter_login/settings/theme.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:localstorage/localstorage.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import '../service/imageStorage.dart';
-import '../service/sharedUser.dart';
-import '../widgets/testeApi.dart';
+import '../service/ImageStorage.dart';
+import '../service/SharedUser.dart';
+import '../widgets/ExerciseList.dart';
 
 class TelaInicial extends StatefulWidget {
   @override
@@ -411,7 +411,7 @@ Future<Uint8List?> _loadUserImage() async {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => TelaInicial(),
+                            builder: (context) => ExerciseList(),
                           ),
                         );
                       },

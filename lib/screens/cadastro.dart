@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_login/screens/login.dart';
 import 'package:flutter_login/settings/theme.dart';
 import 'package:http/http.dart' as http;
-import '../service/sharedUser.dart';
+import '../service/SharedUser.dart';
 
 class CadastroPage extends StatefulWidget {
   @override

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 import '../settings/theme.dart';
 
 class TreinoDetalhes extends StatelessWidget {
@@ -24,54 +23,40 @@ class TreinoDetalhes extends StatelessWidget {
       theme: AppTheme.themeData,
       home: Scaffold(
         appBar: AppBar(
-          iconTheme: IconThemeData(
-          color: AppTheme.iconColor),
+          iconTheme: IconThemeData(color: AppTheme.iconColor),
           backgroundColor: AppTheme.appBarColor,
-          title: Text('Detalhes do Exercício: $title'),
+          title: Text('Detalhes do Exercício'),
           centerTitle: true,
-          leading: IconButton(
-            icon: const Icon(Icons.arrow_back),
-            onPressed: () {
-              Navigator.pop(context);
-            },
-          ),
         ),
-        body: Column(
-          children: [
-            Expanded(
-              child: SingleChildScrollView(
-                child: Column(
-                  children: [
-                    //Image.network(imageUrl),
-                    Text(imageUrl),
-                    const SizedBox(height: 16.0),
-                    Text(
-                      title,
-                      style: const TextStyle(
-                        fontSize: 20.0,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    const SizedBox(height: 8.0),
-                    Text(series),
-                    const SizedBox(height: 8.0),
-                    Text(duration),
-                    const SizedBox(height: 8.0),
-                    Text(description),
-                  ],
+        body: SingleChildScrollView(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Image.network(imageUrl),
+              const SizedBox(height: 16.0),
+              Text(
+                title,
+                style: TextStyle(
+                  fontSize: 20.0,
+                  fontWeight: FontWeight.bold,
                 ),
               ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: ElevatedButton(
+              const SizedBox(height: 8.0),
+              Text('Séries: $series'),
+              const SizedBox(height: 8.0),
+              Text('Duração: $duration'),
+              const SizedBox(height: 8.0),
+              Text(description),
+              const SizedBox(height: 16.0),
+              ElevatedButton(
                 onPressed: () {
                   Navigator.pop(context);
                 },
-                child: const Text('Voltar'),
+                child: Text('Voltar'),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

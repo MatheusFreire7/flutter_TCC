@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import '../screens/telainicial.dart';
 import '../settings/theme.dart';
-import 'header.dart';
 
 class Diet extends StatefulWidget {
   @override

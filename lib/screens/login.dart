@@ -1,10 +1,10 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:flutter_login/screens/cadastro.dart';
+import 'package:flutter_login/screens/Cadastro.dart';
 import 'package:flutter_login/screens/telainicial.dart';
 import 'package:flutter_login/settings/theme.dart';
 import 'package:http/http.dart' as http;
-import '../service/sharedUser.dart';
+import '../service/SharedUser.dart';
 
 class LoginPage extends StatefulWidget {
   @override

@@ -29,16 +29,21 @@ class _AlimentacaoSaudavelState extends State<AlimentacaoSaudavel> {
   }
 
 Future<void> fetchAlimentos() async {
-  final response =
-      await http.get(Uri.parse('http://localhost:3000/alimentos'));
-  if (response.statusCode == 200) {
-    final List<dynamic> data = jsonDecode(response.body);
-    setState(() {
-      alimentos = data.map((item) => Alimento.fromJson(item)).toList();
-    });
-  } else {
-    print('Erro ao carregar os alimentos: ${response.statusCode}');
+  try{
+      final response = await http.get(Uri.parse('http://localhost:3000/alimentos'));
+
+      if (response.statusCode == 200) {
+        final List<dynamic> data = jsonDecode(response.body);
+        setState(() {
+          alimentos = data.map((item) => Alimento.fromJson(item)).toList();
+        });
+      } else {
+        print('Erro ao carregar os alimentos: ${response.statusCode}');
+      }
+  }catch(e){
+        print('Erro ao carregar os alimentos: ${e}');
   }
+  
 }
 
   void _ordenarAlimentos(Ordenacao novaOrdenacao) {

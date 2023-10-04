@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import '../settings/theme.dart';
-import '../widgets/square.dart';
+import '../widgets/Square.dart';
 
 class PlanoTreinoDetalhes extends StatelessWidget {
   final String title;
