@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:typed_data';
 import 'package:flutter/material.dart';
+import 'package:flutter_login/service/NotificationService.dart';
 import 'package:flutter_login/widgets/AlimentSaudavel.dart';
 import 'package:flutter_login/settings/Config.dart';
 import 'package:flutter_login/screens/InfoObri.dart';
@@ -11,6 +12,7 @@ import 'package:flutter_login/settings/theme.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:localstorage/localstorage.dart';
 import 'package:file_picker/file_picker.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../service/ImageStorage.dart';
 import '../service/SharedUser.dart';
@@ -25,7 +27,9 @@ class _TelaInicialState extends State<TelaInicial> {
   String _userName = "Nome do usuário";
   String _userEmail = "email_do_usuario@gmail.com";
   double _imc = 0.0;
-  String?_selectedImagePath; // Variável para armazenar o caminho da imagem selecionada
+  bool valor = false;
+  String?
+      _selectedImagePath; // Variável para armazenar o caminho da imagem selecionada
   Uint8List? _selectedImageBytes;
   final ImageStorage _imageStorage = ImageStorage();
   final LocalStorage localStorage = LocalStorage('my_app');
@@ -42,6 +46,17 @@ class _TelaInicialState extends State<TelaInicial> {
     super.didChangeDependencies();
     _loadUserData();
     _loadUserImage();
+  }
+
+  showNotification() {
+    setState(() {
+      valor = !valor;
+      if (valor) {
+        Provider.of<NotificationService>(context, listen: false)
+            .showNotification(CustomNotification(
+                id: 1, title: "Teste", body: "Bem Vindo", payload: "notificacao"));
+      }
+    });
   }
 
   Future<void> _saveImageToLocalStorage(Uint8List imageBytes) async {
@@ -67,31 +82,30 @@ class _TelaInicialState extends State<TelaInicial> {
     return userData!.idUsuario.toString();
   }
 
-Future<Uint8List?> _loadUserImage() async {
-  if (kIsWeb) {
-    final userId = await getUserUniqueId();
-    final localStorage = LocalStorage('my_app');
-    await localStorage.ready;
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    final encodedImage = prefs.getString('user_profile${userId}.png');
+  Future<Uint8List?> _loadUserImage() async {
+    if (kIsWeb) {
+      final userId = await getUserUniqueId();
+      final localStorage = LocalStorage('my_app');
+      await localStorage.ready;
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      final encodedImage = prefs.getString('user_profile${userId}.png');
 
-    if (userId != null) {
-     // final dynamic encodedImage = await localStorage.getItem(userId.toString());
+      if (userId != null) {
+        // final dynamic encodedImage = await localStorage.getItem(userId.toString());
 
-      if (encodedImage is String) {
-        // Decodifica a representação de texto para obter a lista de bytes
-        final imageBytes = base64Decode(encodedImage);
-        _selectedImageBytes = imageBytes;
-        return Uint8List.fromList(imageBytes);
+        if (encodedImage is String) {
+          // Decodifica a representação de texto para obter a lista de bytes
+          final imageBytes = base64Decode(encodedImage);
+          _selectedImageBytes = imageBytes;
+          return Uint8List.fromList(imageBytes);
+        }
       }
+    } else {
+      return _selectedImageBytes;
     }
-  } else {
-    return _selectedImageBytes;
+
+    return null;
   }
-
-  return null;
-}
-
 
   Future<void> _pickImage() async {
     FilePickerResult? result = await FilePicker.platform.pickFiles(
@@ -113,7 +127,8 @@ Future<Uint8List?> _loadUserImage() async {
           selectedImagePath = userId.toString();
         } else {
           final userId = await getUserUniqueId();
-          selectedImagePath = await _saveUserImage(userId.toString(), platformFile.bytes!);
+          selectedImagePath =
+              await _saveUserImage(userId.toString(), platformFile.bytes!);
         }
       }
 
@@ -184,37 +199,48 @@ Future<Uint8List?> _loadUserImage() async {
           child: ListView(
             padding: EdgeInsets.zero,
             children: <Widget>[
-            UserAccountsDrawerHeader(
+              UserAccountsDrawerHeader(
                 accountName: Row(
                   children: [
-                    const Icon(Icons.person, color: Colors.black, size: 16.0), // Ícone de usuário
-                    const SizedBox(width: 8.0), 
-                    const Text("Username:", style: TextStyle(fontSize: 14.0, fontWeight: FontWeight.bold)),
-                    const SizedBox(width: 4.0), 
+                    const Icon(Icons.person,
+                        color: Colors.black, size: 16.0), // Ícone de usuário
+                    const SizedBox(width: 8.0),
+                    const Text("Username:",
+                        style: TextStyle(
+                            fontSize: 14.0, fontWeight: FontWeight.bold)),
+                    const SizedBox(width: 4.0),
                     Text("${_userName}", style: TextStyle(fontSize: 14.0))
                   ],
                 ),
                 accountEmail: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    SizedBox(height: 5.0), 
+                    SizedBox(height: 5.0),
                     Row(
                       children: [
-                        const Icon(Icons.email, color: Colors.black, size: 16.0), // Ícone de e-mail
-                        const SizedBox(width: 8.0), 
-                        const Text("E-mail:", style: TextStyle(fontSize: 14.0, fontWeight: FontWeight.bold)),
+                        const Icon(Icons.email,
+                            color: Colors.black, size: 16.0), // Ícone de e-mail
+                        const SizedBox(width: 8.0),
+                        const Text("E-mail:",
+                            style: TextStyle(
+                                fontSize: 14.0, fontWeight: FontWeight.bold)),
                         const SizedBox(width: 4.0),
                         Text("${_userEmail}", style: TextStyle(fontSize: 14.0))
                       ],
                     ),
-                    SizedBox(height: 8.0), 
+                    SizedBox(height: 8.0),
                     Row(
                       children: [
-                        const Icon(Icons.monitor_weight, color: Colors.black, size: 16.0), // Ícone para o IMC
-                        const SizedBox(width: 8.0), 
-                        const Text("IMC:", style: TextStyle(fontSize: 14.0, fontWeight: FontWeight.bold)),
-                        const SizedBox(width: 4.0), 
-                        Text("${_imc.toStringAsFixed(1)}", style: TextStyle(fontSize: 14.0))
+                        const Icon(Icons.monitor_weight,
+                            color: Colors.black,
+                            size: 16.0), // Ícone para o IMC
+                        const SizedBox(width: 8.0),
+                        const Text("IMC:",
+                            style: TextStyle(
+                                fontSize: 14.0, fontWeight: FontWeight.bold)),
+                        const SizedBox(width: 4.0),
+                        Text("${_imc.toStringAsFixed(1)}",
+                            style: TextStyle(fontSize: 14.0))
                       ],
                     ),
                   ],
@@ -238,9 +264,10 @@ Future<Uint8List?> _loadUserImage() async {
                   ),
                 ),
               ),
-           ListTile(
-                title: const Text('Informações Pessoais', style: TextStyle(fontSize: 16.0)),
-                leading:const  Icon(Icons.person_outline, color: Colors.blue),
+              ListTile(
+                title: const Text('Informações Pessoais',
+                    style: TextStyle(fontSize: 16.0)),
+                leading: const Icon(Icons.person_outline, color: Colors.blue),
                 onTap: () {
                   Navigator.push(
                     context,
@@ -251,8 +278,9 @@ Future<Uint8List?> _loadUserImage() async {
                 },
               ),
               ListTile(
-                title: const Text('Plano de Treino', style: TextStyle(fontSize: 16.0)),
-                leading: const  Icon(Icons.food_bank, color: Colors.green),
+                title: const Text('Plano de Treino',
+                    style: TextStyle(fontSize: 16.0)),
+                leading: const Icon(Icons.food_bank, color: Colors.green),
                 onTap: () {
                   Navigator.push(
                     context,
@@ -263,19 +291,21 @@ Future<Uint8List?> _loadUserImage() async {
                 },
               ),
               ListTile(
-                title: const Text('Plano de Dieta', style: TextStyle(fontSize: 16.0)),
-                leading:const  Icon(Icons.restaurant_menu, color: Colors.red),
+                title: const Text('Plano de Dieta',
+                    style: TextStyle(fontSize: 16.0)),
+                leading: const Icon(Icons.restaurant_menu, color: Colors.red),
                 onTap: () {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => Diet()//PlanoAlimentacaoPage(),
-                    ),
+                        builder: (context) => Diet() //PlanoAlimentacaoPage(),
+                        ),
                   );
                 },
               ),
               ListTile(
-                title: const Text('Lista de Exercícios', style: TextStyle(fontSize: 16.0)),
+                title: const Text('Lista de Exercícios',
+                    style: TextStyle(fontSize: 16.0)),
                 leading: const Icon(Icons.list_alt, color: Colors.lime),
                 onTap: () {
                   Navigator.push(
@@ -286,9 +316,11 @@ Future<Uint8List?> _loadUserImage() async {
                   );
                 },
               ),
-                ListTile(
-                title: const Text('Lista de Alimentos', style: TextStyle(fontSize: 16.0)),
-                leading: const Icon(Icons.restaurant_menu, color: Colors.orange),
+              ListTile(
+                title: const Text('Lista de Alimentos',
+                    style: TextStyle(fontSize: 16.0)),
+                leading:
+                    const Icon(Icons.restaurant_menu, color: Colors.orange),
                 onTap: () {
                   Navigator.push(
                     context,
@@ -300,7 +332,7 @@ Future<Uint8List?> _loadUserImage() async {
               ),
               ListTile(
                 title: const Text('Suporte', style: TextStyle(fontSize: 16.0)),
-                leading: const  Icon(Icons.help, color: Colors.brown),
+                leading: const Icon(Icons.help, color: Colors.brown),
                 onTap: () {
                   Navigator.push(
                     context,
@@ -311,7 +343,8 @@ Future<Uint8List?> _loadUserImage() async {
                 },
               ),
               ListTile(
-                title: const Text('Configurações', style: TextStyle(fontSize: 16.0)),
+                title: const Text('Configurações',
+                    style: TextStyle(fontSize: 16.0)),
                 leading: const Icon(Icons.settings, color: Colors.grey),
                 onTap: () {
                   Navigator.push(
@@ -398,8 +431,9 @@ Future<Uint8List?> _loadUserImage() async {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => Diet()//PlanoAlimentacaoPage(),
-                          ),
+                              builder: (context) =>
+                                  Diet() //PlanoAlimentacaoPage(),
+                              ),
                         );
                       },
                     ),

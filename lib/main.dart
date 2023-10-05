@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_login/screens/Cadastro.dart';
 import 'package:flutter_login/screens/TelaInicio.dart';
+import 'package:flutter_login/service/NoticationPage.dart';
+import 'package:flutter_login/service/NotificationService.dart';
 import 'package:flutter_login/settings/Config.dart';
 import 'package:flutter_login/screens/FormPlano.dart';
 import 'package:flutter_login/screens/InfoObri.dart';
@@ -10,11 +12,17 @@ import 'package:flutter_login/widgets/AlimentSaudavel.dart';
 import 'package:flutter_login/widgets/PlanoAlimentacao.dart';
 import 'package:flutter_login/widgets/treino.dart';
 import 'package:localstorage/localstorage.dart';
+import 'package:provider/provider.dart';
 import 'screens/login.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  runApp(LoginApp());
+  runApp(
+    MultiProvider(providers: [
+      Provider<NotificationService>(create: (context) => NotificationService()),
+    ],child: LoginApp()
+    ),
+  );  
 }
 
 class LoginApp extends StatelessWidget {
@@ -48,10 +56,11 @@ class LoginApp extends StatelessWidget {
               "config": (context) => ConfiguracoesPage(),
               "planoAlimentacao": (context) => Diet(),
               "alimento": (context) => AlimentacaoSaudavel(),
+              "notificacao": (context) => NotificacaoPage()
             },
           );
         } else {
-          return CircularProgressIndicator(); 
+          return CircularProgressIndicator();
         }
       },
     );
