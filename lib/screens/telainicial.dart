@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:flutter_login/service/NotificationService.dart';
+import 'package:flutter_login/service/NoticationWater.dart';
 import 'package:flutter_login/widgets/AlimentSaudavel.dart';
 import 'package:flutter_login/settings/Config.dart';
 import 'package:flutter_login/screens/InfoObri.dart';
@@ -14,9 +15,13 @@ import 'package:localstorage/localstorage.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import '../service/NoticationWater.dart';
 import '../service/ImageStorage.dart';
 import '../service/SharedUser.dart';
 import '../widgets/ExerciseList.dart';
+import 'package:windows_notification/notification_message.dart';
+import 'package:windows_notification/windows_notification.dart';
+import 'dart:html' as html;
 
 class TelaInicial extends StatefulWidget {
   @override
@@ -33,12 +38,15 @@ class _TelaInicialState extends State<TelaInicial> {
   Uint8List? _selectedImageBytes;
   final ImageStorage _imageStorage = ImageStorage();
   final LocalStorage localStorage = LocalStorage('my_app');
+  final _winNotifyPlugin = WindowsNotification(applicationId: null);
+  final notificationService = NotificationWater.instance;
 
   @override
   void initState() {
     super.initState();
     _loadUserData();
     _loadUserImage();
+    notificationService.showWaterReminderNotification();
   }
 
   @override
@@ -54,10 +62,54 @@ class _TelaInicialState extends State<TelaInicial> {
       if (valor) {
         Provider.of<NotificationService>(context, listen: false)
             .showNotification(CustomNotification(
-                id: 1, title: "Teste", body: "Bem Vindo", payload: "notificacao"));
+                id: 1,
+                title: "Teste",
+                body: "Bem Vindo",
+                payload: "notificacao"));
       }
     });
   }
+
+  void _showWelcomeNotification() {
+    final message = NotificationMessage.fromPluginTemplate(
+      "welcome_notification",
+      "Bem-vindo",
+      "Seja bem-vindo à tela inicial!",
+    );
+    _winNotifyPlugin.showNotificationPluginTemplate(message);
+  }
+
+  // void showWebNotification() {
+  //   if (html.Notification.supported) {
+  //     html.Notification.requestPermission().then((permission) {
+  //       if (permission == 'granted') {
+  //         final notification = html.Notification('Bem Vindo!', body: 'Esta é a Tela Inicial do aplicativo');
+  //         notification.onClick.listen((_) {
+  //           // Ação a ser executada quando o usuário clicar na notificação
+  //         });
+  //       } else {
+  //         // Lidar com o caso em que a permissão não é concedida
+  //         print('Permissão para notificações não concedida');
+  //         showErrorNotification('Erro de Permissão', 'Você não concedeu permissão para notificações.');
+  //       }
+  //     }).catchError((error) {
+  //       // Lidar com erros na solicitação de permissão
+  //       print('Erro na solicitação de permissão: $error');
+  //       showErrorNotification('Erro de Solicitação de Permissão', 'Houve um erro ao solicitar permissão para notificações.');
+  //     });
+  //   } else {
+  //     // Lidar com o caso em que as notificações não são suportadas
+  //     print('Notificações não são suportadas neste navegador');
+  //     showErrorNotification('Notificações Não Suportadas', 'Este navegador não suporta notificações.');
+  //   }
+  // }
+
+  // void showErrorNotification(String title, String message) {
+  //   final notification = html.Notification(title, body: message);
+  //   notification.onClick.listen((_) {
+  //     // Ação a ser executada quando o usuário clicar na notificação de erro
+  //   });
+  // }
 
   Future<void> _saveImageToLocalStorage(Uint8List imageBytes) async {
     final userId = await getUserUniqueId();

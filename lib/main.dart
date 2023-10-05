@@ -13,16 +13,59 @@ import 'package:flutter_login/widgets/PlanoAlimentacao.dart';
 import 'package:flutter_login/widgets/treino.dart';
 import 'package:localstorage/localstorage.dart';
 import 'package:provider/provider.dart';
-import 'screens/login.dart';
+import 'screens/Login.dart';
+import 'package:flutter/widgets.dart';
+import 'dart:async';
+import 'dart:html' as html;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  // showWaterReminderNotification();
+  // // Define um timer para mostrar as próximas notificações a cada 2 horas
+  // const duration = Duration(hours: 2);
+  // Timer.periodic(duration, (Timer t) {
+  //   showWaterReminderNotification();
+  // });
   runApp(
     MultiProvider(providers: [
       Provider<NotificationService>(create: (context) => NotificationService()),
     ],child: LoginApp()
     ),
   );  
+}
+
+void showWaterReminderNotification() {
+  if (html.Notification.supported) {
+    html.Notification.requestPermission().then((permission) {
+      if (permission == 'granted') {
+        final notification = html.Notification('Hora de beber água!', body: 'Lembre-se de beber um copo de água.');
+        notification.onClick.listen((_) {
+          // Ação a ser executada quando o usuário clicar na notificação
+          // Você pode adicionar uma ação personalizada aqui, se necessário
+        });
+      } else {
+        // Lidar com o caso em que a permissão não é concedida
+        print('Permissão para notificações não concedida');
+        showErrorNotification('Erro de Permissão', 'Você não concedeu permissão para notificações.');
+      }
+    }).catchError((error) {
+      // Lidar com erros na solicitação de permissão
+      print('Erro na solicitação de permissão: $error');
+      showErrorNotification('Erro de Solicitação de Permissão', 'Houve um erro ao solicitar permissão para notificações.');
+    });
+  } else {
+    // Lidar com o caso em que as notificações não são suportadas
+    print('Notificações não são suportadas neste navegador');
+    showErrorNotification('Notificações Não Suportadas', 'Este navegador não suporta notificações.');
+  }
+}
+
+void showErrorNotification(String title, String message) {
+  final notification = html.Notification(title, body: message);
+  notification.onClick.listen((_) {
+    // Ação a ser executada quando o usuário clicar na notificação de erro
+    // Você pode adicionar uma ação personalizada aqui, se necessário
+  });
 }
 
 class LoginApp extends StatelessWidget {
