@@ -1,17 +1,17 @@
-# FitLife - Aplicativo de Montagem de Planos de Treino e Alimentação Personalizados por uma IA em Python, Desenvolvido em Flutter para o TCC
+# FitLife - Aplicativo de Montagem de Planos de Treino e Alimentação Personalizados por uma IA em Python.
 
 ## Sobre ℹ️
-O FitLife é um aplicativo inovador que utiliza inteligência artificial para selecionar planos de treino e alimentação personalizados, ajudando você a atingir seus objetivos de forma mais eficaz e eficiente. Desenvolvido como projeto de Trabalho de Conclusão de Curso (TCC), este aplicativo combina o poder da programação em Python e Typescript com a flexibilidade e usabilidade do Flutter para fornecer uma solução abrangente de fitness e nutrição.
+O FitLife é um aplicativo desenvolvido em Flutter com integração a uma Api em Typescript, ele é solução inovadora que utiliza inteligência artificial para selecionar planos de treino e alimentação personalizados, ajudando você a atingir seus objetivos de forma mais eficaz e eficiente. Este Projeto foi Desenvolvido como projeto de Trabalho de Conclusão de Curso (TCC), este aplicativo combina o poder da programação em Python e Typescript com a flexibilidade e usabilidade do Flutter para fornecer uma solução abrangente de fitness e nutrição.
 
 ## Pré-requisitos 🛠️
 
 Antes de usar este aplicativo, você deve ter instalado no seu Computador:
 
-- Flutter: O framework que possibilita o desenvolvimento para criar aplicativos móveis multiplataforma.
+- Flutter: Este é o framework que possibilita o desenvolvimento para criar aplicativos móveis multiplataforma.
 
 ## Como Usar  ▶️
 1. **Clone o repositório**:
-``` base
+``` bash
    git clone https://github.com/MatheusFreire7/flutter_TCC.git
 ```
 
