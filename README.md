@@ -25,10 +25,10 @@ Antes de usar este aplicativo, você deve ter instalado no seu Computador:
     flutter run -d chrome
 ```
 
-Para conseguir usar todas as funcionalidades deste aplicativo, terá que clonar dois repositórios diferentes, um para a Api em Typescript e outro para a IA em Python:<br><br>
+Para conseguir usar todas as funcionalidades deste aplicativo, terá que primeiro clonar dois repositórios diferentes, um para a Api em Typescript e outro para a IA em Python:<br><br>
 Link para os Repositórios:
-- [Api em Typescript]()
-- [IA em Python]()
+- [Api em Typescript](https://github.com/LuizHPDomingues2005/FitLife_API)
+- [IA em Python](https://github.com/MatheusFreire7/IA_TCC)
 
 Após seguir esses passos, você estará pronto para executar e explorar o FitLife, permitindo que a IA selecione planos de treino e alimentação personalizados para ajudar você a atingir seus objetivos de forma eficaz. Aproveite a jornada em direção a um estilo de vida mais saudável com o FitLife!
 
