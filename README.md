@@ -7,7 +7,7 @@ O FitLife é um aplicativo desenvolvido em Flutter com integração a uma Api em
 
 Antes de usar este aplicativo, você deve ter instalado no seu Computador:
 
-- Flutter: Este é o framework que possibilita o desenvolvimento para criar aplicativos móveis multiplataforma.
+- Flutter: Este é o framework que este projeto foi criado.
 
 ## Como Usar  ▶️
 1. **Clone o repositório**:
@@ -25,7 +25,7 @@ Antes de usar este aplicativo, você deve ter instalado no seu Computador:
     flutter run -d chrome
 ```
 
-Para conseguir usar todas as funcionalidades deste aplicativo, terá que primeiro clonar dois repositórios diferentes, um para a Api em Typescript e outro para a IA em Python:<br><br>
+Para conseguir usar todas as funcionalidades deste aplicativo, terá que primeiro clonar dois repositórios do Github diferentes, um para a Api em Typescript e outro para a IA em Python:<br><br>
 Link para os Repositórios:
 - [Api em Typescript](https://github.com/LuizHPDomingues2005/FitLife_API)
 - [IA em Python](https://github.com/MatheusFreire7/IA_TCC)
