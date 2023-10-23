@@ -16,13 +16,22 @@ Antes de usar este aplicativo, você deve ter instalado no seu Computador:
 ```
 
 2. **Instalar as Dependências do Projeto**:
- ``` base
+ ``` bash
      Flutter pub get
 ```
 
 3. **Execute o Projeto**:
- ``` base
+ ``` bash
     flutter run -d chrome
 ```
 
+Para conseguir usar todas as funcionalidades deste aplicativo, terá que clonar dois repositórios diferentes, um para a Api em Typescript e outro para a IA em Python:<br><br>
+Link para os Repositórios:
+- [Api em Typescript]()
+- [IA em Python]()
+
 Após seguir esses passos, você estará pronto para executar e explorar o FitLife, permitindo que a IA selecione planos de treino e alimentação personalizados para ajudar você a atingir seus objetivos de forma eficaz. Aproveite a jornada em direção a um estilo de vida mais saudável com o FitLife!
+
+## **Autores**
+   **Luiz Henrique Parolim Domingues**     [Github](https://github.com/LuizHPDomingues2005)<br>
+   **Matheus Henrique de Oliveira Freire** [Github](https://github.com/MatheusFreire7)
