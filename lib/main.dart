@@ -6,7 +6,7 @@ import 'package:flutter_login/service/NotificationService.dart';
 import 'package:flutter_login/settings/Config.dart';
 import 'package:flutter_login/screens/FormPlano.dart';
 import 'package:flutter_login/screens/InfoObri.dart';
-import 'package:flutter_login/screens/telainicial.dart';
+import 'package:flutter_login/screens/Telainicial.dart';
 import 'package:flutter_login/settings/theme.dart';
 import 'package:flutter_login/widgets/AlimentSaudavel.dart';
 import 'package:flutter_login/widgets/PlanoAlimentacao.dart';

@@ -15,13 +15,11 @@ import 'package:localstorage/localstorage.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import '../service/NoticationWater.dart';
 import '../service/ImageStorage.dart';
 import '../service/SharedUser.dart';
 import '../widgets/ExerciseList.dart';
-import 'package:windows_notification/notification_message.dart';
 import 'package:windows_notification/windows_notification.dart';
-import 'dart:html' as html;
+
 
 class TelaInicial extends StatefulWidget {
   @override
@@ -33,8 +31,7 @@ class _TelaInicialState extends State<TelaInicial> {
   String _userEmail = "email_do_usuario@gmail.com";
   double _imc = 0.0;
   bool valor = false;
-  String?
-      _selectedImagePath; // Variável para armazenar o caminho da imagem selecionada
+  String?_selectedImagePath; // Variável para armazenar o caminho da imagem selecionada
   Uint8List? _selectedImageBytes;
   final ImageStorage _imageStorage = ImageStorage();
   final LocalStorage localStorage = LocalStorage('my_app');

@@ -95,22 +95,28 @@ class _PlanoTreinoPageState extends State<PlanoTreinoPage> {
           Expanded(
             child: ListView(
               padding: EdgeInsets.all(16.0),
+              //    nomeExercicio: nomeExercicio,
+              // imageUrl: imageUrl,
+              // series: series,
+              // tempo: tempo,
+              // intensidade: intensidade,
+              // repeticoes: repeticoes,
               children: [
                 if (_selectedDay == 'Segunda-feira')
                   _buildWeekDaySection('Segunda-feira', [
                     _buildExerciseTile('Exercício 1', 'caminho_da_imagem',
-                        '3 séries', '10 min', 'Descrição do exercício 1'),
+                        '3 séries', '10 min', '3 Repetições','Médio'),
                     _buildExerciseTile('Exercício 2', 'caminho_da_imagem',
-                        '4 séries', '15 min', 'Descrição do exercício 2'),
+                        '4 séries', '15 min', '2 Repetições','Alta'),
                   ]),
                 if (_selectedDay == 'Terça-feira')
                   _buildWeekDaySection('Terça-feira', [
                     _buildExerciseTile('Exercício 3', 'caminho_da_imagem',
-                        '2 séries', '8 min', 'Descrição do exercício 3'),
+                        '2 séries', '8 min', '4 Repetições','Baixa'),
                     _buildExerciseTile('Exercício 4', 'caminho_da_imagem',
-                        '3 séries', '12 min', 'Descrição do exercício 4'),
+                        '3 séries', '12 min', '4 Repetições','Baixa'),
                     _buildExerciseTile('Exercício 5', 'caminho_da_imagem',
-                        '3 séries', '10 min', 'Descrição do exercício 5'),
+                        '3 séries', '10 min', '3 Repetições','Médio'),
                   ]),
                 // Adicione seções para cada dia da semana
               ],
@@ -136,19 +142,21 @@ class _PlanoTreinoPageState extends State<PlanoTreinoPage> {
     );
   }
 
-  Widget _buildExerciseTile(String title, String imagePath, String series,
-      String duration, String description) {
+
+  Widget _buildExerciseTile(String nomeExercicio, String imageUrl, String series,
+      String tempo, String intensidade, String repeticoes){
     return ListTile(
        onTap: () {
         Navigator.push(
           context,
           MaterialPageRoute(
             builder: (context) => TreinoDetalhes(
-              title: title,
-              imageUrl: imagePath,
+              nomeExercicio: nomeExercicio,
+              imageUrl: imageUrl,
               series: series,
-              duration: duration,
-              description: description,
+              tempo: tempo,
+              repeticoes: repeticoes,
+              intensidade: intensidade,
             ),
           ),
         );
@@ -160,8 +168,8 @@ class _PlanoTreinoPageState extends State<PlanoTreinoPage> {
       //   fit: BoxFit.cover,
       // ),
       leading: const Text('image'),
-      title: Text(title),
-      subtitle: Text('$series - $duration'),
+      title: Text(nomeExercicio),
+      subtitle: Text('$series - $series'),
       trailing: const Icon(Icons.arrow_forward_ios),
     );
   }

@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-
 import '../screens/telainicial.dart';
 import '../settings/theme.dart';
 
@@ -30,7 +29,7 @@ class _AlimentacaoSaudavelState extends State<AlimentacaoSaudavel> {
 
 Future<void> fetchAlimentos() async {
   try{
-      final response = await http.get(Uri.parse('http://localhost:3000/alimentos'));
+      final response = await http.get(Uri.parse('http://localhost:3002/alimentos'));
 
       if (response.statusCode == 200) {
         final List<dynamic> data = jsonDecode(response.body);
@@ -105,27 +104,31 @@ Future<void> fetchAlimentos() async {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      theme: AppTheme.themeData,
       debugShowCheckedModeBanner: false,
       home: Scaffold(
         appBar: AppBar(
-            backgroundColor: Colors.white, 
+          iconTheme: IconThemeData(color: AppTheme.iconColor),
+          backgroundColor: AppTheme.appBarColor,
           leading: IconButton(
-            icon: Icon(Icons.arrow_back, color: Colors.black),
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => TelaInicial(),
-                ),
-              );
-            },
-          ),
+              icon: const Icon(Icons.arrow_back),
+              color: AppTheme.iconColor,
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => TelaInicial(),
+                  ),
+                );
+              },
+            ),
            actions: [
             DropdownButton<Ordenacao>(
               value: _ordenacaoAtual,
               onChanged: (novaOrdenacao) {
                 _ordenarAlimentos(novaOrdenacao!);
               },
+              elevation: 0,
               items: Ordenacao.values.map((ordenacao) {
                 return DropdownMenuItem<Ordenacao>(
                   value: ordenacao,
@@ -137,6 +140,7 @@ Future<void> fetchAlimentos() async {
             IconButton(
               icon: Icon(
                 _ordemCrescente ? Icons.arrow_upward : Icons.arrow_downward,
+                color: AppTheme.iconColor,
               ),
               color: Colors.black,
               onPressed: () {

@@ -1,32 +1,38 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-
 import 'Treino.dart';
 import '../settings/theme.dart';
 
+
 class Exercise {
-  final String title;
-  final String description;
-  final String imageUrl;
+  final String nomeExercicio;
   final String series;
-  final String duration;
+  final String imageUrl;
+  final String repeticoes;
+  final String intensidade;
+  final String idMusculo;
+  final String tempo;
 
   Exercise({
-    required this.title,
-    required this.description,
-    required this.imageUrl,
+    required this.nomeExercicio,
     required this.series,
-    required this.duration,
+    required this.imageUrl,
+    required this.repeticoes,
+    required this.intensidade,
+    required this.idMusculo,
+    required this.tempo,
   });
 
   factory Exercise.fromJson(Map<String, dynamic> json) {
     return Exercise(
-      title: json['title'],
-      description: json['description'],
-      imageUrl: json['imageUrl'],
+      nomeExercicio: json['nomeExercicio'],
       series: json['series'],
-      duration: json['duration'],
+      imageUrl: json['imageUrl'],
+      repeticoes: json['repeticoes'],
+      intensidade: json['intensidade'],
+      idMusculo: json['idMusculo'],
+      tempo: json['tempo'],
     );
   }
 }
@@ -93,11 +99,12 @@ class _ExerciseListState extends State<ExerciseList> {
                     context,
                     MaterialPageRoute(
                       builder: (context) => TreinoDetalhes(
-                        title: exercises[index].title,
+                        nomeExercicio: exercises[index].nomeExercicio,
                         imageUrl: exercises[index].imageUrl,
                         series: exercises[index].series,
-                        duration: exercises[index].duration,
-                        description: exercises[index].description,
+                        repeticoes: exercises[index].repeticoes,
+                        tempo: exercises[index].tempo,
+                        intensidade: exercises[index].intensidade,
                       ),
                     ),
                   );
@@ -118,16 +125,11 @@ class _ExerciseListState extends State<ExerciseList> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            exercises[index].title,
+                            exercises[index].nomeExercicio,
                             style: TextStyle(
                               fontSize: 20,
                               fontWeight: FontWeight.bold,
                             ),
-                          ),
-                          SizedBox(height: 5),
-                          Text(
-                            exercises[index].description,
-                            style: TextStyle(color: Colors.grey),
                           ),
                           SizedBox(height: 5),
                           Text(
@@ -136,7 +138,17 @@ class _ExerciseListState extends State<ExerciseList> {
                           ),
                           SizedBox(height: 5),
                           Text(
-                            'Duração: ${exercises[index].duration}',
+                            'Repetições: ${exercises[index].repeticoes}',
+                            style: TextStyle(color: Colors.grey),
+                          ),
+                          SizedBox(height: 5),
+                          Text(
+                            'Duração: ${exercises[index].tempo}',
+                            style: TextStyle(color: Colors.grey),
+                          ),
+                          SizedBox(height: 5),
+                          Text(
+                            'Intensidade: ${exercises[index].intensidade}',
                             style: TextStyle(color: Colors.grey),
                           ),
                         ],
