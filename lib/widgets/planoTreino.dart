@@ -95,12 +95,6 @@ class _PlanoTreinoPageState extends State<PlanoTreinoPage> {
           Expanded(
             child: ListView(
               padding: EdgeInsets.all(16.0),
-              //    nomeExercicio: nomeExercicio,
-              // imageUrl: imageUrl,
-              // series: series,
-              // tempo: tempo,
-              // intensidade: intensidade,
-              // repeticoes: repeticoes,
               children: [
                 if (_selectedDay == 'Segunda-feira')
                   _buildWeekDaySection('Segunda-feira', [

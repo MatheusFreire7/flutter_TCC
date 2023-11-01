@@ -107,7 +107,7 @@ class _DietState extends State<Diet> {
                           elevation: 0, 
                         ),
                         TabBar(
-                          tabs: <Widget>[
+                          tabs: const <Widget>[
                             Tab(
                               child: Text('Café da Manhã',style:TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
                             ),

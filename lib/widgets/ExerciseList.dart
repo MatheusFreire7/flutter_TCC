@@ -6,6 +6,7 @@ import '../settings/theme.dart';
 
 
 class Exercise {
+  final String idExercicio;
   final String nomeExercicio;
   final String series;
   final String imageUrl;
@@ -15,6 +16,7 @@ class Exercise {
   final String tempo;
 
   Exercise({
+    required this.idExercicio,
     required this.nomeExercicio,
     required this.series,
     required this.imageUrl,
@@ -26,13 +28,14 @@ class Exercise {
 
   factory Exercise.fromJson(Map<String, dynamic> json) {
     return Exercise(
-      nomeExercicio: json['nomeExercicio'],
-      series: json['series'],
-      imageUrl: json['imageUrl'],
-      repeticoes: json['repeticoes'],
-      intensidade: json['intensidade'],
-      idMusculo: json['idMusculo'],
-      tempo: json['tempo'],
+      idExercicio: json['idExercicio'] ?? '',
+      nomeExercicio: json['nomeExercicio'] ?? '',
+      series: json['series'] ?? '',
+      imageUrl: json['imageUrl'] ?? '',
+      repeticoes: json['repeticoes'] ?? '',
+      intensidade: json['intensidade'] ?? '',
+      idMusculo: json['idMusculo'] ?? '',
+      tempo: json['tempoS'] ?? '',
     );
   }
 }
@@ -48,8 +51,7 @@ class _ExerciseListState extends State<ExerciseList> {
   late List<Exercise> exercises = [];
 
   Future<List<Exercise>> fetchExercises() async {
-    final response =
-        await http.get(Uri.parse('http://localhost:3001/exercicios'));
+    final response = await http.get(Uri.parse('http://localhost:3001/exercicios'));
     if (response.statusCode == 200) {
       List jsonResponse = json.decode(response.body);
       return jsonResponse
