@@ -35,35 +35,48 @@ class TreinoDetalhes extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              Image.network(
-                imageUrl,
-                errorBuilder: (context, error, stackTrace) {
-                  return Icon(Icons.error, size: 100.0, color: Colors.red); 
-                },
-              ),
-              const SizedBox(height: 16.0),
-              Text(
-                nomeExercicio,
-                style: TextStyle(
-                  fontSize: 20.0,
-                  fontWeight: FontWeight.bold,
+              Center(
+                child: Image.network(
+                  imageUrl,
+                  errorBuilder: (context, error, stackTrace) {
+                    return Icon(Icons.error, size: 100.0, color: Colors.red); 
+                  },
                 ),
               ),
-              const SizedBox(height: 8.0),
+              const SizedBox(height: 16.0),
+              Center(
+                child: Text(
+                  nomeExercicio,
+                  style: TextStyle(
+                    fontSize: 20.0,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+              const SizedBox(height: 8.0), 
+              Divider(), 
+              const SizedBox(height: 16.0),
               Text('Séries: $series'),
-              const SizedBox(height: 8.0),
+              Divider(), 
               Text('Repetições: $repeticoes'),
-              const SizedBox(height: 8.0),
+              Divider(), 
               Text('Duração: $tempo'),
-              const SizedBox(height: 8.0),
+              Divider(), 
               Text('Intensidade: $intensidade'),
               const SizedBox(height: 16.0),
-              ElevatedButton(
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-                child: Text('Voltar'),
+             ElevatedButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              style: ElevatedButton.styleFrom(
+                primary: Colors.blue, 
+                onPrimary: Colors.white, 
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(20.0),
+                ),
               ),
+              child: Text('Voltar'),
+            ),
             ],
           ),
         ),

@@ -114,8 +114,7 @@ class _ExerciseListState extends State<ExerciseList> {
                     context,
                     MaterialPageRoute(
                       builder: (context) => TreinoDetalhes(
-                        nomeExercicio:
-                            exercises[index].nomeExercicio.toString(),
+                        nomeExercicio:exercises[index].nomeExercicio.toString(),
                         imageUrl: exercises[index].imageUrl,
                         series: exercises[index].series.toString(),
                         repeticoes: exercises[index].repeticoes.toString(),
