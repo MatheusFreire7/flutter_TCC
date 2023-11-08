@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import '../settings/theme.dart';
 
-
 class TreinoDetalhes extends StatelessWidget {
   final String nomeExercicio;
   final String imageUrl;
@@ -36,7 +35,12 @@ class TreinoDetalhes extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              Image.network(imageUrl),
+              Image.network(
+                imageUrl,
+                errorBuilder: (context, error, stackTrace) {
+                  return Icon(Icons.error, size: 100.0, color: Colors.red); 
+                },
+              ),
               const SizedBox(height: 16.0),
               Text(
                 nomeExercicio,

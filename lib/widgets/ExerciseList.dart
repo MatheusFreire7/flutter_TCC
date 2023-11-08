@@ -2,40 +2,42 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'Treino.dart';
-import '../settings/theme.dart';
-
+import '../settings/Theme.dart';
 
 class Exercise {
-  final String idExercicio;
+  final int idExercicio;
   final String nomeExercicio;
-  final String series;
+  final int series;
+  final int repeticoes;
+  final int tempoS;
+  final int intensidade;
   final String imageUrl;
-  final String repeticoes;
-  final String intensidade;
-  final String idMusculo;
-  final String tempo;
+  final String ciclo;
+  final int idMusculo;
 
   Exercise({
     required this.idExercicio,
     required this.nomeExercicio,
     required this.series,
-    required this.imageUrl,
     required this.repeticoes,
+    required this.tempoS,
     required this.intensidade,
+    required this.imageUrl,
+    required this.ciclo,
     required this.idMusculo,
-    required this.tempo,
   });
 
   factory Exercise.fromJson(Map<String, dynamic> json) {
     return Exercise(
-      idExercicio: json['idExercicio'] ?? '',
+      idExercicio: json['idExercicio'] ?? 0,
       nomeExercicio: json['nomeExercicio'] ?? '',
-      series: json['series'] ?? '',
+      series: json['series'] ?? 0,
+      repeticoes: json['repeticoes'] ?? 0,
+      tempoS: json['tempoS'] ?? 0,
+      intensidade: json['intensidade'] ?? 0,
       imageUrl: json['imageUrl'] ?? '',
-      repeticoes: json['repeticoes'] ?? '',
-      intensidade: json['intensidade'] ?? '',
-      idMusculo: json['idMusculo'] ?? '',
-      tempo: json['tempoS'] ?? '',
+      ciclo: json['ciclo'] ?? '',
+      idMusculo: json['idMusculo'] ?? 0,
     );
   }
 }
@@ -50,25 +52,36 @@ class ExerciseList extends StatefulWidget {
 class _ExerciseListState extends State<ExerciseList> {
   late List<Exercise> exercises = [];
 
-  Future<List<Exercise>> fetchExercises() async {
-    final response = await http.get(Uri.parse('http://localhost:3001/exercicios'));
+  Future<List<Exercise>?> fetchExercises() async {
+    final response = await http.get(Uri.parse('http://localhost:3000/exercicio/get'));
     if (response.statusCode == 200) {
-      List jsonResponse = json.decode(response.body);
-      return jsonResponse
-          .map((exercise) => Exercise.fromJson(exercise))
-          .toList();
+      final jsonResponse = json.decode(response.body);
+      if (jsonResponse is List) {
+        final exercises = <Exercise>[];
+        for (var exerciseJson in jsonResponse[0]) {
+          if (exerciseJson is Map<String, dynamic>) {
+            exercises.add(Exercise.fromJson(exerciseJson));
+          }
+        }
+        return exercises;
+      } else {
+        return null;
+      }
     } else {
       throw Exception('Falha para carregar os exercícios da API');
     }
   }
 
+
   @override
   void initState() {
     super.initState();
     fetchExercises().then((exercises) {
-      setState(() {
-        this.exercises = exercises;
-      });
+      if (exercises != null) {
+        setState(() {
+          this.exercises = exercises;
+        });
+      }
     });
   }
 
@@ -101,12 +114,13 @@ class _ExerciseListState extends State<ExerciseList> {
                     context,
                     MaterialPageRoute(
                       builder: (context) => TreinoDetalhes(
-                        nomeExercicio: exercises[index].nomeExercicio,
+                        nomeExercicio:
+                            exercises[index].nomeExercicio.toString(),
                         imageUrl: exercises[index].imageUrl,
-                        series: exercises[index].series,
-                        repeticoes: exercises[index].repeticoes,
-                        tempo: exercises[index].tempo,
-                        intensidade: exercises[index].intensidade,
+                        series: exercises[index].series.toString(),
+                        repeticoes: exercises[index].repeticoes.toString(),
+                        tempo: exercises[index].tempoS.toString(),
+                        intensidade: exercises[index].intensidade.toString(),
                       ),
                     ),
                   );
@@ -117,9 +131,12 @@ class _ExerciseListState extends State<ExerciseList> {
                       height: 100,
                       width: 100,
                       child: Image.network(
-                        exercises[index].imageUrl,
-                        fit: BoxFit.cover,
-                      ),
+                      exercises[index].imageUrl,
+                      fit: BoxFit.cover,
+                      errorBuilder: (context, error, stackTrace) {
+                        return Icon(Icons.error, color: Colors.red); 
+                      },
+                    )
                     ),
                     SizedBox(width: 10),
                     Expanded(
@@ -145,7 +162,7 @@ class _ExerciseListState extends State<ExerciseList> {
                           ),
                           SizedBox(height: 5),
                           Text(
-                            'Duração: ${exercises[index].tempo}',
+                            'Duração: ${exercises[index].tempoS}',
                             style: TextStyle(color: Colors.grey),
                           ),
                           SizedBox(height: 5),

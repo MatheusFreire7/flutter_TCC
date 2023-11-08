@@ -1,4 +1,3 @@
-import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_login/screens/telainicial.dart';
 import 'package:flutter_login/service/sharedUser.dart';
@@ -35,10 +34,11 @@ class _PersonalInfoFormState extends State<PersonalInfoForm> {
         _altura = userData.altura;
         _idade = userData.idade;
         _peso = userData.peso;
-        if(userData.genero == 'M')
+        if(userData.genero == 'M') {
           _gender = 'Masculino';
-        else
+        } else {
           _gender = 'Feminino';
+        }
       });
     }
   }
@@ -57,8 +57,9 @@ class _PersonalInfoFormState extends State<PersonalInfoForm> {
 
     if (genero == "Masculino") {
       genero = "M";
-    } else
+    } else {
       genero = "F";
+    }
 
     final novoInfoUser = {
       'idUsuario': idUsuario,
@@ -82,7 +83,7 @@ class _PersonalInfoFormState extends State<PersonalInfoForm> {
         peso = double.parse(dadosUser!.peso.toString());
         altura = dadosUser!.altura / 100.0; // Converter altura para metros
 
-      UserData userData = new UserData(
+      UserData userData = UserData(
         idUsuario: dadosUser!.idUsuario, 
         usuario: dadosUser.usuario,
         email: dadosUser.email, 
@@ -97,8 +98,7 @@ class _PersonalInfoFormState extends State<PersonalInfoForm> {
       await SharedUser.saveUserData(userData);
 
       if (response.statusCode == 201) {
-        // Requisição bem-sucedida, você pode tratar a resposta aqui
-        print('Cadastro realizado com sucesso');
+        // ignore: use_build_context_synchronously
         showDialog(
             context: context,
             builder: (context) {
@@ -106,16 +106,16 @@ class _PersonalInfoFormState extends State<PersonalInfoForm> {
                shape: RoundedRectangleBorder(
                 borderRadius:
                     BorderRadius.circular(30.0)),
-                  titleTextStyle: TextStyle(fontSize: 25, fontWeight: FontWeight.bold, color: Colors.blue), 
-                title: Text('Cadastro foi incluído'),
-                content: Text(
+                  titleTextStyle: const TextStyle(fontSize: 25, fontWeight: FontWeight.bold, color: Colors.blue), 
+                title: const Text('Cadastro foi incluído'),
+                content: const Text(
                     'Cadastro de informações foi realizado com sucesso!', style: TextStyle(fontSize: 20, fontWeight: FontWeight.w200),),
                 actions: <Widget>[
                   TextButton(
                     onPressed: () {
                       Navigator.of(context).pop();
                     },
-                    child: Text('Ok'),
+                    child: const Text('Ok'),
                   ),
                 ],
               );
@@ -123,6 +123,7 @@ class _PersonalInfoFormState extends State<PersonalInfoForm> {
           );
       } else {
         print('Erro ao cadastrar usuário. Código de resposta: ${response.statusCode}');
+        // ignore: use_build_context_synchronously
         showDialog(
             context: context,
             builder: (context) {
@@ -130,16 +131,16 @@ class _PersonalInfoFormState extends State<PersonalInfoForm> {
                shape: RoundedRectangleBorder(
                 borderRadius:
                     BorderRadius.circular(30.0)),
-                  titleTextStyle: TextStyle(fontSize: 25, fontWeight: FontWeight.bold, color: Colors.red), 
-                title: Text('Erro ao Cadastrar'),
-                content: Text(
+                  titleTextStyle: const TextStyle(fontSize: 25, fontWeight: FontWeight.bold, color: Colors.red), 
+                title: const Text('Erro ao Cadastrar'),
+                content: const Text(
                     'Ocorre um Erro ao cadastrar usuário.!', style: TextStyle(fontSize: 20, fontWeight: FontWeight.w200),),
                 actions: <Widget>[
                   TextButton(
                     onPressed: () {
                       Navigator.of(context).pop();
                     },
-                    child: Text('Ok'),
+                    child: const Text('Ok'),
                   ),
                 ],
               );
@@ -153,6 +154,7 @@ class _PersonalInfoFormState extends State<PersonalInfoForm> {
     }
     else
     {
+       // ignore: use_build_context_synchronously
        showDialog(
             context: context,
             builder: (context) {
@@ -161,15 +163,15 @@ class _PersonalInfoFormState extends State<PersonalInfoForm> {
                 borderRadius:
                     BorderRadius.circular(30.0)),
                   titleTextStyle: TextStyle(fontSize: 25, fontWeight: FontWeight.bold, color: Colors.blue), 
-                title: Text('Erro ao Cadastrar'),
-                content: Text(
+                title: const Text('Erro ao Cadastrar'),
+                content: const Text(
                     'Você já possui Informações Cadastradas!', style: TextStyle(fontSize: 20, fontWeight: FontWeight.w200),),
                 actions: <Widget>[
                   TextButton(
                     onPressed: () {
                       Navigator.of(context).pop();
                     },
-                    child: Text('Ok'),
+                    child: const Text('Ok'),
                   ),
                 ],
               );
@@ -221,6 +223,7 @@ class _PersonalInfoFormState extends State<PersonalInfoForm> {
         // Dados atualizados com sucesso.
         print('Dados atualizados com sucesso!');
 
+        // ignore: use_build_context_synchronously
         showDialog(
             context: context,
             builder: (context) {

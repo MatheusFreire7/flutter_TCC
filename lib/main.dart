@@ -10,7 +10,7 @@ import 'package:flutter_login/screens/Telainicial.dart';
 import 'package:flutter_login/settings/theme.dart';
 import 'package:flutter_login/widgets/AlimentSaudavel.dart';
 import 'package:flutter_login/widgets/PlanoAlimentacao.dart';
-import 'package:flutter_login/widgets/treino.dart';
+import 'package:flutter_login/widgets/Treino.dart';
 import 'package:localstorage/localstorage.dart';
 import 'package:provider/provider.dart';
 import 'screens/Login.dart';
