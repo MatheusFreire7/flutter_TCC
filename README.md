@@ -22,7 +22,7 @@ Antes de usar este aplicativo, você deve ter instalado no seu Computador:
 
 3. **Execute o Projeto**:
  ``` bash
-    flutter run -d chrome
+ flutter run -d chrome --web-renderer html
 ```
 
 Para conseguir usar todas as funcionalidades deste aplicativo, terá que primeiro clonar dois repositórios do Github diferentes, um para a Api em Typescript e outro para a IA em Python:<br><br>
