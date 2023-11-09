@@ -85,8 +85,8 @@ Future<List<UserData>> getDadosUser(int userId) async {
           final userDataObject = userDataList.first;
           userDataObject.usuario = username;
           userDataObject.email = userEmail;
-         final alturaMetros = userDataObject.altura / 100; // Converter altura para metros
-         userDataObject.imc = userDataObject.peso / (alturaMetros * alturaMetros); 
+          final alturaMetros = userDataObject.altura / 100; // Converter altura para metros
+          userDataObject.imc = userDataObject.peso / (alturaMetros * alturaMetros); 
           await SharedUser.saveUserData(userDataObject);
         } else {
           final userDataObjectNew = UserData(

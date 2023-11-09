@@ -6,24 +6,24 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'Login.dart';
 
-class PlanoTreinoDetalhes extends StatefulWidget {
+class PlanoAlimentoDetalhes extends StatefulWidget {
   final String title;
   final String imageUrl;
   final String name;
-  final List<dynamic> planosTreino;
+  final List<dynamic> planosAlimentos;
 
-  PlanoTreinoDetalhes({
+  PlanoAlimentoDetalhes({
     required this.title,
     required this.imageUrl,
     required this.name,
-    required this.planosTreino,
+    required this.planosAlimentos,
   });
 
   @override
-  _PlanoTreinoDetalhesState createState() => _PlanoTreinoDetalhesState();
+  _PlanoAlimentoDetalhesState createState() => _PlanoAlimentoDetalhesState();
 }
 
-class _PlanoTreinoDetalhesState extends State<PlanoTreinoDetalhes> {
+class _PlanoAlimentoDetalhesState extends State<PlanoAlimentoDetalhes> {
   int selectedRecomendadoPlanIndex = -1;
   int selectedNaoRecomendadoPlanIndex = -1;
   List<dynamic> planosNaoRecomendados = [];
@@ -36,7 +36,7 @@ class _PlanoTreinoDetalhesState extends State<PlanoTreinoDetalhes> {
   }
 
   Future<void> getPlanosNaoRecomendados() async {
-    const urlBase = 'http://localhost:3000/planoTreino/get/';
+    const urlBase = 'http://localhost:3000/planoAlimentacao/get/';
     final response = await http.get(Uri.parse(urlBase));
 
     if (response.statusCode == 200) {
@@ -55,7 +55,7 @@ class _PlanoTreinoDetalhesState extends State<PlanoTreinoDetalhes> {
   }
 
   bool foiRecomendado(int planoId) {
-    for (var planoRecomendado in widget.planosTreino) {
+    for (var planoRecomendado in widget.planosAlimentos) {
       if (planoRecomendado[0]['idPlanoTreino'] == planoId) {
         return true;
       }
@@ -107,7 +107,7 @@ class _PlanoTreinoDetalhesState extends State<PlanoTreinoDetalhes> {
                   style: TextStyle(fontSize: 25, color: Colors.green),
                 ),
                 const SizedBox(height: 5.0),
-                for (int index = 0; index < widget.planosTreino.length; index++)
+                for (int index = 0; index < widget.planosAlimentos.length; index++)
                   Column(
                     children: <Widget>[
                       AnimatedContainer(
@@ -122,13 +122,13 @@ class _PlanoTreinoDetalhesState extends State<PlanoTreinoDetalhes> {
                             setState(() {
                               selectedRecomendadoPlanIndex = index;
                               selectedNaoRecomendadoPlanIndex = -1; // Limpar a seleção de não recomendados
-                              selectedPlanId = widget.planosTreino[index][0]["idPlanoTreino"]; // Atualize o ID do plano selecionado
+                              selectedPlanId = widget.planosAlimentos[index][0]["idPlanoTreino"]; // Atualize o ID do plano selecionado
                               print('ID do plano selecionado: ${selectedPlanId}');
                             });
                           },
                           child: MySquare(
-                            child: widget.planosTreino[index][0]["nomePlanoTreino"],
-                            intensidade: widget.planosTreino[index][0]["intensidade"],
+                            child: widget.planosAlimentos[index][0]["nomePlanoTreino"],
+                            intensidade: widget.planosAlimentos[index][0]["intensidade"],
                           ),
                         ),
                       ),
@@ -214,7 +214,7 @@ class _PlanoTreinoDetalhesState extends State<PlanoTreinoDetalhes> {
                         horizontal: 120.0,
                       ),
                       child: Text(
-                        'Seltor de Plano de Alimentação',
+                        'Tela de Login',
                         style: TextStyle(
                           color: Colors.white,
                           fontSize: 20,
