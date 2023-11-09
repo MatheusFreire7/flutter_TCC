@@ -24,7 +24,8 @@ class PlanoTreinoDetalhes extends StatefulWidget {
 }
 
 class _PlanoTreinoDetalhesState extends State<PlanoTreinoDetalhes> {
-  int selectedPlanIndex = -1;
+  int selectedRecomendadoPlanIndex = -1;
+  int selectedNaoRecomendadoPlanIndex = -1;
   List<dynamic> planosNaoRecomendados = [];
 
   @override
@@ -111,14 +112,15 @@ class _PlanoTreinoDetalhesState extends State<PlanoTreinoDetalhes> {
                       AnimatedContainer(
                         duration: const Duration(milliseconds: 300),
                         decoration: BoxDecoration(
-                          color: selectedPlanIndex == index
+                          color: selectedRecomendadoPlanIndex == index
                               ? Colors.red
                               : Colors.deepPurple[100],
                         ),
                         child: InkWell(
                           onTap: () {
                             setState(() {
-                              selectedPlanIndex = index;
+                              selectedRecomendadoPlanIndex = index;
+                              selectedNaoRecomendadoPlanIndex = -1; // Limpar a seleção de não recomendados
                               print('ID do plano selecionado: ${widget.planosTreino[index][0]["idPlanoTreino"]}');
                             });
                           },
@@ -131,6 +133,7 @@ class _PlanoTreinoDetalhesState extends State<PlanoTreinoDetalhes> {
                       SizedBox(height: 8.0), // Espaço entre os planos
                     ],
                   ),
+
                 const SizedBox(height: 16.0),
                 const Text(
                   "Planos de Treino Não Recomendados:",
@@ -142,14 +145,15 @@ class _PlanoTreinoDetalhesState extends State<PlanoTreinoDetalhes> {
                       AnimatedContainer(
                         duration: const Duration(milliseconds: 300),
                         decoration: BoxDecoration(
-                          color: selectedPlanIndex == index
+                          color: selectedNaoRecomendadoPlanIndex == index
                               ? Colors.red
                               : Colors.deepPurple[100],
                         ),
                         child: InkWell(
                           onTap: () {
                             setState(() {
-                              selectedPlanIndex = index;
+                              selectedNaoRecomendadoPlanIndex = index;
+                              selectedRecomendadoPlanIndex = -1; // Limpar a seleção de recomendados
                               print('ID do plano selecionado: ${planosNaoRecomendados[index]["idPlanoTreino"]}');
                             });
                           },
@@ -162,6 +166,7 @@ class _PlanoTreinoDetalhesState extends State<PlanoTreinoDetalhes> {
                       SizedBox(height: 8.0), // Espaço entre os planos não recomendados
                     ],
                   ),
+
                 ElevatedButton(
                   style: ElevatedButton.styleFrom(
                     primary: Colors.transparent,
@@ -174,12 +179,12 @@ class _PlanoTreinoDetalhesState extends State<PlanoTreinoDetalhes> {
                     shadowColor: Colors.transparent,
                   ),
                   onPressed: () {
-                       Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => LoginPage(),
-                        ),
-                      );
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => LoginPage(),
+                      ),
+                    );
                   },
                   child: Container(
                     decoration: BoxDecoration(
