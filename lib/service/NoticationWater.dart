@@ -1,4 +1,3 @@
-import 'dart:async';
 import 'dart:html' as html;
 import 'package:flutter_login/settings/theme.dart';
 

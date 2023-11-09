@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_login/screens/Cadastro.dart';
+import 'package:flutter_login/screens/SelectPlanoTreino.dart';
 import 'package:flutter_login/screens/TelaInicio.dart';
 import 'package:flutter_login/service/NoticationPage.dart';
 import 'package:flutter_login/service/NotificationService.dart';
@@ -10,7 +11,6 @@ import 'package:flutter_login/screens/Telainicial.dart';
 import 'package:flutter_login/settings/theme.dart';
 import 'package:flutter_login/widgets/AlimentSaudavel.dart';
 import 'package:flutter_login/widgets/PlanoAlimentacao.dart';
-import 'package:flutter_login/widgets/Treino.dart';
 import 'package:localstorage/localstorage.dart';
 import 'package:provider/provider.dart';
 import 'screens/Login.dart';
@@ -99,7 +99,8 @@ class LoginApp extends StatelessWidget {
               "config": (context) => ConfiguracoesPage(),
               "planoAlimentacao": (context) => Diet(),
               "alimento": (context) => AlimentacaoSaudavel(),
-              "notificacao": (context) => NotificacaoPage()
+              "notificacao": (context) => NotificacaoPage(),
+              "select": (context) => PlanoTreinoDetalhes(imageUrl: '', name: '', title: '', planosTreino: [])
             },
           );
         } else {

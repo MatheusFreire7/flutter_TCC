@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:flutter_login/screens/FormPlano.dart';
 import 'package:flutter_login/screens/Login.dart';
 import 'package:flutter_login/settings/theme.dart';
 import 'package:http/http.dart' as http;
@@ -57,7 +58,7 @@ class _CadastroPageState extends State<CadastroPage> {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => LoginPage(),
+              builder: (context) => FormScreen(),
             ),
           );
         } else {
@@ -349,7 +350,7 @@ class _CadastroPageState extends State<CadastroPage> {
                         ),
                       ),
                       child:const Padding(
-                        padding: const EdgeInsets.symmetric(
+                        padding: EdgeInsets.symmetric(
                           vertical: 15.0,
                           horizontal: 120.0,
                         ),

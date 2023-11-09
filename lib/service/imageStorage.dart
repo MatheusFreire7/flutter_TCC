@@ -23,7 +23,7 @@ Future<String?> saveUserImage(String userId, Uint8List imageBytes, String fileNa
     final appDocumentDirectory = await getApplicationDocumentsDirectory();
     final userDirectory = path.join(appDocumentDirectory.path, userId);
 
-    // Verifique se o diretório do usuário já existe, caso contrário, crie-o.
+    // Verifique se o diretório do usuário já existe, caso contrário, crie-o
     final userDir = Directory(userDirectory);
     if (!userDir.existsSync()) {
       userDir.createSync(recursive: true);

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_login/service/sharedUser.dart';
 import 'package:flutter_login/settings/appConfig.dart';
 import 'package:flutter_login/screens/infoObri.dart';
 import 'package:flutter_login/screens/Login.dart';

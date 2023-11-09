@@ -1,10 +1,9 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:flutter_login/service/SharedUser.dart';
 import 'package:flutter_login/settings/theme.dart';
 import 'package:http/http.dart' as http;
-
-import 'SelectTreino.dart';
+import 'package:flutter_login/service/sharedUser.dart';
+import 'SelectPlanoTreino.dart';
 
 class FormScreen extends StatefulWidget {
   @override
@@ -17,12 +16,50 @@ class _FormScreenState extends State<FormScreen> {
   late int _age;
   late double _height;
   late double _weight;
+  String idUsuario = "";
   String _gender = "Masculino";
   String _restricao = 'Nenhuma';
   String _meta = 'Hipertrofia';
-  late String classificao_plano = "";
+  late String previsao_ia = "";
   bool _isLoading = false;
   Future<void>? _previsaoFuture;
+
+
+  Future<List<dynamic>> getPlano(String classificacaoPlano) async {
+    List<int> idPlanos = [];
+
+    if (classificacaoPlano != " ") {
+      if (classificacaoPlano == "intensivo") {
+        idPlanos.add(1);
+      } else if (classificacaoPlano == "intermediário") {
+        idPlanos.add(2);
+        idPlanos.add(4);
+      } else if (classificacaoPlano == "menos_intensivo") {
+        idPlanos.add(3);
+        idPlanos.add(5);
+      }
+
+      final urlBase = 'http://localhost:3000/planoTreino/get';
+
+      List<dynamic> planos = [];
+
+      for (int id in idPlanos) {
+        final url = Uri.parse('$urlBase/$id'); // Adiciona o ID à URL aqui
+        final response = await http.get(url);
+
+        if (response.statusCode == 200) {
+          // Apenas decodifique e adicione o plano se a resposta for bem-sucedida (código 200)
+          var plano = json.decode(response.body);
+          planos.add(plano);
+        }
+      }
+
+      return planos;
+    }
+
+    return []; // Retorna uma lista vazia se a classificação do plano for inválida ou em branco
+  }
+
 
   Future<void> prever() async {
     final nome = _name.toString().trim();
@@ -50,9 +87,37 @@ class _FormScreenState extends State<FormScreen> {
         );
 
         if (response.statusCode == 200) {
+         final userData = await SharedUser.getUserData();
+         
+          if (userData != null) {
+            if (userData.usuario == " " || userData.idade == 0 || userData.altura == 0 || userData.peso == 0 || userData.genero == "") {
+                  if (userData.usuario == " ") {
+                    userData.usuario = _name;
+                  }
+
+                  if (userData.idade == 0) {
+                    userData.idade = _age;  
+                  }
+
+                  if (userData.altura == 0) {
+                    userData.altura = _height;  
+                  }
+
+                  if (userData.peso == 0) {
+                    userData.peso = _weight;  
+                  }
+
+                  if (userData.genero == "") {
+                    userData.genero = _gender;  
+                  }
+
+                  await SharedUser.saveUserData(userData);
+            }
+          }
+
           print(response.body);
           final previsaoIa = json.decode(response.body);
-          classificao_plano = previsaoIa['previsao'];
+          previsao_ia = previsaoIa['previsao'];
         } else {
           final error = response.body;
           print(error);
@@ -395,21 +460,31 @@ class _FormScreenState extends State<FormScreen> {
                               _isLoading = false;
                             });
 
-                            print('Classificação: $classificao_plano');
+                            print('Classificação: $previsao_ia');
                           }
-                          if(classificao_plano != "")
-                          {
-                              // ignore: use_build_context_synchronously
-                              Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => PlanoTreinoDetalhes(
-                                  title: "title",
-                                  imageUrl: "imageUrl",
-                                  name: "nome",
-                                ),
-                              ),
-                            );
+                        if (previsao_ia != "") {
+                            List<dynamic> planosTreino = await getPlano(previsao_ia);
+                            print(planosTreino);
+
+                            if (planosTreino.isNotEmpty) {
+                              for (var planoSelecionado in planosTreino) {
+                                final title = planoSelecionado[0]["nomePlanoTreino"];
+                                final imageUrl = "";
+                                final name = "nome"; 
+
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => PlanoTreinoDetalhes(
+                                      title: title,
+                                      imageUrl: imageUrl,
+                                      name: name,
+                                      planosTreino: planosTreino, 
+                                    ),
+                                  ),
+                                );
+                              }
+                            }
                           }
                         },
                     child: _isLoading

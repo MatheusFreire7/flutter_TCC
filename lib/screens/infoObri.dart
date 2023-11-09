@@ -4,7 +4,6 @@ import 'package:flutter_login/service/sharedUser.dart';
 import 'package:flutter_login/settings/theme.dart';
 import 'package:http/http.dart' as http;
 
-
 class PersonalInfoForm extends StatefulWidget {
   @override
   _PersonalInfoFormState createState() => _PersonalInfoFormState();
@@ -196,8 +195,9 @@ class _PersonalInfoFormState extends State<PersonalInfoForm> {
 
     if (gender == "Masculino") {
       genero = "M";
-    } else
+    } else {
       genero = "F";
+    }
 
     try {
       final response = await http.put(
@@ -232,8 +232,8 @@ class _PersonalInfoFormState extends State<PersonalInfoForm> {
                 borderRadius:
                     BorderRadius.circular(30.0)),
                   titleTextStyle: TextStyle(fontSize: 25, fontWeight: FontWeight.bold, color: Colors.blue), 
-                title: Text('Dados Foram Atualizados'),
-                content: Text(
+                title: const Text('Dados Foram Atualizados'),
+                content: const Text(
                     'Dados atualizados com sucesso!', style: TextStyle(fontSize: 20, fontWeight: FontWeight.w200),),
                 actions: <Widget>[
                   TextButton(
