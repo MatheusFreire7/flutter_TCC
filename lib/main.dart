@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_login/screens/Cadastro.dart';
+import 'package:flutter_login/screens/SelectPlanoAlimento.dart';
 import 'package:flutter_login/screens/SelectPlanoTreino.dart';
 import 'package:flutter_login/screens/TelaInicio.dart';
 import 'package:flutter_login/service/NoticationPage.dart';
@@ -100,7 +101,8 @@ class LoginApp extends StatelessWidget {
               "planoAlimentacao": (context) => Diet(),
               "alimento": (context) => AlimentacaoSaudavel(),
               "notificacao": (context) => NotificacaoPage(),
-              "select": (context) => PlanoTreinoDetalhes(imageUrl: '', name: '', title: '', planosTreino: [])
+              "select": (context) => PlanoTreinoDetalhes(imageUrl: '', name: '', title: '', planosTreino: []),
+              "selectAlimento": (context) => PlanoAlimentoDetalhes(imageUrl: '', name: '', planosAlimentos: [], title: '',)
             },
           );
         } else {

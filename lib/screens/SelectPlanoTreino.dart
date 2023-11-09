@@ -27,7 +27,7 @@ class _PlanoTreinoDetalhesState extends State<PlanoTreinoDetalhes> {
   int selectedRecomendadoPlanIndex = -1;
   int selectedNaoRecomendadoPlanIndex = -1;
   List<dynamic> planosNaoRecomendados = [];
-  int selectedPlanId = -1; // Adicione esta variável
+  int selectedPlanId = -1; 
 
   @override
   void initState() {

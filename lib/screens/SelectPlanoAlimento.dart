@@ -13,10 +13,10 @@ class PlanoAlimentoDetalhes extends StatefulWidget {
   final List<dynamic> planosAlimentos;
 
   PlanoAlimentoDetalhes({
-    required this.title,
-    required this.imageUrl,
-    required this.name,
-    required this.planosAlimentos,
+    this.title = '',
+    this.imageUrl = '',
+    this.name = '',
+    this.planosAlimentos = const [],
   });
 
   @override
@@ -24,18 +24,17 @@ class PlanoAlimentoDetalhes extends StatefulWidget {
 }
 
 class _PlanoAlimentoDetalhesState extends State<PlanoAlimentoDetalhes> {
-  int selectedRecomendadoPlanIndex = -1;
-  int selectedNaoRecomendadoPlanIndex = -1;
-  List<dynamic> planosNaoRecomendados = [];
-  int selectedPlanId = -1; // Adicione esta variável
+  int selectPlanIndex = -1;
+  List<dynamic> planosAlimentos = [];
+  int selectedPlanId = -1; 
 
   @override
   void initState() {
     super.initState();
-    getPlanosNaoRecomendados();
+    getPlanosAlimento();
   }
 
-  Future<void> getPlanosNaoRecomendados() async {
+  Future<void> getPlanosAlimento() async {
     const urlBase = 'http://localhost:3000/planoAlimentacao/get/';
     final response = await http.get(Uri.parse(urlBase));
 
@@ -44,23 +43,11 @@ class _PlanoAlimentoDetalhesState extends State<PlanoAlimentoDetalhes> {
 
       // Filtrar planos que não foram recomendados
       for (var plano in planos) {
-        final planoId = plano['idPlanoTreino'];
-        if (!foiRecomendado(planoId)) {
-          planosNaoRecomendados.add(plano);
-        }
+          planosAlimentos.add(plano);
       }
     }
 
     setState(() {});
-  }
-
-  bool foiRecomendado(int planoId) {
-    for (var planoRecomendado in widget.planosAlimentos) {
-      if (planoRecomendado[0]['idPlanoTreino'] == planoId) {
-        return true;
-      }
-    }
-    return false;
   }
 
   @override
@@ -91,7 +78,7 @@ class _PlanoAlimentoDetalhesState extends State<PlanoAlimentoDetalhes> {
                 Center(
                   child: Container(
                     child: const Text(
-                      "Selecione um dos Planos de Treino Abaixo:",
+                      "Selecione um dos Planos de Alimentação:",
                       style: TextStyle(
                         fontFamily: 'Work Sans',
                         fontSize: 22,
@@ -101,68 +88,33 @@ class _PlanoAlimentoDetalhesState extends State<PlanoAlimentoDetalhes> {
                     ),
                   ),
                 ),
-                const SizedBox(height: 5.0),
+                const SizedBox(height: 8.0),
                 const Text(
-                  "Planos de Treino Recomendado:",
-                  style: TextStyle(fontSize: 25, color: Colors.green),
-                ),
-                const SizedBox(height: 5.0),
-                for (int index = 0; index < widget.planosAlimentos.length; index++)
-                  Column(
-                    children: <Widget>[
-                      AnimatedContainer(
-                        duration: const Duration(milliseconds: 300),
-                        decoration: BoxDecoration(
-                          color: selectedRecomendadoPlanIndex == index
-                              ? Colors.red
-                              : Colors.deepPurple[100],
-                        ),
-                        child: InkWell(
-                          onTap: () {
-                            setState(() {
-                              selectedRecomendadoPlanIndex = index;
-                              selectedNaoRecomendadoPlanIndex = -1; // Limpar a seleção de não recomendados
-                              selectedPlanId = widget.planosAlimentos[index][0]["idPlanoTreino"]; // Atualize o ID do plano selecionado
-                              print('ID do plano selecionado: ${selectedPlanId}');
-                            });
-                          },
-                          child: MySquare(
-                            child: widget.planosAlimentos[index][0]["nomePlanoTreino"],
-                            intensidade: widget.planosAlimentos[index][0]["intensidade"],
-                          ),
-                        ),
-                      ),
-                      SizedBox(height: 8.0), // Espaço entre os planos
-                    ],
-                  ),
-
-                const SizedBox(height: 16.0),
-                const Text(
-                  "Planos de Treino Não Recomendados:",
+                  "Planos de Alimentação:",
                   style: TextStyle(fontSize: 25, color: Colors.red),
                 ),
-                for (int index = 0; index < planosNaoRecomendados.length; index++)
+                const SizedBox(height: 8.0),
+                for (int index = 0; index < planosAlimentos.length; index++)
                   Column(
                     children: <Widget>[
                       AnimatedContainer(
                         duration: const Duration(milliseconds: 300),
                         decoration: BoxDecoration(
-                          color: selectedNaoRecomendadoPlanIndex == index
+                          color: selectPlanIndex == index
                               ? Colors.red
                               : Colors.deepPurple[100],
                         ),
                         child: InkWell(
                           onTap: () {
                             setState(() {
-                              selectedNaoRecomendadoPlanIndex = index;
-                              selectedRecomendadoPlanIndex = -1; // Limpar a seleção de recomendados
-                              selectedPlanId = planosNaoRecomendados[index]["idPlanoTreino"]; // Atualize o ID do plano selecionado
+                              selectPlanIndex = index;
+                              selectedPlanId = planosAlimentos[index]["idPlanoAlimentacao"];
                               print('ID do plano selecionado: ${selectedPlanId}');
                             });
                           },
                           child: MySquare(
-                            child: planosNaoRecomendados[index]["nomePlanoTreino"],
-                            intensidade: planosNaoRecomendados[index]["intensidade"],
+                            child: planosAlimentos[index]["nomePlanoAlimentacao"],
+                            intensidade: 0,
                           ),
                         ),
                       ),
@@ -186,8 +138,8 @@ class _PlanoAlimentoDetalhesState extends State<PlanoAlimentoDetalhes> {
                     final userData = await SharedUser.getUserData();
          
                       if (userData != null) {
-                          if(userData.idPlanoTreino == 0){
-                              userData.idPlanoTreino = selectedPlanId;
+                          if(userData.idPlanoAlimentacao == 0){
+                              userData.idPlanoAlimentacao = selectedPlanId;
                           }
                       }
                       
