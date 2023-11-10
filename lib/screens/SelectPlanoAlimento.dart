@@ -140,6 +140,7 @@ class _PlanoAlimentoDetalhesState extends State<PlanoAlimentoDetalhes> {
                       if (userData != null) {
                           if(userData.idPlanoAlimentacao == 0){
                               userData.idPlanoAlimentacao = selectedPlanId;
+                              await SharedUser.saveUserData(userData); // Atualize o objeto userData com o novo idPlanoAlimentacao
                           }
                       }
                       

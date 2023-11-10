@@ -1,6 +1,41 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_login/settings/theme.dart';
-import 'package:flutter_login/widgets/treino.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+import '../service/sharedUser.dart';
+import 'Treino.dart';
+import '../settings/Theme.dart';
+
+class Exercise {
+  final int idExercicio;
+  final String nomeExercicio;
+  final int series;
+  final int repeticoes;
+  final int tempoS;
+  final int intensidade;
+  final String imageUrl;
+
+  Exercise({
+    required this.idExercicio,
+    required this.nomeExercicio,
+    required this.series,
+    required this.repeticoes,
+    required this.tempoS,
+    required this.intensidade,
+    required this.imageUrl,
+  });
+
+  factory Exercise.fromJson(Map<String, dynamic> json) {
+    return Exercise(
+      idExercicio: json['idExercicio'] ?? 0,
+      nomeExercicio: json['nomeExercicio'] ?? '',
+      series: json['series'] ?? 0,
+      repeticoes: json['repeticoes'] ?? 0,
+      tempoS: json['tempoS'] ?? 0,
+      intensidade: json['intensidade'] ?? 0,
+      imageUrl: json['imageUrl'] ?? '',
+    );
+  }
+}
 
 class PlanoTreinoPage extends StatefulWidget {
   @override
@@ -8,38 +43,49 @@ class PlanoTreinoPage extends StatefulWidget {
 }
 
 class _PlanoTreinoPageState extends State<PlanoTreinoPage> {
-  
-  String _selectedDay = ''; // Inicialmente vazio, será preenchido com o dia atual
+  late List<Exercise> exercises = [];
 
-     @override
+  @override
   void initState() {
     super.initState();
-    // Obtenha o dia da semana atual e atribua à variável _selectedDay
-    _selectedDay = _getCurrentDayOfWeek();
+    fetchExercisesForPlano();
   }
 
-  String _getCurrentDayOfWeek() {
-    final now = DateTime.now();
-    final dayOfWeek = now.weekday; // Retorna um número de 1 (segunda-feira) a 7 (domingo)
-    
-    switch (dayOfWeek) {
-      case 1:
-        return 'Segunda-feira';
-      case 2:
-        return 'Terça-feira';
-      case 3:
-        return 'Quarta-feira';
-      case 4:
-        return 'Quinta-feira';
-      case 5:
-        return 'Sexta-feira';
-      case 6:
-        return 'Sábado';
-      case 7:
-        return 'Domingo';
-      default:
-        return '';
+  Future<void> fetchExercisesForPlano() async {
+    final userData = await SharedUser.getUserData();
+    if (userData != null) {
+      final idPlano = userData.idPlanoTreino;
+      final response = await http.get(Uri.parse('http://localhost:3000/treinoExercicio/get/$idPlano'));
+
+      if (response.statusCode == 200) {
+        final jsonResponse = json.decode(response.body) as List<dynamic>;
+        final exerciseIds =
+            jsonResponse.map((item) => item['idExercicio'] as int).toList();
+        await fetchExercises(exerciseIds);
+      }
     }
+  }
+
+  Future<void> fetchExercises(List<int> exerciseIds) async {
+    final List<Exercise> exercises = [];
+
+    for (final idExercicio in exerciseIds) {
+      final response = await http.get(Uri.parse('http://localhost:3000/exercicio/get/id/$idExercicio'));
+
+      if (response.statusCode == 200) {
+        final List<dynamic> exerciseJson = json.decode(response.body);
+        for (var item in exerciseJson) {
+          if (item is Map<String, dynamic>) {
+            final exercise = Exercise.fromJson(item);
+            exercises.add(exercise);
+          }
+        }
+      }
+    }
+
+    setState(() {
+      this.exercises = exercises;
+    });
   }
 
   @override
@@ -48,99 +94,67 @@ class _PlanoTreinoPageState extends State<PlanoTreinoPage> {
       debugShowCheckedModeBanner: false,
       theme: AppTheme.themeData,
       home: Scaffold(
-     appBar: AppBar(
+        appBar: AppBar(
           iconTheme: IconThemeData(color: AppTheme.iconColor),
           backgroundColor: AppTheme.appBarColor,
           centerTitle: true,
           leading: IconButton(
-            icon: const Icon(Icons.arrow_back),
+            icon: Icon(Icons.arrow_back),
             onPressed: () {
               Navigator.pop(context);
             },
           ),
-      ),
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
+        ),
+       body: Column(
         children: [
-          // Imagem em destaque do plano de treino
-          // Image.asset(
-          //   'caminho_da_imagem',
-          //   height: 200,
-          //   fit: BoxFit.cover,
-          // ),
-          const SizedBox(height: 16.0),
-          DropdownButton<String>(
-            value: _selectedDay,
-            onChanged: (String? newValue) {
-              setState(() {
-                _selectedDay = newValue!;
-              });
-            },
-            items: [
-              'Segunda-feira',
-              'Terça-feira',
-              'Quarta-feira',
-              'Quinta-feira',
-              'Sexta-feira',
-              'Sábado',
-              'Domingo',
-            ].map<DropdownMenuItem<String>>((String value) {
-              return DropdownMenuItem<String>(
-                value: value,
-                child: Text(value),
-              );
-            }).toList(),
+          const Padding(
+            padding: EdgeInsets.all(16.0),
+            child: Text(
+              'Plano de Treino',
+              style: TextStyle(
+                fontSize: 32,  
+                fontWeight: FontWeight.bold,  
+                color: Colors.blue,  
+                shadows: [
+                  Shadow(
+                    blurRadius: 5,  
+                    color: Colors.black,  
+                    offset: Offset(2, 2), 
+                  ),
+                ],
+               fontFamily: 'Roboto'
+              ),
+            ),
           ),
-          const SizedBox(height: 16.0),
           Expanded(
-            child: ListView(
-              padding: EdgeInsets.all(16.0),
-              children: [
-                if (_selectedDay == 'Segunda-feira')
-                  _buildWeekDaySection('Segunda-feira', [
-                    _buildExerciseTile('Exercício 1', 'caminho_da_imagem',
-                        '3 séries', '10 min', '3 Repetições','Médio'),
-                    _buildExerciseTile('Exercício 2', 'caminho_da_imagem',
-                        '4 séries', '15 min', '2 Repetições','Alta'),
-                  ]),
-                if (_selectedDay == 'Terça-feira')
-                  _buildWeekDaySection('Terça-feira', [
-                    _buildExerciseTile('Exercício 3', 'caminho_da_imagem',
-                        '2 séries', '8 min', '4 Repetições','Baixa'),
-                    _buildExerciseTile('Exercício 4', 'caminho_da_imagem',
-                        '3 séries', '12 min', '4 Repetições','Baixa'),
-                    _buildExerciseTile('Exercício 5', 'caminho_da_imagem',
-                        '3 séries', '10 min', '3 Repetições','Médio'),
-                  ]),
-                // Adicione seções para cada dia da semana
-              ],
+            child: GridView.builder(
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 2,
+              ),
+              itemCount: exercises.length,
+              itemBuilder: (BuildContext context, int index) {
+                final exercise = exercises[index];
+                return _buildExerciseTile(
+                  exercise.nomeExercicio,
+                  exercise.imageUrl,
+                  exercise.series.toString(),
+                  exercise.tempoS.toString(),
+                  exercise.intensidade.toString(),
+                  exercise.repeticoes.toString(),
+                );
+              },
             ),
           ),
         ],
       ),
     ),
-    );
-  }
+  );
+}
 
-  Widget _buildWeekDaySection(String day, List<Widget> exercises) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        Text(
-          day,
-          style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-        ),
-        const SizedBox(height: 8.0),
-        Column(children: exercises),
-      ],
-    );
-  }
-
-
-  Widget _buildExerciseTile(String nomeExercicio, String imageUrl, String series,
-      String tempo, String intensidade, String repeticoes){
-    return ListTile(
-       onTap: () {
+Widget _buildExerciseTile(String nomeExercicio, String imageUrl, String series, String tempo, String intensidade, String repeticoes) {
+  return Card(
+    child: InkWell(
+      onTap: () {
         Navigator.push(
           context,
           MaterialPageRoute(
@@ -155,16 +169,27 @@ class _PlanoTreinoPageState extends State<PlanoTreinoPage> {
           ),
         );
       },
-      // leading: Image.asset(
-      //   imagePath,
-      //   width: 80,
-      //   height: 80,
-      //   fit: BoxFit.cover,
-      // ),
-      leading: const Text('image'),
-      title: Text(nomeExercicio),
-      subtitle: Text('$series - $series'),
-      trailing: const Icon(Icons.arrow_forward_ios),
-    );
-  }
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Image.network(
+            imageUrl,
+            width: 150,
+            height: 150,
+            fit: BoxFit.cover,
+            errorBuilder: (context, error, stackTrace) {
+              return Icon(Icons.error, color: Colors.red);
+            },
+          ),
+          Text(nomeExercicio, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
+          if (int.parse(series) > 0) Text('Séries: $series', style: TextStyle(fontSize: 10)),
+          if (int.parse(tempo) > 0) Text('Tempo: $tempo', style: TextStyle(fontSize: 10)),
+          if (int.parse(intensidade) > 0) Text('Intensidade: $intensidade', style: TextStyle(fontSize: 10)),
+          if (int.parse(repeticoes) > 0) Text('Repetições: $repeticoes', style: TextStyle(fontSize: 10)),
+        ],
+      ),
+    ),
+  );
+}
+
 }

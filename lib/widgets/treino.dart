@@ -47,40 +47,58 @@ class TreinoDetalhes extends StatelessWidget {
               Center(
                 child: Text(
                   nomeExercicio,
-                  style: TextStyle(
-                    fontSize: 20.0,
+                  style: const TextStyle(
+                    fontSize: 24.0,
                     fontWeight: FontWeight.bold,
+                    color: Colors.blue,
+                    shadows: [
+                      Shadow(
+                        blurRadius: 5.0,
+                        color: Colors.black,
+                        offset: Offset(2.0, 2.0),
+                      ),
+                    ],
+                    fontFamily: 'Roboto',
                   ),
                 ),
               ),
-              const SizedBox(height: 8.0), 
-              Divider(), 
               const SizedBox(height: 16.0),
-              Text('Séries: $series'),
-              Divider(), 
-              Text('Repetições: $repeticoes'),
-              Divider(), 
-              Text('Duração: $tempo'),
-              Divider(), 
-              Text('Intensidade: $intensidade'),
+              _buildInfoRow('Séries', series),
+              _buildInfoRow('Repetições', repeticoes),
+              _buildInfoRow('Duração', tempo),
+              _buildInfoRow('Intensidade', intensidade),
+              //Center(child: Text('Intensidade: $intensidade')),
               const SizedBox(height: 16.0),
-             ElevatedButton(
-              onPressed: () {
-                Navigator.pop(context);
-              },
-              style: ElevatedButton.styleFrom(
-                primary: Colors.blue, 
-                onPrimary: Colors.white, 
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(20.0),
+              ElevatedButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                style: ElevatedButton.styleFrom(
+                  primary: Colors.blue, 
+                  onPrimary: Colors.white, 
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(20.0),
+                  ),
                 ),
+                child: Text('Voltar'),
               ),
-              child: Text('Voltar'),
-            ),
             ],
           ),
         ),
       ),
     );
+  }
+
+  Widget _buildInfoRow(String label, String value) {
+    if (value != '0') {
+      return Column(
+        children: [
+          Text('$label: $value', style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold)),
+          const SizedBox(height: 8.0),
+        ],
+      );
+    } else {
+      return SizedBox.shrink(); // Não exibe nada se o valor for '0'
+    }
   }
 }

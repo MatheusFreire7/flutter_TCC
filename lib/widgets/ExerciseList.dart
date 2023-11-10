@@ -85,100 +85,98 @@ class _ExerciseListState extends State<ExerciseList> {
     });
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      theme: AppTheme.themeData,
-      home: Scaffold(
-        appBar: AppBar(
-          iconTheme: IconThemeData(color: AppTheme.iconColor),
-          backgroundColor: AppTheme.appBarColor,
-          centerTitle: true,
-          leading: IconButton(
-            icon: Icon(Icons.arrow_back),
-            onPressed: () {
-              Navigator.pop(context);
-            },
-          ),
-        ),
-        body: ListView.builder(
-          itemCount: exercises.length,
-          itemBuilder: (BuildContext context, int index) {
-            return Card(
-              elevation: 2.0,
-              margin: const EdgeInsets.all(16.0),
-              child: InkWell(
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => TreinoDetalhes(
-                        nomeExercicio:exercises[index].nomeExercicio.toString(),
-                        imageUrl: exercises[index].imageUrl,
-                        series: exercises[index].series.toString(),
-                        repeticoes: exercises[index].repeticoes.toString(),
-                        tempo: exercises[index].tempoS.toString(),
-                        intensidade: exercises[index].intensidade.toString(),
-                      ),
-                    ),
-                  );
-                },
-                child: Row(
-                  children: [
-                    Container(
-                      height: 100,
-                      width: 100,
-                      child: Image.network(
-                      exercises[index].imageUrl,
-                      fit: BoxFit.cover,
-                      errorBuilder: (context, error, stackTrace) {
-                        return Icon(Icons.error, color: Colors.red); 
-                      },
-                    )
-                    ),
-                    SizedBox(width: 10),
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            exercises[index].nomeExercicio,
-                            style: TextStyle(
-                              fontSize: 20,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          SizedBox(height: 5),
-                          Text(
-                            'Séries: ${exercises[index].series}',
-                            style: TextStyle(color: Colors.grey),
-                          ),
-                          SizedBox(height: 5),
-                          Text(
-                            'Repetições: ${exercises[index].repeticoes}',
-                            style: TextStyle(color: Colors.grey),
-                          ),
-                          SizedBox(height: 5),
-                          Text(
-                            'Duração: ${exercises[index].tempoS}',
-                            style: TextStyle(color: Colors.grey),
-                          ),
-                          SizedBox(height: 5),
-                          Text(
-                            'Intensidade: ${exercises[index].intensidade}',
-                            style: TextStyle(color: Colors.grey),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            );
+  
+@override
+Widget build(BuildContext context) {
+  return MaterialApp(
+    debugShowCheckedModeBanner: false,
+    theme: AppTheme.themeData,
+    home: Scaffold(
+      appBar: AppBar(
+        iconTheme: IconThemeData(color: AppTheme.iconColor),
+        backgroundColor: AppTheme.appBarColor,
+        centerTitle: true,
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back),
+          onPressed: () {
+            Navigator.pop(context);
           },
         ),
       ),
-    );
-  }
+      body: ListView.builder(
+        itemCount: exercises.length,
+        itemBuilder: (BuildContext context, int index) {
+          return Card(
+            elevation: 2.0,
+            margin: const EdgeInsets.all(16.0),
+            child: InkWell(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => TreinoDetalhes(
+                      nomeExercicio:exercises[index].nomeExercicio.toString(),
+                      imageUrl: exercises[index].imageUrl,
+                      series: exercises[index].series.toString(),
+                      repeticoes: exercises[index].repeticoes.toString(),
+                      tempo: exercises[index].tempoS.toString(),
+                      intensidade: exercises[index].intensidade.toString(),
+                    ),
+                  ),
+                );
+              },
+              child: Row(
+                children: [
+                  Container(
+                    height: 100,
+                    width: 100,
+                    child: Image.network(
+                    exercises[index].imageUrl,
+                    fit: BoxFit.cover,
+                    errorBuilder: (context, error, stackTrace) {
+                      return Icon(Icons.error, color: Colors.red); 
+                    },
+                  )
+                  ),
+                  SizedBox(width: 10),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          exercises[index].nomeExercicio,
+                          style: TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        SizedBox(height: 5),
+                        if (exercises[index].series > 0) Text(
+                          'Séries: ${exercises[index].series}',
+                          style: TextStyle(color: Colors.grey),
+                        ),
+                        if (exercises[index].repeticoes > 0) Text(
+                          'Repetições: ${exercises[index].repeticoes}',
+                          style: TextStyle(color: Colors.grey),
+                        ),
+                        if (exercises[index].tempoS > 0) Text(
+                          'Duração: ${exercises[index].tempoS}',
+                          style: TextStyle(color: Colors.grey),
+                        ),
+                        Text(
+                          'Intensidade: ${exercises[index].intensidade}',
+                          style: TextStyle(color: Colors.grey),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          );
+        },
+      ),
+    ),
+  );
+}
 }

@@ -27,7 +27,7 @@ class _PlanoTreinoDetalhesState extends State<PlanoTreinoDetalhes> {
   int selectedRecomendadoPlanIndex = -1;
   int selectedNaoRecomendadoPlanIndex = -1;
   List<dynamic> planosNaoRecomendados = [];
-  int selectedPlanId = -1; 
+  int selectedPlanId = -1;
 
   @override
   void initState() {
@@ -121,27 +121,33 @@ class _PlanoTreinoDetalhesState extends State<PlanoTreinoDetalhes> {
                           onTap: () {
                             setState(() {
                               selectedRecomendadoPlanIndex = index;
-                              selectedNaoRecomendadoPlanIndex = -1; // Limpar a seleção de não recomendados
-                              selectedPlanId = widget.planosTreino[index][0]["idPlanoTreino"]; // Atualize o ID do plano selecionado
-                              print('ID do plano selecionado: ${selectedPlanId}');
+                              selectedNaoRecomendadoPlanIndex =
+                                  -1; // Limpar a seleção de não recomendados
+                              selectedPlanId = widget.planosTreino[index][0][
+                                  "idPlanoTreino"]; // Atualize o ID do plano selecionado
+                              print(
+                                  'ID do plano selecionado: ${selectedPlanId}');
                             });
                           },
                           child: MySquare(
-                            child: widget.planosTreino[index][0]["nomePlanoTreino"],
-                            intensidade: widget.planosTreino[index][0]["intensidade"],
+                            child: widget.planosTreino[index][0]
+                                ["nomePlanoTreino"],
+                            intensidade: widget.planosTreino[index][0]
+                                ["intensidade"],
                           ),
                         ),
                       ),
                       SizedBox(height: 8.0), // Espaço entre os planos
                     ],
                   ),
-
                 const SizedBox(height: 16.0),
                 const Text(
                   "Planos de Treino Não Recomendados:",
                   style: TextStyle(fontSize: 25, color: Colors.red),
                 ),
-                for (int index = 0; index < planosNaoRecomendados.length; index++)
+                for (int index = 0;
+                    index < planosNaoRecomendados.length;
+                    index++)
                   Column(
                     children: <Widget>[
                       AnimatedContainer(
@@ -155,21 +161,27 @@ class _PlanoTreinoDetalhesState extends State<PlanoTreinoDetalhes> {
                           onTap: () {
                             setState(() {
                               selectedNaoRecomendadoPlanIndex = index;
-                              selectedRecomendadoPlanIndex = -1; // Limpar a seleção de recomendados
-                              selectedPlanId = planosNaoRecomendados[index]["idPlanoTreino"]; // Atualize o ID do plano selecionado
-                              print('ID do plano selecionado: ${selectedPlanId}');
+                              selectedRecomendadoPlanIndex =
+                                  -1; // Limpar a seleção de recomendados
+                              selectedPlanId = planosNaoRecomendados[index][
+                                  "idPlanoTreino"]; // Atualize o ID do plano selecionado
+                              print(
+                                  'ID do plano selecionado: ${selectedPlanId}');
                             });
                           },
                           child: MySquare(
-                            child: planosNaoRecomendados[index]["nomePlanoTreino"],
-                            intensidade: planosNaoRecomendados[index]["intensidade"],
+                            child: planosNaoRecomendados[index]
+                                ["nomePlanoTreino"],
+                            intensidade: planosNaoRecomendados[index]
+                                ["intensidade"],
                           ),
                         ),
                       ),
-                      SizedBox(height: 8.0), // Espaço entre os planos não recomendados
+                      SizedBox(
+                          height:
+                              8.0), // Espaço entre os planos não recomendados
                     ],
                   ),
-
                 ElevatedButton(
                   style: ElevatedButton.styleFrom(
                     primary: Colors.transparent,
@@ -184,19 +196,18 @@ class _PlanoTreinoDetalhesState extends State<PlanoTreinoDetalhes> {
                   onPressed: () async {
                     print(selectedPlanId);
                     final userData = await SharedUser.getUserData();
-         
-                      if (userData != null) {
-                          if(userData.idPlanoTreino == 0){
-                              userData.idPlanoTreino = selectedPlanId;
-                          }
+
+                    if (userData != null) {
+                      if (userData.idPlanoTreino == 0) {
+                        userData.idPlanoTreino = selectedPlanId;
+                         await SharedUser.saveUserData(userData); // Atualize o objeto userData com o novo idPlanoTreino
                       }
-                      
+                    }
+
                     // ignore: use_build_context_synchronously
                     Navigator.push(
                       context,
-                      MaterialPageRoute(
-                        builder: (context) => LoginPage()
-                      ),
+                      MaterialPageRoute(builder: (context) => LoginPage()),
                     );
                   },
                   child: Container(
@@ -214,7 +225,7 @@ class _PlanoTreinoDetalhesState extends State<PlanoTreinoDetalhes> {
                         horizontal: 120.0,
                       ),
                       child: Text(
-                        'Seltor de Plano de Alimentação',
+                        'Seletor de Planos de Alimentação',
                         style: TextStyle(
                           color: Colors.white,
                           fontSize: 20,
