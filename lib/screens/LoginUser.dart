@@ -24,42 +24,72 @@ class _LoginPageState extends State<LoginPage> {
     super.dispose();
   }
 
-Future<List<UserData>> getDadosUser(int userId) async {
-  try {
-    final response = await http.get(
-      Uri.parse('http://localhost:3000/infouser/get/$userId'),
-      headers: {'Content-Type': 'application/json'},
-    );
+  Future<int> getIdPlanoTreino(int userId) async {
+    try {
+      final response = await http.get(
+        Uri.parse('http://localhost:3000/usuarioTreino/get/$userId'),
+        headers: {'Content-Type': 'application/json'},
+      );
 
-    if (response.statusCode == 200) {
-      final List<Map<String, dynamic>> jsonDataList =
-          List<Map<String, dynamic>>.from(json.decode(response.body));
-      
-      final List<UserData> userDataList = jsonDataList.map((jsonMap) {
-        return UserData(
-          idUsuario: jsonMap['idUsuario'],
-          usuario: '', 
-          email: '',   
-          genero: jsonMap['genero'],
-          altura: jsonMap['alturaCM'].toDouble(),
-          idade: jsonMap['idade'].toInt(),
-          peso: jsonMap['pesoKg'].toDouble(),
-          imc: 0.0,   
-          idPlanoTreino: 0, 
-          idPlanoAlimentacao: 0, 
-        );
-      }).toList();
+      if (response.statusCode == 200) {
+        final List<Map<String, dynamic>> jsonDataList =
+            List<Map<String, dynamic>>.from(json.decode(response.body));
 
-      return userDataList;
-    } else {
-      return []; // Retorna uma lista vazia em caso de erro 
+        if (jsonDataList.isNotEmpty) {
+          final idPlanoTreino = jsonDataList.first['idPlanoTreino'];
+          return idPlanoTreino;
+        } else {
+          // Retorna 0 se o idPlanoTreino não estiver definido
+          return 0;
+        }
+      } else {
+        // Lida com outros códigos de status, se necessário
+        print(
+            'Erro ao obter idPlanoTreino. Código de status: ${response.statusCode}');
+        return 0;
+      }
+    } catch (e) {
+      // Lida com erros de conexão
+      print('Erro de conexão ao obter idPlanoTreino: $e');
+      return 0;
     }
-  } catch (e) {
-    print(e);
-    return []; // Retorna uma lista vazia em caso de erro 
   }
-}
 
+  Future<List<UserData>> getDadosUser(int userId) async {
+    try {
+      final response = await http.get(
+        Uri.parse('http://localhost:3000/infouser/get/$userId'),
+        headers: {'Content-Type': 'application/json'},
+      );
+
+      if (response.statusCode == 200) {
+        final List<Map<String, dynamic>> jsonDataList =
+            List<Map<String, dynamic>>.from(json.decode(response.body));
+
+        final List<UserData> userDataList = jsonDataList.map((jsonMap) {
+          return UserData(
+            idUsuario: jsonMap['idUsuario'],
+            usuario: '',
+            email: '',
+            genero: jsonMap['genero'],
+            altura: jsonMap['alturaCM'].toDouble(),
+            idade: jsonMap['idade'].toInt(),
+            peso: jsonMap['pesoKg'].toDouble(),
+            imc: 0.0,
+            idPlanoTreino: 0,
+            idPlanoAlimentacao: 0,
+          );
+        }).toList();
+
+        return userDataList;
+      } else {
+        return []; // Retorna uma lista vazia em caso de erro
+      }
+    } catch (e) {
+      print(e);
+      return []; // Retorna uma lista vazia em caso de erro
+    }
+  }
 
   Future<void> login(String email, String password) async {
     if (email.isNotEmpty && password.isNotEmpty) {
@@ -73,43 +103,55 @@ Future<List<UserData>> getDadosUser(int userId) async {
           headers: {'Content-Type': 'application/json'},
         );
 
-       if (response.statusCode == 200) {
-        final userData = jsonDecode(response.body);
-        final userId = userData['user']['id'];
-        final username = userData['user']['username'];
-        final userEmail = userData['user']['email'];
+        if (response.statusCode == 200) {
+          final userData = jsonDecode(response.body);
+          final userId = userData['user']['id'];
+          final username = userData['user']['username'];
+          final userEmail = userData['user']['email'];
 
-        final userDataList = await getDadosUser(userId);
+          final userDataList = await getDadosUser(userId);
 
-        if (userDataList.isNotEmpty) {
-          final userDataObject = userDataList.first;
-          userDataObject.usuario = username;
-          userDataObject.email = userEmail;
-          final alturaMetros = userDataObject.altura / 100; // Converter altura para metros
-          userDataObject.imc = userDataObject.peso / (alturaMetros * alturaMetros); 
-          await SharedUser.saveUserData(userDataObject);
-        } else {
-          final userDataObjectNew = UserData(
-            idUsuario: userId,
-            usuario: username,
-            email: userEmail,
-            genero: '',
-            altura: 0.0,
-            idade: 0,
-            peso: 0.0,
-            imc: 0.0,
-            idPlanoTreino: 0,
-            idPlanoAlimentacao: 0,
-          );
-          await SharedUser.saveUserData(userDataObjectNew);
-        }
+          if (userDataList.isNotEmpty) {
+            final userDataObject = userDataList.first;
+            userDataObject.usuario = username;
+            userDataObject.email = userEmail;
+            final alturaMetros = userDataObject.altura / 100; // Converter altura para metros
+            userDataObject.imc = userDataObject.peso / (alturaMetros * alturaMetros);
+
+            if (userDataObject.idPlanoTreino == 0) {
+              // Obtenha o idPlanoTreino da API
+              final idPlanoTreinoFromApi = await getIdPlanoTreino(userId);
+
+              // Se for zero, atualiza localmente, pors o usuario já escolheu seu plano de treino
+              if (idPlanoTreinoFromApi != 0) {
+                userDataObject.idPlanoTreino = idPlanoTreinoFromApi;
+                await SharedUser.saveUserData(userDataObject);
+              }
+            }
+
+            await SharedUser.saveUserData(userDataObject);
+          } else {
+            final userDataObjectNew = UserData(
+              idUsuario: userId,
+              usuario: username,
+              email: userEmail,
+              genero: '',
+              altura: 0.0,
+              idade: 0,
+              peso: 0.0,
+              imc: 0.0,
+              idPlanoTreino: 0,
+              idPlanoAlimentacao: 0,
+            );
+            await SharedUser.saveUserData(userDataObjectNew);
+          }
           Navigator.push(
             context,
             MaterialPageRoute(builder: (context) => TelaInicial()),
           );
         } else {
-        // ignore: use_build_context_synchronously
-        showDialog(
+          // ignore: use_build_context_synchronously
+          showDialog(
             context: context,
             builder: (BuildContext context) {
               return AlertDialog(
@@ -164,48 +206,7 @@ Future<List<UserData>> getDadosUser(int userId) async {
         }
       } catch (e) {
         print('Ocorreu uma exceção: $e');
-          showDialog(
-            context: context,
-            builder: (BuildContext context) {
-              return AlertDialog(
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(20.0),
-                ),
-                title: const Text(
-                  'Erro de Conexão com o Servidor',
-                  style: TextStyle(
-                    fontSize: 25,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.red,
-                  ),
-                ),
-                content:const Text(
-                  'Ocorreu um erro ao processar a solicitação. Por favor, tente novamente mais tarde.',
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.w400,
-                  ),
-                ),
-                actions: <Widget>[
-                  TextButton(
-                    onPressed: () {
-                      Navigator.of(context).pop();
-                    },
-                    child: const Text(
-                      'Ok',
-                      style: TextStyle(
-                        fontSize: 18,
-                        color: Colors.red,
-                      ),
-                    ),
-                  ),
-                ],
-              );
-            },
-          );
-      }
-    } else {
-          showDialog(
+        showDialog(
           context: context,
           builder: (BuildContext context) {
             return AlertDialog(
@@ -213,52 +214,93 @@ Future<List<UserData>> getDadosUser(int userId) async {
                 borderRadius: BorderRadius.circular(20.0),
               ),
               title: const Text(
-                'Credenciais Inválidas',
+                'Erro de Conexão com o Servidor',
                 style: TextStyle(
                   fontSize: 25,
                   fontWeight: FontWeight.bold,
                   color: Colors.red,
                 ),
               ),
-              content: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                const Text(
-                    'Não foi possível fazer login. Preencha todas as suas credenciais e tente novamente.',
+              content: const Text(
+                'Ocorreu um erro ao processar a solicitação. Por favor, tente novamente mais tarde.',
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.w400,
+                ),
+              ),
+              actions: <Widget>[
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: const Text(
+                    'Ok',
                     style: TextStyle(
                       fontSize: 18,
-                      fontWeight: FontWeight.w400,
+                      color: Colors.red,
                     ),
                   ),
-                  const SizedBox(height: 20),
-                  ElevatedButton(
-                    onPressed: () {
-                      Navigator.of(context).pop();
-                    },
-                    style: ElevatedButton.styleFrom(
-                      primary: Colors.red,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                    ),
-                    child: const Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Text(
-                        'OK',
-                        style: TextStyle(
-                          fontSize: 18,
-                          color: Colors.white,
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
+                ),
+              ],
             );
           },
         );
       }
+    } else {
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(20.0),
+            ),
+            title: const Text(
+              'Credenciais Inválidas',
+              style: TextStyle(
+                fontSize: 25,
+                fontWeight: FontWeight.bold,
+                color: Colors.red,
+              ),
+            ),
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const Text(
+                  'Não foi possível fazer login. Preencha todas as suas credenciais e tente novamente.',
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.w400,
+                  ),
+                ),
+                const SizedBox(height: 20),
+                ElevatedButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  style: ElevatedButton.styleFrom(
+                    primary: Colors.red,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                  ),
+                  child: const Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Text(
+                      'OK',
+                      style: TextStyle(
+                        fontSize: 18,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          );
+        },
+      );
     }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -336,65 +378,65 @@ Future<List<UserData>> getDadosUser(int userId) async {
                   ),
                   const SizedBox(height: 20.0),
                   SizedBox(
-                      width: 50,
-                      child: ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          primary: Colors.transparent,
-                          minimumSize: Size(double.infinity, 50.0),
-                          elevation: 0,
-                          padding: EdgeInsets.zero,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(16.0),
-                          ),
-                          shadowColor: Colors.transparent,
+                    width: 50,
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        primary: Colors.transparent,
+                        minimumSize: Size(double.infinity, 50.0),
+                        elevation: 0,
+                        padding: EdgeInsets.zero,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(16.0),
                         ),
-                        onPressed: () {
-                          final email = _emailController.text;
-                          final password = _passwordController.text;
-                          login(email, password);
-                          // Navigator.push(
-                          //   context,
-                          //   MaterialPageRoute(
-                          //       builder: (context) => TelaInicial()),
-                          // );
-                        },
-                        child: Container(
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(20.0),
-                            gradient: const LinearGradient(
-                              colors: [Colors.cyan, Colors.blue],
-                              begin: Alignment.topCenter,
-                              end: Alignment.bottomCenter,
-                            ),
+                        shadowColor: Colors.transparent,
+                      ),
+                      onPressed: () {
+                        final email = _emailController.text;
+                        final password = _passwordController.text;
+                        login(email, password);
+                        // Navigator.push(
+                        //   context,
+                        //   MaterialPageRoute(
+                        //       builder: (context) => TelaInicial()),
+                        // );
+                      },
+                      child: Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(20.0),
+                          gradient: const LinearGradient(
+                            colors: [Colors.cyan, Colors.blue],
+                            begin: Alignment.topCenter,
+                            end: Alignment.bottomCenter,
                           ),
-                          child: const Padding(
-                            padding:  EdgeInsets.symmetric(
-                              vertical: 15.0,
-                              horizontal: 143.0,
-                            ),
-                            child: Text(
-                              'Entrar',
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 20,
-                                fontWeight: FontWeight.w900,
-                              ),
+                        ),
+                        child: const Padding(
+                          padding: EdgeInsets.symmetric(
+                            vertical: 15.0,
+                            horizontal: 143.0,
+                          ),
+                          child: Text(
+                            'Entrar',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 20,
+                              fontWeight: FontWeight.w900,
                             ),
                           ),
                         ),
                       ),
                     ),
+                  ),
                   const SizedBox(height: 10),
                   TextButton(
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => CadastroPage(),
-                        ),
-                      );
-                    },
-                    child:Center(
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => CadastroPage(),
+                          ),
+                        );
+                      },
+                      child: Center(
                         child: TextButton(
                           onPressed: () {
                             Navigator.push(
@@ -405,15 +447,17 @@ Future<List<UserData>> getDadosUser(int userId) async {
                             );
                           },
                           child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center, // Centraliza horizontalmente
+                            mainAxisAlignment: MainAxisAlignment
+                                .center, // Centraliza horizontalmente
                             children: [
                               const Text(
                                 "Não Possui Conta? ",
-                                style: TextStyle(fontSize: 18, color: Colors.black),
+                                style: TextStyle(
+                                    fontSize: 18, color: Colors.black),
                               ),
-                            const SizedBox(width: 1), 
-                            GestureDetector(
-                                 onTap: () {
+                              const SizedBox(width: 1),
+                              GestureDetector(
+                                onTap: () {
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(
@@ -422,19 +466,18 @@ Future<List<UserData>> getDadosUser(int userId) async {
                                   );
                                 },
                                 child: const Text(
-                                'Cadastre-se',
-                                style: TextStyle(
-                                  color: Colors.blue,
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.bold,
+                                  'Cadastre-se',
+                                  style: TextStyle(
+                                    color: Colors.blue,
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.bold,
+                                  ),
                                 ),
-                              ), 
-                            ),    
+                              ),
                             ],
                           ),
                         ),
-                      )
-                  ),
+                      )),
                 ],
               ),
             ),
