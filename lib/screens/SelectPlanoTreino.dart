@@ -197,10 +197,40 @@ class _PlanoTreinoDetalhesState extends State<PlanoTreinoDetalhes> {
                     print(selectedPlanId);
                     final userData = await SharedUser.getUserData();
 
-                    if (userData != null && userData.idPlanoTreino == 0) {
+                    if (userData!.idPlanoTreino == 0) {
                       userData.idPlanoTreino = selectedPlanId;
-                      await SharedUser.saveUserData(userData); // Atualize o objeto userData com o novo idPlanoTreino
+
+                      // Atualize o objeto userData com o novo idPlanoTreino localmente
+                      await SharedUser.saveUserData(userData);
+
+                      // Envie o novo idPlanoTreino para a API
+                      final apiUrl ='http://localhost:3000/usuarioTreino/cadastro';
+                      final requestBody = {
+                        'idUsuario': userData.idUsuario,
+                        'idPlanoTreino': selectedPlanId,
+                      };
+
+                      try {
+                        final response = await http.post(
+                          Uri.parse(apiUrl),
+                          body: jsonEncode(requestBody),
+                          headers: {'Content-Type': 'application/json'},
+                        );
+
+                        if (response.statusCode == 201) {
+                          // O recurso foi criado com sucesso na API
+                          print('Plano adicionado com sucesso!');
+                        } else {
+                          // Handle outros códigos de status, se necessário
+                          print(
+                              'Erro ao adicionar o plano. Código de status: ${response.statusCode}');
+                        }
+                      } catch (e) {
+                        // Handle erros de conexão
+                        print('Erro de conexão: $e');
+                      }
                     }
+
                     // ignore: use_build_context_synchronously
                     Navigator.push(
                       context,
@@ -217,7 +247,8 @@ class _PlanoTreinoDetalhesState extends State<PlanoTreinoDetalhes> {
                       ),
                     ),
                     child: Container(
-                      constraints: const BoxConstraints(minWidth: 120, minHeight: 50),
+                      constraints:
+                          const BoxConstraints(minWidth: 120, minHeight: 50),
                       alignment: Alignment.center,
                       child: const Text(
                         'Seletor de Planos de Alimentação',
