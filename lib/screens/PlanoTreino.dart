@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'package:intl/intl.dart';
 import '../service/sharedUser.dart';
 import '../widgets/TreinoDetalhes.dart';
 import '../settings/Theme.dart';
+import 'package:intl/date_symbol_data_local.dart';
 
 class Exercise {
   final int idExercicio;
@@ -12,6 +14,7 @@ class Exercise {
   final int repeticoes;
   final int tempoS;
   final int intensidade;
+  final String ciclo;
   final String imageUrl;
 
   Exercise({
@@ -21,6 +24,7 @@ class Exercise {
     required this.repeticoes,
     required this.tempoS,
     required this.intensidade,
+    required this.ciclo,
     required this.imageUrl,
   });
 
@@ -32,6 +36,7 @@ class Exercise {
       repeticoes: json['repeticoes'] ?? 0,
       tempoS: json['tempoS'] ?? 0,
       intensidade: json['intensidade'] ?? 0,
+      ciclo: json['ciclo'] ?? '',
       imageUrl: json['imageUrl'] ?? '',
     );
   }
@@ -44,10 +49,22 @@ class PlanoTreinoPage extends StatefulWidget {
 
 class _PlanoTreinoPageState extends State<PlanoTreinoPage> {
   late List<Exercise> exercises = [];
+  late String selectedDay =
+      capitalize(DateFormat('EEEE', 'pt_BR').format(DateTime.now())); // Inicializa com o dia da semana atual
+  late TextEditingController searchController = TextEditingController();
+
+  String capitalize(String text) {
+    return text[0].toUpperCase() + text.substring(1);
+  }
 
   @override
   void initState() {
     super.initState();
+    try {
+      initializeDateFormatting('pt_BR', null);
+    } catch (e) {
+      print('Erro na inicialização da localização: $e');
+    }
     fetchExercisesForPlano();
   }
 
@@ -59,8 +76,7 @@ class _PlanoTreinoPageState extends State<PlanoTreinoPage> {
 
       if (response.statusCode == 200) {
         final jsonResponse = json.decode(response.body) as List<dynamic>;
-        final exerciseIds =
-            jsonResponse.map((item) => item['idExercicio'] as int).toList();
+        final exerciseIds = jsonResponse.map((item) => item['idExercicio'] as int).toList();
         await fetchExercises(exerciseIds);
       }
     }
@@ -83,8 +99,24 @@ class _PlanoTreinoPageState extends State<PlanoTreinoPage> {
       }
     }
 
+    final filteredExercises = exercises.where((exercise) {
+      if (exercise.ciclo == 'A' &&
+          (selectedDay == 'Segunda-feira' ||
+              selectedDay == 'Terça-feira' ||
+              selectedDay == 'Quarta-feira')) {
+        return true;
+      } else if (exercise.ciclo == 'B' &&
+          (selectedDay == 'Quinta-feira' || selectedDay == 'Sexta-feira')) {
+        return true;
+      } else if (exercise.ciclo == 'C' &&
+          (selectedDay == 'Sábado' || selectedDay == 'Domingo')) {
+        return true;
+      }
+      return false;
+    }).toList();
+
     setState(() {
-      this.exercises = exercises;
+      this.exercises = filteredExercises;
     });
   }
 
@@ -104,92 +136,228 @@ class _PlanoTreinoPageState extends State<PlanoTreinoPage> {
               Navigator.pop(context);
             },
           ),
-        ),
-       body: Column(
-        children: [
-          const Padding(
-            padding: EdgeInsets.all(16.0),
-            child: Text(
-              'Plano de Treino',
-              style: TextStyle(
-                fontSize: 32,  
-                fontWeight: FontWeight.bold,  
-                color: Colors.blue,  
-                shadows: [
-                  Shadow(
-                    blurRadius: 5,  
-                    color: Colors.black,  
-                    offset: Offset(2, 2), 
-                  ),
-                ],
-               fontFamily: 'Roboto'
-              ),
-            ),
-          ),
-          Expanded(
-            child: GridView.builder(
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2,
-              ),
-              itemCount: exercises.length,
-              itemBuilder: (BuildContext context, int index) {
-                final exercise = exercises[index];
-                return _buildExerciseTile(
-                  exercise.nomeExercicio,
-                  exercise.imageUrl,
-                  exercise.series.toString(),
-                  exercise.tempoS.toString(),
-                  exercise.intensidade.toString(),
-                  exercise.repeticoes.toString(),
+          title: Text('Plano de Treino'),
+          actions: [
+            IconButton(
+              icon: Icon(Icons.search),
+              onPressed: () {
+                // Adicionar funcionalidade de busca
+                showSearch(
+                  context: context,
+                  delegate: ExerciseSearchDelegate(exercises),
                 );
               },
             ),
-          ),
-        ],
+          ],
+        ),
+        body: Column(
+          children: [
+            Padding(
+              padding: EdgeInsets.all(16.0),
+              child: Column(
+                children: [
+                  Text(
+                    'Exercícios para $selectedDay',
+                    style: TextStyle(
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.blue,
+                    ),
+                  ),
+                  SizedBox(height: 16),
+                  _buildDaySelector(),
+                ],
+              ),
+            ),
+            Expanded(
+              child: GridView.builder(
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 2,
+                ),
+                itemCount: exercises.length,
+                itemBuilder: (BuildContext context, int index) {
+                  final exercise = exercises[index];
+                  return _buildExerciseTile(
+                    exercise.nomeExercicio,
+                    exercise.imageUrl,
+                    exercise.series.toString(),
+                    exercise.tempoS.toString(),
+                    exercise.intensidade.toString(),
+                    exercise.repeticoes.toString(),
+                  );
+                },
+              ),
+            ),
+          ],
+        ),
       ),
-    ),
-  );
+    );
+  }
+
+  Widget _buildDaySelector() {
+    return Container(
+      decoration: BoxDecoration(
+        border: Border.all(color: Colors.grey),
+        borderRadius: BorderRadius.circular(8.0),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 8.0),
+        child: DropdownButton<String>(
+          value: selectedDay,
+          items: [
+            'Segunda-feira',
+            'Terça-feira',
+            'Quarta-feira',
+            'Quinta-feira',
+            'Sexta-feira',
+            'Sábado',
+            'Domingo'
+          ].map((String value) {
+            return DropdownMenuItem<String>(
+              value: value,
+              child: Text(value),
+            );
+          }).toList(),
+          onChanged: (String? newValue) {
+            setState(() {
+              selectedDay = capitalize(newValue!);
+              fetchExercisesForPlano();
+            });
+          },
+          underline: Container(),
+          isExpanded: true,
+          icon: Icon(Icons.arrow_drop_down),
+          iconSize: 24,
+        ),
+      ),
+    );
+  }
+
+  Widget _buildExerciseTile(String nomeExercicio, String imageUrl,
+      String series, String tempo, String intensidade, String repeticoes) {
+    return Card(
+      elevation: 5,
+      child: InkWell(
+        onTap: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => TreinoDetalhes(
+                nomeExercicio: nomeExercicio,
+                imageUrl: imageUrl,
+                series: series,
+                tempo: tempo,
+                repeticoes: repeticoes,
+                intensidade: intensidade,
+              ),
+            ),
+          );
+        },
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Image.network(
+              imageUrl,
+              width: 150,
+              height: 150,
+              fit: BoxFit.cover,
+              errorBuilder: (context, error, stackTrace) {
+                return Icon(Icons.error, color: Colors.red);
+              },
+            ),
+            SizedBox(height: 8),
+            Text(
+              nomeExercicio,
+              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+              textAlign: TextAlign.center,
+            ),
+            if (int.parse(series) > 0)
+              Text('Séries: $series', style: TextStyle(fontSize: 12)),
+            if (int.parse(tempo) > 0)
+              Text('Tempo: $tempo', style: TextStyle(fontSize: 12)),
+            if (int.parse(intensidade) > 0)
+              Text('Intensidade: $intensidade', style: TextStyle(fontSize: 12)),
+            if (int.parse(repeticoes) > 0)
+              Text('Repetições: $repeticoes', style: TextStyle(fontSize: 12)),
+          ],
+        ),
+      ),
+    );
+  }
 }
 
-Widget _buildExerciseTile(String nomeExercicio, String imageUrl, String series, String tempo, String intensidade, String repeticoes) {
-  return Card(
-    child: InkWell(
-      onTap: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => TreinoDetalhes(
-              nomeExercicio: nomeExercicio,
-              imageUrl: imageUrl,
-              series: series,
-              tempo: tempo,
-              repeticoes: repeticoes,
-              intensidade: intensidade,
-            ),
-          ),
+class ExerciseSearchDelegate extends SearchDelegate<Exercise> {
+  final List<Exercise> exercises;
+
+  ExerciseSearchDelegate(this.exercises);
+
+  @override
+  List<Widget> buildActions(BuildContext context) {
+    return [
+      IconButton(
+        icon: Icon(Icons.clear),
+        onPressed: () {
+          query = '';
+        },
+      ),
+    ];
+  }
+
+  @override
+  Widget buildLeading(BuildContext context) {
+    return IconButton(
+      icon: Icon(Icons.arrow_back),
+      onPressed: () {
+        // Corrigir para fechar a tela de pesquisa sem retornar um resultado
+        close(context, Exercise(
+          idExercicio: 0,
+          nomeExercicio: '',
+          series: 0,
+          repeticoes: 0,
+          tempoS: 0,
+          intensidade: 0,
+          ciclo: '',
+          imageUrl: '',
+        ));
+      },
+    );
+  }
+
+  @override
+  Widget buildResults(BuildContext context) {
+    // Implementar a exibição dos resultados da pesquisa
+    final filteredExercises = exercises
+        .where((exercise) =>
+            exercise.nomeExercicio.toLowerCase().contains(query.toLowerCase()))
+        .toList();
+
+    return _buildSearchResults(filteredExercises);
+  }
+
+  @override
+  Widget buildSuggestions(BuildContext context) {
+    // Implementar sugestões enquanto o usuário digita
+    final filteredExercises = exercises
+        .where((exercise) =>
+            exercise.nomeExercicio.toLowerCase().contains(query.toLowerCase()))
+        .toList();
+
+    return _buildSearchResults(filteredExercises);
+  }
+
+  Widget _buildSearchResults(List<Exercise> results) {
+    return ListView.builder(
+      itemCount: results.length,
+      itemBuilder: (BuildContext context, int index) {
+        final exercise = results[index];
+        return ListTile(
+          title: Text(exercise.nomeExercicio),
+          onTap: () {
+            // Corrigir para retornar o resultado da pesquisa
+            close(context, exercise);
+          },
         );
       },
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Image.network(
-            imageUrl,
-            width: 150,
-            height: 150,
-            fit: BoxFit.cover,
-            errorBuilder: (context, error, stackTrace) {
-              return Icon(Icons.error, color: Colors.red);
-            },
-          ),
-          Text(nomeExercicio, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
-          if (int.parse(series) > 0) Text('Séries: $series', style: TextStyle(fontSize: 10)),
-          if (int.parse(tempo) > 0) Text('Tempo: $tempo', style: TextStyle(fontSize: 10)),
-          if (int.parse(intensidade) > 0) Text('Intensidade: $intensidade', style: TextStyle(fontSize: 10)),
-          if (int.parse(repeticoes) > 0) Text('Repetições: $repeticoes', style: TextStyle(fontSize: 10)),
-        ],
-      ),
-    ),
-  );
-}
-
+    );
+  }
 }
