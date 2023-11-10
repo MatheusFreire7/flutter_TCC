@@ -115,7 +115,7 @@ class _PlanoTreinoDetalhesState extends State<PlanoTreinoDetalhes> {
                         decoration: BoxDecoration(
                           color: selectedRecomendadoPlanIndex == index
                               ? Colors.red
-                              : Colors.deepPurple[100],
+                              : Colors.white,
                         ),
                         child: InkWell(
                           onTap: () {
@@ -155,7 +155,7 @@ class _PlanoTreinoDetalhesState extends State<PlanoTreinoDetalhes> {
                         decoration: BoxDecoration(
                           color: selectedNaoRecomendadoPlanIndex == index
                               ? Colors.red
-                              : Colors.deepPurple[100],
+                              : Colors.white,
                         ),
                         child: InkWell(
                           onTap: () {
@@ -185,7 +185,7 @@ class _PlanoTreinoDetalhesState extends State<PlanoTreinoDetalhes> {
                 ElevatedButton(
                   style: ElevatedButton.styleFrom(
                     primary: Colors.transparent,
-                    minimumSize: Size(double.infinity, 50.0),
+                    minimumSize: const Size(double.infinity, 50.0),
                     elevation: 0,
                     padding: EdgeInsets.zero,
                     shape: RoundedRectangleBorder(
@@ -197,20 +197,17 @@ class _PlanoTreinoDetalhesState extends State<PlanoTreinoDetalhes> {
                     print(selectedPlanId);
                     final userData = await SharedUser.getUserData();
 
-                    if (userData != null) {
-                      if (userData.idPlanoTreino == 0) {
-                        userData.idPlanoTreino = selectedPlanId;
-                         await SharedUser.saveUserData(userData); // Atualize o objeto userData com o novo idPlanoTreino
-                      }
+                    if (userData != null && userData.idPlanoTreino == 0) {
+                      userData.idPlanoTreino = selectedPlanId;
+                      await SharedUser.saveUserData(userData); // Atualize o objeto userData com o novo idPlanoTreino
                     }
-
                     // ignore: use_build_context_synchronously
                     Navigator.push(
                       context,
                       MaterialPageRoute(builder: (context) => LoginPage()),
                     );
                   },
-                  child: Container(
+                  child: Ink(
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(20.0),
                       gradient: const LinearGradient(
@@ -219,12 +216,10 @@ class _PlanoTreinoDetalhesState extends State<PlanoTreinoDetalhes> {
                         end: Alignment.bottomCenter,
                       ),
                     ),
-                    child: const Padding(
-                      padding: EdgeInsets.symmetric(
-                        vertical: 15.0,
-                        horizontal: 120.0,
-                      ),
-                      child: Text(
+                    child: Container(
+                      constraints: const BoxConstraints(minWidth: 120, minHeight: 50),
+                      alignment: Alignment.center,
+                      child: const Text(
                         'Seletor de Planos de Alimentação',
                         style: TextStyle(
                           color: Colors.white,
