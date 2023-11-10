@@ -469,9 +469,10 @@ class _FormScreenState extends State<FormScreen> {
                             if (planosTreino.isNotEmpty) {
                               for (var planoSelecionado in planosTreino) {
                                 final title = planoSelecionado[0]["nomePlanoTreino"];
-                                final imageUrl = "";
-                                final name = "nome"; 
+                                const imageUrl = "";
+                                const name = "nome"; 
 
+                                // ignore: use_build_context_synchronously
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-import 'Treino.dart';
+import '../widgets/TreinoDetalhes.dart';
 import '../settings/Theme.dart';
 
 class Exercise {

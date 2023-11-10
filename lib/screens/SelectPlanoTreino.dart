@@ -4,7 +4,7 @@ import '../settings/theme.dart';
 import '../widgets/Square.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-import 'Login.dart';
+import 'LoginUser.dart';
 
 class PlanoTreinoDetalhes extends StatefulWidget {
   final String title;

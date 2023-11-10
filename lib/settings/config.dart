@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_login/settings/appConfig.dart';
-import 'package:flutter_login/screens/infoObri.dart';
-import 'package:flutter_login/screens/Login.dart';
+import 'package:flutter_login/screens/infoUser.dart';
+import 'package:flutter_login/screens/LoginUser.dart';
 import 'package:flutter_login/screens/Telainicial.dart';
 import 'package:flutter_login/settings/theme.dart';
 

@@ -3,11 +3,11 @@ import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:flutter_login/service/NotificationService.dart';
 import 'package:flutter_login/service/NoticationWater.dart';
-import 'package:flutter_login/widgets/AlimentSaudavel.dart';
+import 'package:flutter_login/screens/FoodList.dart';
 import 'package:flutter_login/settings/Config.dart';
-import 'package:flutter_login/screens/InfoObri.dart';
-import 'package:flutter_login/widgets/PlanoAlimentacao.dart';
-import 'package:flutter_login/widgets/PlanoTreino.dart';
+import 'package:flutter_login/screens/InfoUser.dart';
+import 'package:flutter_login/screens/PlanoAlimentacao.dart';
+import 'package:flutter_login/screens/PlanoTreino.dart';
 import 'package:flutter_login/settings/Suporte.dart';
 import 'package:flutter_login/settings/theme.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
@@ -17,7 +17,7 @@ import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../service/ImageStorage.dart';
 import '../service/SharedUser.dart';
-import '../widgets/ExerciseList.dart';
+import '../screens/ExerciseList.dart';
 import 'package:windows_notification/windows_notification.dart';
 
 
@@ -333,7 +333,7 @@ class _TelaInicialState extends State<TelaInicial> {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => AlimentacaoSaudavel(),
+                      builder: (context) => FoodList(),
                     ),
                   );
                 },
@@ -466,7 +466,7 @@ class _TelaInicialState extends State<TelaInicial> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => AlimentacaoSaudavel()),
+                              builder: (context) => FoodList()),
                         );
                       },
                     ),

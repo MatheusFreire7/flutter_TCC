@@ -1,20 +1,20 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_login/screens/Cadastro.dart';
+import 'package:flutter_login/screens/CadastroUser.dart';
 import 'package:flutter_login/screens/SelectPlanoAlimento.dart';
 import 'package:flutter_login/screens/SelectPlanoTreino.dart';
 import 'package:flutter_login/screens/TelaInicio.dart';
 import 'package:flutter_login/service/NoticationPage.dart';
 import 'package:flutter_login/service/NotificationService.dart';
 import 'package:flutter_login/settings/Config.dart';
-import 'package:flutter_login/screens/FormPlano.dart';
-import 'package:flutter_login/screens/InfoObri.dart';
+import 'package:flutter_login/screens/FormTreino.dart';
+import 'package:flutter_login/screens/InfoUser.dart';
 import 'package:flutter_login/screens/Telainicial.dart';
 import 'package:flutter_login/settings/theme.dart';
-import 'package:flutter_login/widgets/AlimentSaudavel.dart';
-import 'package:flutter_login/widgets/PlanoAlimentacao.dart';
+import 'package:flutter_login/screens/FoodList.dart';
+import 'package:flutter_login/screens/PlanoAlimentacao.dart';
 import 'package:localstorage/localstorage.dart';
 import 'package:provider/provider.dart';
-import 'screens/Login.dart';
+import 'screens/LoginUser.dart';
 import 'package:flutter/widgets.dart';
 import 'dart:async';
 import 'dart:html' as html;
@@ -99,7 +99,7 @@ class LoginApp extends StatelessWidget {
               "info": (context) => PersonalInfoForm(),
               "config": (context) => ConfiguracoesPage(),
               "planoAlimentacao": (context) => Diet(),
-              "alimento": (context) => AlimentacaoSaudavel(),
+              "alimento": (context) => FoodList(),
               "notificacao": (context) => NotificacaoPage(),
               "select": (context) => PlanoTreinoDetalhes(imageUrl: '', name: '', title: '', planosTreino: []),
               "selectAlimento": (context) => PlanoAlimentoDetalhes(imageUrl: '', name: '', planosAlimentos: [], title: '',)

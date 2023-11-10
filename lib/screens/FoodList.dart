@@ -1,12 +1,12 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import '../screens/telainicial.dart';
+import 'telainicial.dart';
 import '../settings/theme.dart';
 
-class AlimentacaoSaudavel extends StatefulWidget {
+class FoodList extends StatefulWidget {
   @override
-  _AlimentacaoSaudavelState createState() => _AlimentacaoSaudavelState();
+  _FoodListState createState() => _FoodListState();
 }
 
 enum Ordenacao {
@@ -16,7 +16,7 @@ enum Ordenacao {
   carboidratos,
 }
 
-class _AlimentacaoSaudavelState extends State<AlimentacaoSaudavel> {
+class _FoodListState extends State<FoodList> {
   List<Alimento> alimentos = [];
   Ordenacao _ordenacaoAtual = Ordenacao.calorias;
   bool _ordemCrescente = true;
@@ -29,7 +29,7 @@ class _AlimentacaoSaudavelState extends State<AlimentacaoSaudavel> {
 
 Future<void> fetchAlimentos() async {
   try{
-      final response = await http.get(Uri.parse('http://localhost:3002/alimentos'));
+      final response = await http.get(Uri.parse('http://localhost:3000/alimentos'));
 
       if (response.statusCode == 200) {
         final List<dynamic> data = jsonDecode(response.body);
