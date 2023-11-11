@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_login/screens/CadastroUser.dart';
+import 'package:flutter_login/screens/FormTreino.dart';
 import 'package:flutter_login/screens/Telainicial.dart';
 import 'package:flutter_login/settings/theme.dart';
 import 'package:http/http.dart' as http;
@@ -51,6 +52,37 @@ class _LoginPageState extends State<LoginPage> {
     } catch (e) {
       // Lida com erros de conexão
       print('Erro de conexão ao obter idPlanoTreino: $e');
+      return 0;
+    }
+  }
+
+  Future<int> getIdPlanoAlimentacao(int userId) async {
+    try {
+      final response = await http.get(
+        Uri.parse('http://localhost:3000/usuarioAlimentacao/get/$userId'),
+        headers: {'Content-Type': 'application/json'},
+      );
+
+      if (response.statusCode == 200) {
+        final List<Map<String, dynamic>> jsonDataList =
+            List<Map<String, dynamic>>.from(json.decode(response.body));
+
+        if (jsonDataList.isNotEmpty) {
+          final idPlanoAlimentacao = jsonDataList.first['idPlanoAlimentacao'];
+          return idPlanoAlimentacao;
+        } else {
+          // Retorna 0 se o idPlanoAlimentacao não estiver definido
+          return 0;
+        }
+      } else {
+        // Lida com outros códigos de status, se necessário
+        print(
+            'Erro ao obter idPlanoAlimentacao. Código de status: ${response.statusCode}');
+        return 0;
+      }
+    } catch (e) {
+      // Lida com erros de conexão
+      print('Erro de conexão ao obter idPlanoAlimentacao: $e');
       return 0;
     }
   }
@@ -115,21 +147,40 @@ class _LoginPageState extends State<LoginPage> {
             final userDataObject = userDataList.first;
             userDataObject.usuario = username;
             userDataObject.email = userEmail;
-            final alturaMetros = userDataObject.altura / 100; // Converter altura para metros
-            userDataObject.imc = userDataObject.peso / (alturaMetros * alturaMetros);
+            final alturaMetros = userDataObject.altura / 100;
+            userDataObject.imc =
+                userDataObject.peso / (alturaMetros * alturaMetros);
 
-            if (userDataObject.idPlanoTreino == 0) {
-              // Obtenha o idPlanoTreino da API
+            if (userDataObject.idPlanoTreino == 0 ||
+                userDataObject.idPlanoAlimentacao == 0) {
               final idPlanoTreinoFromApi = await getIdPlanoTreino(userId);
+              final idPlanoAlimentacaoFromApi = await getIdPlanoAlimentacao(userId);
 
-              // Se for zero, atualiza localmente, pors o usuario já escolheu seu plano de treino
-              if (idPlanoTreinoFromApi != 0) {
+              if (idPlanoTreinoFromApi != 0 || idPlanoAlimentacaoFromApi != 0) {
+                print(idPlanoTreinoFromApi);
+                print(idPlanoAlimentacaoFromApi);
                 userDataObject.idPlanoTreino = idPlanoTreinoFromApi;
+                userDataObject.idPlanoAlimentacao = idPlanoAlimentacaoFromApi;
                 await SharedUser.saveUserData(userDataObject);
               }
-            }
 
-            await SharedUser.saveUserData(userDataObject);
+              if (userDataObject.idPlanoTreino == 0 ||
+                  userDataObject.idPlanoAlimentacao == 0) {
+                // ignore: use_build_context_synchronously
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => FormScreen()),
+                );
+                return; // Navegação já realizada, encerra a função.
+              }
+
+              // ignore: use_build_context_synchronously
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => TelaInicial()),
+              );
+              return; // Navegação já realizada, encerra a função.
+            }
           } else {
             final userDataObjectNew = UserData(
               idUsuario: userId,
@@ -145,9 +196,11 @@ class _LoginPageState extends State<LoginPage> {
             );
             await SharedUser.saveUserData(userDataObjectNew);
           }
+
+          // ignore: use_build_context_synchronously
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => TelaInicial()),
+            MaterialPageRoute(builder: (context) => FormScreen()),
           );
         } else {
           // ignore: use_build_context_synchronously

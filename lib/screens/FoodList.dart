@@ -15,6 +15,7 @@ enum Ordenacao {
   proteinas,
   gorduras,
   carboidratos,
+  sodio,
 }
 
 class _FoodListState extends State<FoodList> {
@@ -30,7 +31,8 @@ class _FoodListState extends State<FoodList> {
 
   Future<void> fetchCardapios() async {
     try {
-      final response = await http.get(Uri.parse('http://localhost:3000/cardapio/get'));
+      final response =
+          await http.get(Uri.parse('http://localhost:3000/cardapio/get'));
 
       if (response.statusCode == 200) {
         final List<dynamic> data = jsonDecode(response.body);
@@ -40,7 +42,8 @@ class _FoodListState extends State<FoodList> {
           final List<dynamic> cardapiosData = data[0];
 
           setState(() {
-            cardapios = cardapiosData.map((item) => Cardapio.fromJson(item)).toList();
+            cardapios =
+                cardapiosData.map((item) => Cardapio.fromJson(item)).toList();
           });
         } else {
           print('Erro: Resposta inesperada');
@@ -82,6 +85,10 @@ class _FoodListState extends State<FoodList> {
             valorA = a.carb;
             valorB = b.carb;
             break;
+          case Ordenacao.sodio:
+            valorA = a.sodio;
+            valorB = b.sodio;
+            break;
           default:
             valorA = 0;
             valorB = 0;
@@ -104,6 +111,8 @@ class _FoodListState extends State<FoodList> {
         return 'Gorduras';
       case Ordenacao.carboidratos:
         return 'Carboidratos';
+      case Ordenacao.sodio:
+        return 'Sódio';
       default:
         return '';
     }
@@ -179,6 +188,7 @@ class _FoodListState extends State<FoodList> {
                       gordura: cardapio.gorduras.toStringAsFixed(2),
                       proteina: cardapio.proteinas.toStringAsFixed(2),
                       calorias: cardapio.valorEnergetico.toStringAsFixed(2),
+                      sodio: cardapio.sodio.toStringAsFixed(2),
                       imageUrl: cardapio.imageUrl,
                     ),
                   ),
@@ -213,6 +223,8 @@ class _FoodListState extends State<FoodList> {
                                 'Gorduras: ${cardapio.gorduras.toStringAsFixed(2)}'),
                             Text(
                                 'Carboidratos: ${cardapio.carb.toStringAsFixed(2)}'),
+                            Text(
+                                'Sódio: ${cardapio.sodio.toStringAsFixed(2)}'),
                           ],
                         ),
                       ),
@@ -235,6 +247,7 @@ class Cardapio {
   final double carb;
   final double proteinas;
   final double gorduras;
+  final double sodio;
   final int periodo;
   final String imageUrl;
 
@@ -245,6 +258,7 @@ class Cardapio {
     required this.carb,
     required this.proteinas,
     required this.gorduras,
+    required this.sodio,
     required this.periodo,
     required this.imageUrl,
   });
@@ -257,6 +271,7 @@ class Cardapio {
       carb: json['carb']?.toDouble() ?? 0.0,
       proteinas: json['proteinas']?.toDouble() ?? 0.0,
       gorduras: json['gorduras']?.toDouble() ?? 0.0,
+      sodio: json['sodio']?.toDouble() ?? 0.0,
       periodo: json['periodo'],
       imageUrl: json['imageUrl'],
     );

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_login/screens/Telainicial.dart';
 import '../service/SharedUser.dart';
 import '../settings/theme.dart';
 import '../widgets/Square.dart';
@@ -41,7 +42,6 @@ class _PlanoAlimentoDetalhesState extends State<PlanoAlimentoDetalhes> {
     if (response.statusCode == 200) {
       final planos = json.decode(response.body);
 
-      // Filtrar planos que não foram recomendados
       for (var plano in planos) {
           planosAlimentos.add(plano);
       }
@@ -102,7 +102,7 @@ class _PlanoAlimentoDetalhesState extends State<PlanoAlimentoDetalhes> {
                         decoration: BoxDecoration(
                           color: selectPlanIndex == index
                               ? Colors.red
-                              : Colors.deepPurple[100],
+                              : Colors.white,
                         ),
                         child: InkWell(
                           onTap: () {
@@ -141,6 +141,33 @@ class _PlanoAlimentoDetalhesState extends State<PlanoAlimentoDetalhes> {
                           if(userData.idPlanoAlimentacao == 0){
                               userData.idPlanoAlimentacao = selectedPlanId;
                               await SharedUser.saveUserData(userData); // Atualize o objeto userData com o novo idPlanoAlimentacao
+
+                              // Envie o novo idPlanoTreino para a API
+                              final apiUrl ='http://localhost:3000/usuarioAlimentacao/cadastro';
+                              final requestBody = {
+                                'idUsuario': userData.idUsuario,
+                                'idPlanoAlimentacao': selectedPlanId,
+                              };
+
+                              try {
+                                final response = await http.post(
+                                  Uri.parse(apiUrl),
+                                  body: jsonEncode(requestBody),
+                                  headers: {'Content-Type': 'application/json'},
+                                );
+
+                                if (response.statusCode == 201) {
+                                  // O recurso foi criado com sucesso na API
+                                  print('Plano adicionado com sucesso!');
+                                } else {
+                                  // Handle outros códigos de status, se necessário
+                                  print(
+                                      'Erro ao adicionar o plano. Código de status: ${response.statusCode}');
+                                }
+                              } catch (e) {
+                                // Handle erros de conexão
+                                print('Erro de conexão: $e');
+                              }
                           }
                       }
                       
@@ -148,7 +175,7 @@ class _PlanoAlimentoDetalhesState extends State<PlanoAlimentoDetalhes> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => LoginPage()
+                        builder: (context) => TelaInicial()
                       ),
                     );
                   },
@@ -167,7 +194,7 @@ class _PlanoAlimentoDetalhesState extends State<PlanoAlimentoDetalhes> {
                         horizontal: 120.0,
                       ),
                       child: Text(
-                        'Tela de Login',
+                        'Tela Inicial',
                         style: TextStyle(
                           color: Colors.white,
                           fontSize: 20,

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_login/screens/SelectPlanoAlimento.dart';
 import '../service/SharedUser.dart';
 import '../settings/theme.dart';
 import '../widgets/Square.dart';
@@ -234,7 +235,7 @@ class _PlanoTreinoDetalhesState extends State<PlanoTreinoDetalhes> {
                     // ignore: use_build_context_synchronously
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => LoginPage()),
+                      MaterialPageRoute(builder: (context) => PlanoAlimentoDetalhes()),
                     );
                   },
                   child: Ink(

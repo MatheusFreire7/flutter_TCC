@@ -8,6 +8,7 @@ class AlimentoDetalhes extends StatelessWidget {
   final String proteina;
   final String calorias;
   final String imageUrl;
+  final String sodio;
 
   AlimentoDetalhes({
     required this.nome,
@@ -15,6 +16,7 @@ class AlimentoDetalhes extends StatelessWidget {
     required this.gordura,
     required this.proteina,
     required this.calorias,
+    required this.sodio,
     required this.imageUrl,
   });
 
@@ -64,8 +66,14 @@ class AlimentoDetalhes extends StatelessWidget {
                   ),
                   const SizedBox(height: 16.0),
                   TabelaInformacoes(
-                    labels: ['Carboidrato (g)', 'Gordura (g)', 'Proteína (g)', 'Calorias (kcal)'],
-                    valores: [carboidrato, gordura, proteina, calorias],
+                    labels: [
+                      'Carboidrato (g)',
+                      'Gordura (g)',
+                      'Proteína (g)',
+                      'Calorias (kcal)',
+                      'Sodio (mg)'
+                    ],
+                    valores: [carboidrato, gordura, proteina, calorias, sodio],
                   ),
                 ],
               ),

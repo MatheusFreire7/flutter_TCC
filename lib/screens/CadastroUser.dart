@@ -58,7 +58,7 @@ class _CadastroPageState extends State<CadastroPage> {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => FormScreen(),
+              builder: (context) => LoginPage(),
             ),
           );
         } else {

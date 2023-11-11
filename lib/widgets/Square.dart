@@ -37,6 +37,16 @@ class MySquare extends StatelessWidget {
         return "https://emc.acidadeon.com/dbimagens/corrida_de_1200x675_31052022090353.webp";
       case "Treino para manter o peso":
         return "https://gooutside.com.br/wp-content/uploads/sites/3/2022/04/shutterstock_493940722-696x464.jpg";
+      case "Dieta Balanceada":
+        return "https://socientifica.com.br/wp-content/uploads/2020/08/Dieta-balanceada.jpg";
+      case "Dieta Nordestina":
+        return "https://www.mundoboaforma.com.br/wp-content/uploads/2017/10/moqueca-light.jpg";
+      case "Dieta do Sudeste":
+        return "https://2.bp.blogspot.com/-fkGq7FGPhE0/W0T50dSP7-I/AAAAAAAAMRM/lpCO4PUySdwX9hVAlzwtq0sNjdASw6JqACLcBGAs/s1600/FEIJOADA%2B2.jpg";
+      case "Dieta Arroz e Feijão":
+        return "https://media-cdn.tripadvisor.com/media/photo-s/05/08/5a/bc/r3-express-food.jpg";
+      case "Dieta Marítima":
+        return "https://s2.glbimg.com/4yh3pOap88onUgRT7my9vv0pXZk=/e.glbimg.com/og/ed/f/original/2016/11/10/peixessvvv.jpg";
       default:
         return null;
     }
@@ -59,7 +69,8 @@ class MySquare extends StatelessWidget {
               Image.network(
                 imageUrl,
                 fit: BoxFit.cover,
-                errorBuilder: (BuildContext context, Object error, StackTrace? stackTrace) {
+                errorBuilder: (BuildContext context, Object error,
+                    StackTrace? stackTrace) {
                   return const Placeholder(
                     color: Colors.grey,
                     fallbackWidth: 250,
@@ -80,7 +91,8 @@ class MySquare extends StatelessWidget {
                     children: [
                       Text(
                         child,
-                        style: const TextStyle(fontSize: 20, color: Colors.white),
+                        style:
+                            const TextStyle(fontSize: 20, color: Colors.white),
                       ),
                       if (intensidadeText != null)
                         Text(
