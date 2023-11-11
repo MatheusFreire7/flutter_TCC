@@ -5,6 +5,8 @@ import 'package:flutter_login/screens/LoginUser.dart';
 import 'package:flutter_login/screens/Telainicial.dart';
 import 'package:flutter_login/settings/theme.dart';
 
+import '../screens/InfoUserAlter.dart';
+
 ThemeData _themeData = AppTheme.themeData; // Use sua classe de tema global aqui
 
 class ConfiguracoesPage extends StatefulWidget {
@@ -69,7 +71,7 @@ class _ConfiguracoesPageState extends State<ConfiguracoesPage> {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => PersonalInfoForm(),
+                    builder: (context) => PersonalInfoAlterForm(),
                   ),
                 );
               },

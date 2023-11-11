@@ -1,16 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_login/screens/FormTreino.dart';
 import 'package:flutter_login/screens/telainicial.dart';
 import 'package:flutter_login/service/sharedUser.dart';
 import 'package:flutter_login/settings/theme.dart';
 import 'package:http/http.dart' as http;
 
-class PersonalInfoForm extends StatefulWidget {
+class PersonalInfoAlterForm extends StatefulWidget {
   @override
-  _PersonalInfoFormState createState() => _PersonalInfoFormState();
+  _PersonalInfoAlterFormState createState() => _PersonalInfoAlterFormState();
 }
 
-class _PersonalInfoFormState extends State<PersonalInfoForm> {
+class _PersonalInfoAlterFormState extends State<PersonalInfoAlterForm> {
   final _formKey = GlobalKey<FormState>();
   final _ageController = TextEditingController();
   final _weightController = TextEditingController();
@@ -44,124 +43,51 @@ class _PersonalInfoFormState extends State<PersonalInfoForm> {
   }
 
 
-  Future<void> _createUserData({
-    required String idUsuario,
-    required String peso,
-    required String idade,
-    required String genero,
-    required String altura,
-  }) async {
-    final url = Uri.parse('http://localhost:3000/infouser/cadastro');
+  Future<void> _updateUserData() async {
+    final age = _ageController.text;
+    final weight = _weightController.text;
+    final height = _heightController.text;
+    final gender = _gender;
+    String genero = " ";
+    final userData = await SharedUser.getUserData();
+    if (userData != null) {
+      idUsuario = userData.idUsuario.toString();
+    }
 
-      final dadosUser = await SharedUser.getUserData();
+    final apiUrl = 'http://localhost:3000/infouser/atualizar/$idUsuario';
 
-    if (genero == "Masculino") {
+    if (gender == "Masculino") {
       genero = "M";
     } else {
       genero = "F";
     }
 
-    final novoInfoUser = {
-      'idUsuario': idUsuario,
-      'peso': peso.toString(),
-      'idade': idade.toString(),
-      'genero': genero,
-      'altura': altura.toString()
-    };
-
-    if(dadosUser!.imc == 0.0)
-    {
-      try {
-      final response = await http.post(
-        url,
-        body: novoInfoUser,
+    try {
+      final response = await http.put(
+        Uri.parse(apiUrl),
+        body: {
+          'peso': weight.toString(),
+          'idade': age.toString(),
+          'genero': genero,
+          'altura': height.toString()
+        },
       );
 
-      double peso = 0.0;
-      double altura = 0.0;
+      final userData = await SharedUser.getUserData();
+      userData?.peso = double.parse(weight);
+      userData?.idade = int.parse(age);
+      userData?.genero = genero;
+      userData?.altura = double.parse(height);
 
-        peso = double.parse(dadosUser!.peso.toString());
-        altura = dadosUser!.altura / 100.0; // Converter altura para metros
+      await SharedUser.saveUserData(userData!);
 
-        final imc = altura != 0 ? peso / (altura * altura) : 0.0;
-
-
-      UserData userData = UserData(
-        idUsuario: dadosUser!.idUsuario, 
-        usuario: dadosUser.usuario,
-        email: dadosUser.email, 
-        genero: genero, 
-        altura: altura, 
-        idade: int.parse(idade),
-        peso: peso, 
-        imc: imc,
-        idPlanoTreino: 0,
-        idPlanoAlimentacao: 0);
-
-      await SharedUser.saveUserData(userData);
-
+      // Verifique a resposta da API e lide com ela conforme necessário.
       if (response.statusCode == 201) {
+        // Dados atualizados com sucesso.
+        print('Dados atualizados com sucesso!');
+
         // ignore: use_build_context_synchronously
         showDialog(
-            context: context,
-            builder: (context) {
-              return AlertDialog(
-               shape: RoundedRectangleBorder(
-                borderRadius:
-                    BorderRadius.circular(30.0)),
-                  titleTextStyle: const TextStyle(fontSize: 25, fontWeight: FontWeight.bold, color: Colors.blue), 
-                title: const Text('Cadastro foi incluído'),
-                content: const Text(
-                    'Cadastro de informações foi realizado com sucesso!', style: TextStyle(fontSize: 20, fontWeight: FontWeight.w200),),
-                actions: <Widget>[
-                  TextButton(
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => FormScreen()),
-                      );
-                    },
-                    child: const Text('Ok'),
-                  ),
-                ],
-              );
-            },
-          );
-      } else {
-        print('Erro ao cadastrar usuário. Código de resposta: ${response.statusCode}');
-        // ignore: use_build_context_synchronously
-        showDialog(
-            context: context,
-            builder: (context) {
-              return AlertDialog(
-               shape: RoundedRectangleBorder(
-                borderRadius:
-                    BorderRadius.circular(30.0)),
-                  titleTextStyle: const TextStyle(fontSize: 25, fontWeight: FontWeight.bold, color: Colors.red), 
-                title: const Text('Erro ao Cadastrar'),
-                content: const Text(
-                    'Ocorre um Erro ao cadastrar usuário.!', style: TextStyle(fontSize: 20, fontWeight: FontWeight.w200),),
-                actions: <Widget>[
-                  TextButton(
-                    onPressed: () {
-                      Navigator.of(context).pop();
-                    },
-                    child: const Text('Ok'),
-                  ),
-                ],
-              );
-            },
-          );
-      }
-    } catch (error) {
-      // Erro de Conexão
-      print('Erro: $error');
-    }
-    }
-    else
-    {
-       // ignore: use_build_context_synchronously
-       showDialog(
             context: context,
             builder: (context) {
               return AlertDialog(
@@ -169,22 +95,28 @@ class _PersonalInfoFormState extends State<PersonalInfoForm> {
                 borderRadius:
                     BorderRadius.circular(30.0)),
                   titleTextStyle: TextStyle(fontSize: 25, fontWeight: FontWeight.bold, color: Colors.blue), 
-                title: const Text('Erro ao Cadastrar'),
+                title: const Text('Dados Foram Atualizados'),
                 content: const Text(
-                    'Você já possui Informações Cadastradas!', style: TextStyle(fontSize: 20, fontWeight: FontWeight.w200),),
+                    'Dados atualizados com sucesso!', style: TextStyle(fontSize: 20, fontWeight: FontWeight.w200),),
                 actions: <Widget>[
                   TextButton(
                     onPressed: () {
                       Navigator.of(context).pop();
                     },
-                    child: const Text('Ok'),
+                    child: Text('Ok'),
                   ),
                 ],
               );
             },
           );
+      } else {
+        // Algo deu errado na solicitação.
+        print('Erro ao atualizar dados: ${response.statusCode}');
+      }
+    } catch (error) {
+      // Erro de conexão ou outro erro.
+      print('Erro: $error');
     }
-    
   }
 
   @override
@@ -254,7 +186,7 @@ class _PersonalInfoFormState extends State<PersonalInfoForm> {
                 const SizedBox(height: 12.0),
                 _buildGenderDropdown(),
                 const SizedBox(height: 24.0),
-                _buildSubmitButton(),
+                _buildAlterButton()
               ],
             ),
           ),
@@ -302,10 +234,10 @@ class _PersonalInfoFormState extends State<PersonalInfoForm> {
     );
   }
 
-  Widget _buildSubmitButton() {
+  Widget _buildAlterButton() {
     return Container(
       width: double.infinity,
-      height: 50.0, // Defina a altura desejada aqui
+      height: 50.0,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(16.0),
         gradient: const LinearGradient(
@@ -315,24 +247,9 @@ class _PersonalInfoFormState extends State<PersonalInfoForm> {
         ),
       ),
       child: ElevatedButton(
-        onPressed: () async {
+        onPressed: () {
           if (_formKey.currentState!.validate()) {
-            final userData = await SharedUser.getUserData();
-            if (userData != null) {
-              idUsuario = userData.idUsuario.toString();
-            }
-
-            final age = int.tryParse(_ageController.text) ?? 0;
-            final weight = double.tryParse(_weightController.text) ?? 0.0;
-            final height = double.tryParse(_heightController.text) ?? 0.0;
-
-            _createUserData(
-              idUsuario: idUsuario,
-              peso: _weightController.text,
-              idade: _ageController.text,
-              genero: _gender,
-              altura: _heightController.text,
-            );
+            _updateUserData(); // Chame a função para atualizar os dados
           }
         },
         style: ElevatedButton.styleFrom(
@@ -347,7 +264,7 @@ class _PersonalInfoFormState extends State<PersonalInfoForm> {
         child: const Padding(
           padding: EdgeInsets.symmetric(vertical: 12.0, horizontal: 24.0),
           child: Text(
-            'Pronto',
+            'Alterar',
             style: TextStyle(
               color: Colors.white,
               fontSize: 18,

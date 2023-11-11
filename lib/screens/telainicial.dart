@@ -20,6 +20,8 @@ import '../service/SharedUser.dart';
 import '../screens/ExerciseList.dart';
 import 'package:windows_notification/windows_notification.dart';
 
+import 'InfoUserAlter.dart';
+
 
 class TelaInicial extends StatefulWidget {
   @override
@@ -280,7 +282,7 @@ class _TelaInicialState extends State<TelaInicial> {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => PersonalInfoForm(),
+                      builder: (context) => PersonalInfoAlterForm(),
                     ),
                   );
                 },
@@ -413,7 +415,7 @@ class _TelaInicialState extends State<TelaInicial> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => PersonalInfoForm(),
+                            builder: (context) => PersonalInfoAlterForm(),
                           ),
                         );
                       },

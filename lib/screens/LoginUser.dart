@@ -4,6 +4,7 @@ import 'package:flutter_login/screens/CadastroUser.dart';
 import 'package:flutter_login/screens/FormTreino.dart';
 import 'package:flutter_login/screens/Telainicial.dart';
 import 'package:flutter_login/settings/theme.dart';
+import 'package:flutter_login/screens/InfoUser.dart';
 import 'package:http/http.dart' as http;
 import '../service/SharedUser.dart';
 
@@ -164,12 +165,11 @@ class _LoginPageState extends State<LoginPage> {
                 await SharedUser.saveUserData(userDataObject);
               }
 
-              if (userDataObject.idPlanoTreino == 0 ||
-                  userDataObject.idPlanoAlimentacao == 0) {
+              if (userDataObject.idPlanoTreino == 0 || userDataObject.idPlanoAlimentacao == 0) {
                 // ignore: use_build_context_synchronously
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => FormScreen()),
+                  MaterialPageRoute(builder: (context) => PersonalInfoForm()),
                 );
                 return; // Navegação já realizada, encerra a função.
               }
@@ -200,7 +200,7 @@ class _LoginPageState extends State<LoginPage> {
           // ignore: use_build_context_synchronously
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => FormScreen()),
+            MaterialPageRoute(builder: (context) => PersonalInfoForm()),
           );
         } else {
           // ignore: use_build_context_synchronously
