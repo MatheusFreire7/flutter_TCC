@@ -9,14 +9,41 @@ class TreinoDetalhes extends StatelessWidget {
   final String intensidade;
   final String repeticoes;
 
-  TreinoDetalhes({
-    required this.nomeExercicio,
-    required this.imageUrl,
-    required this.series,
-    required this.tempo,
-    required this.intensidade,
-    required this.repeticoes
-  });
+  TreinoDetalhes(
+      {required this.nomeExercicio,
+      required this.imageUrl,
+      required this.series,
+      required this.tempo,
+      required this.intensidade,
+      required this.repeticoes});
+
+  int convertToMinutes(String tempo) {
+    try {
+      // Remove " Minutos" da string antes de tentar a conversão
+      String minutesString = tempo.replaceAll(" Minutos", "");
+      return int.parse(minutesString) ~/ 60;
+    } catch (e) {
+      // Trata erros de conversão aqui, se necessário
+      print("Erro ao converter para minutos: $e");
+      return 0; // Retorne 0 ou outro valor padrão em caso de erro
+    }
+  }
+
+  String? convertIntensidade(int intensidade) {
+    if (intensidade == 1) {
+      return "Baixa";
+    }
+
+    if (intensidade == 2) {
+      return "Intermediária";
+    }
+
+    if (intensidade == 3) {
+      return "Alta";
+    }
+
+    return null; // Retorna null quando não houver intensidade
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -39,7 +66,7 @@ class TreinoDetalhes extends StatelessWidget {
                 child: Image.network(
                   imageUrl,
                   errorBuilder: (context, error, stackTrace) {
-                    return Icon(Icons.error, size: 100.0, color: Colors.red); 
+                    return Icon(Icons.error, size: 100.0, color: Colors.red);
                   },
                 ),
               ),
@@ -64,18 +91,21 @@ class TreinoDetalhes extends StatelessWidget {
               ),
               const SizedBox(height: 16.0),
               _buildInfoRow('Séries', series),
-              _buildInfoRow('Repetições', repeticoes),
-              _buildInfoRow('Duração', tempo),
-              _buildInfoRow('Intensidade', intensidade),
-              //Center(child: Text('Intensidade: $intensidade')),
+              _buildInfoRow('Repetições', "${repeticoes} Vezes"),
+              _buildInfoRow(
+                  'Duração',
+                  convertToMinutes(tempo) != 0
+                      ? '${convertToMinutes(tempo)} Minutos'
+                      : null),
+              _buildInfoRow('Intensidade', '${convertIntensidade(int.parse(intensidade))}'),
               const SizedBox(height: 16.0),
               ElevatedButton(
                 onPressed: () {
                   Navigator.pop(context);
                 },
                 style: ElevatedButton.styleFrom(
-                  primary: Colors.blue, 
-                  onPrimary: Colors.white, 
+                  primary: Colors.blue,
+                  onPrimary: Colors.white,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(20.0),
                   ),
@@ -89,16 +119,18 @@ class TreinoDetalhes extends StatelessWidget {
     );
   }
 
-  Widget _buildInfoRow(String label, String value) {
-    if (value != '0') {
+  Widget _buildInfoRow(String label, String? value) {
+    if (value != null &&
+        int.tryParse(value.replaceAll(RegExp(r'[^0-9]'), '')) != 0) {
       return Column(
         children: [
-          Text('$label: $value', style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold)),
+          Text('$label: $value',
+              style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold)),
           const SizedBox(height: 8.0),
         ],
       );
     } else {
-      return SizedBox.shrink(); // Não exibe nada se o valor for '0'
+      return SizedBox.shrink(); // Não exibe nada se o valor for '0' ou nulo
     }
   }
 }

@@ -8,15 +8,6 @@ import '../settings/Theme.dart';
 import 'package:intl/date_symbol_data_local.dart';
 
 class Exercise {
-  final int idExercicio;
-  final String nomeExercicio;
-  final int series;
-  final int repeticoes;
-  final int tempoS;
-  final int intensidade;
-  final String ciclo;
-  final String imageUrl;
-
   Exercise({
     required this.idExercicio,
     required this.nomeExercicio,
@@ -40,6 +31,17 @@ class Exercise {
       imageUrl: json['imageUrl'] ?? '',
     );
   }
+
+  final String ciclo;
+  final int idExercicio;
+  final String imageUrl;
+  final int intensidade;
+  final String nomeExercicio;
+  final int repeticoes;
+  final int series;
+  final int tempoS;
+
+  int get tempoMinutos => tempoS ~/ 60;
 }
 
 class PlanoTreinoPage extends StatefulWidget {
@@ -47,15 +49,26 @@ class PlanoTreinoPage extends StatefulWidget {
   _PlanoTreinoPageState createState() => _PlanoTreinoPageState();
 }
 
+int convertToMinutes(int seconds) {
+  return seconds ~/ 60;
+}
+
+String intensidadeText(int intensidade) {
+  if (intensidade == 1) {
+    return "Baixa";
+  } else if (intensidade == 2) {
+    return "Intermediária";
+  } else if (intensidade == 3) {
+    return "Alta";
+  }
+  return "Desconhecida";
+}
+
 class _PlanoTreinoPageState extends State<PlanoTreinoPage> {
   late List<Exercise> exercises = [];
-  late String selectedDay =
-      capitalize(DateFormat('EEEE', 'pt_BR').format(DateTime.now())); // Inicializa com o dia da semana atual
   late TextEditingController searchController = TextEditingController();
-
-  String capitalize(String text) {
-    return text[0].toUpperCase() + text.substring(1);
-  }
+  late String selectedDay = capitalize(DateFormat('EEEE', 'pt_BR')
+      .format(DateTime.now())); // Inicializa com o dia da semana atual
 
   @override
   void initState() {
@@ -68,15 +81,21 @@ class _PlanoTreinoPageState extends State<PlanoTreinoPage> {
     fetchExercisesForPlano();
   }
 
+  String capitalize(String text) {
+    return text[0].toUpperCase() + text.substring(1);
+  }
+
   Future<void> fetchExercisesForPlano() async {
     final userData = await SharedUser.getUserData();
     if (userData != null) {
       final idPlano = userData.idPlanoTreino;
-      final response = await http.get(Uri.parse('http://localhost:3000/treinoExercicio/get/$idPlano'));
+      final response = await http
+          .get(Uri.parse('http://localhost:3000/treinoExercicio/get/$idPlano'));
 
       if (response.statusCode == 200) {
         final jsonResponse = json.decode(response.body) as List<dynamic>;
-        final exerciseIds = jsonResponse.map((item) => item['idExercicio'] as int).toList();
+        final exerciseIds =
+            jsonResponse.map((item) => item['idExercicio'] as int).toList();
         await fetchExercises(exerciseIds);
       }
     }
@@ -86,7 +105,8 @@ class _PlanoTreinoPageState extends State<PlanoTreinoPage> {
     final List<Exercise> exercises = [];
 
     for (final idExercicio in exerciseIds) {
-      final response = await http.get(Uri.parse('http://localhost:3000/exercicio/get/id/$idExercicio'));
+      final response = await http.get(
+          Uri.parse('http://localhost:3000/exercicio/get/id/$idExercicio'));
 
       if (response.statusCode == 200) {
         final List<dynamic> exerciseJson = json.decode(response.body);
@@ -118,80 +138,6 @@ class _PlanoTreinoPageState extends State<PlanoTreinoPage> {
     setState(() {
       this.exercises = filteredExercises;
     });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      theme: AppTheme.themeData,
-      home: Scaffold(
-        appBar: AppBar(
-          iconTheme: IconThemeData(color: AppTheme.iconColor),
-          backgroundColor: AppTheme.appBarColor,
-          centerTitle: true,
-          leading: IconButton(
-            icon: Icon(Icons.arrow_back),
-            onPressed: () {
-              Navigator.pop(context);
-            },
-          ),
-          title: Text('Plano de Treino'),
-          actions: [
-            IconButton(
-              icon: Icon(Icons.search),
-              onPressed: () {
-                // Adicionar funcionalidade de busca
-                showSearch(
-                  context: context,
-                  delegate: ExerciseSearchDelegate(exercises),
-                );
-              },
-            ),
-          ],
-        ),
-        body: Column(
-          children: [
-            Padding(
-              padding: EdgeInsets.all(16.0),
-              child: Column(
-                children: [
-                  Text(
-                    'Exercícios para $selectedDay',
-                    style: TextStyle(
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.blue,
-                    ),
-                  ),
-                  SizedBox(height: 16),
-                  _buildDaySelector(),
-                ],
-              ),
-            ),
-            Expanded(
-              child: GridView.builder(
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2,
-                ),
-                itemCount: exercises.length,
-                itemBuilder: (BuildContext context, int index) {
-                  final exercise = exercises[index];
-                  return _buildExerciseTile(
-                    exercise.nomeExercicio,
-                    exercise.imageUrl,
-                    exercise.series.toString(),
-                    exercise.tempoS.toString(),
-                    exercise.intensidade.toString(),
-                    exercise.repeticoes.toString(),
-                  );
-                },
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
   }
 
   Widget _buildDaySelector() {
@@ -274,11 +220,95 @@ class _PlanoTreinoPageState extends State<PlanoTreinoPage> {
             if (int.parse(series) > 0)
               Text('Séries: $series', style: TextStyle(fontSize: 12)),
             if (int.parse(tempo) > 0)
-              Text('Tempo: $tempo', style: TextStyle(fontSize: 12)),
+              Text('Tempo: ${convertToMinutes(int.parse(tempo))} Minutos',
+                  style: TextStyle(fontSize: 12)),
             if (int.parse(intensidade) > 0)
-              Text('Intensidade: $intensidade', style: TextStyle(fontSize: 12)),
+              Text('Intensidade: ${intensidadeText(int.parse(intensidade))}',
+                  style: TextStyle(fontSize: 12)),
             if (int.parse(repeticoes) > 0)
               Text('Repetições: $repeticoes', style: TextStyle(fontSize: 12)),
+          ],
+        ),
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      theme: AppTheme.themeData,
+      home: Scaffold(
+        appBar: AppBar(
+          iconTheme: IconThemeData(color: AppTheme.iconColor),
+          backgroundColor: AppTheme.appBarColor,
+          centerTitle: true,
+          leading: IconButton(
+            icon: Icon(Icons.arrow_back),
+            onPressed: () {
+              Navigator.pop(context);
+            },
+          ),
+          title: Text(
+            'Plano de Treino',
+            style: TextStyle(
+              fontSize: 24,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          actions: [
+            IconButton(
+              icon: Icon(Icons.search),
+              onPressed: () {
+                // Adicionar funcionalidade de busca
+                showSearch(
+                  context: context,
+                  delegate: ExerciseSearchDelegate(exercises),
+                );
+              },
+            ),
+          ],
+        ),
+        body: Column(
+          children: [
+            Padding(
+              padding: EdgeInsets.all(16.0),
+              child: Column(
+                children: [
+                  Text(
+                    'Exercícios para $selectedDay',
+                    style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.blue,
+                    ),
+                  ),
+                  SizedBox(height: 16),
+                  _buildDaySelector(),
+                ],
+              ),
+            ),
+            Expanded(
+              child: GridView.builder(
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 2,
+                  crossAxisSpacing: 8,
+                  mainAxisSpacing: 8,
+                ),
+                itemCount: exercises.length,
+                itemBuilder: (BuildContext context, int index) {
+                  final exercise = exercises[index];
+                  return _buildExerciseTile(
+                    exercise.nomeExercicio,
+                    exercise.imageUrl,
+                    exercise.series.toString(),
+                    exercise.tempoS.toString(),
+                    exercise.intensidade.toString(),
+                    exercise.repeticoes.toString(),
+                  );
+                },
+              ),
+            ),
           ],
         ),
       ),
@@ -287,9 +317,9 @@ class _PlanoTreinoPageState extends State<PlanoTreinoPage> {
 }
 
 class ExerciseSearchDelegate extends SearchDelegate<Exercise> {
-  final List<Exercise> exercises;
-
   ExerciseSearchDelegate(this.exercises);
+
+  final List<Exercise> exercises;
 
   @override
   List<Widget> buildActions(BuildContext context) {
@@ -309,16 +339,18 @@ class ExerciseSearchDelegate extends SearchDelegate<Exercise> {
       icon: Icon(Icons.arrow_back),
       onPressed: () {
         // Corrigir para fechar a tela de pesquisa sem retornar um resultado
-        close(context, Exercise(
-          idExercicio: 0,
-          nomeExercicio: '',
-          series: 0,
-          repeticoes: 0,
-          tempoS: 0,
-          intensidade: 0,
-          ciclo: '',
-          imageUrl: '',
-        ));
+        close(
+            context,
+            Exercise(
+              idExercicio: 0,
+              nomeExercicio: '',
+              series: 0,
+              repeticoes: 0,
+              tempoS: 0,
+              intensidade: 0,
+              ciclo: '',
+              imageUrl: '',
+            ));
       },
     );
   }
