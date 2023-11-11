@@ -17,17 +17,20 @@ class TreinoDetalhes extends StatelessWidget {
       required this.intensidade,
       required this.repeticoes});
 
-  int convertToMinutes(String tempo) {
-    try {
-      // Remove " Minutos" da string antes de tentar a conversão
-      String minutesString = tempo.replaceAll(" Minutos", "");
-      return int.parse(minutesString) ~/ 60;
-    } catch (e) {
-      // Trata erros de conversão aqui, se necessário
-      print("Erro ao converter para minutos: $e");
-      return 0; // Retorne 0 ou outro valor padrão em caso de erro
+  String convertToMinutes(int seconds) {
+    if (seconds >= 60) {
+      int minutes = seconds ~/ 60;
+      int remainingSeconds = seconds % 60;
+      if (remainingSeconds > 0) {
+        return '$minutes Minutos e $remainingSeconds Segundos';
+      } else {
+        return '$minutes Minutos';
+      }
+    } else {
+      return '$seconds Segundos';
     }
   }
+
 
   String? convertIntensidade(int intensidade) {
     if (intensidade == 1) {
@@ -94,8 +97,8 @@ class TreinoDetalhes extends StatelessWidget {
               _buildInfoRow('Repetições', "${repeticoes} Vezes"),
               _buildInfoRow(
                   'Duração',
-                  convertToMinutes(tempo) != 0
-                      ? '${convertToMinutes(tempo)} Minutos'
+                  convertToMinutes(int.parse(tempo)) != 0
+                      ? '${convertToMinutes(int.parse(tempo))}'
                       : null),
               _buildInfoRow('Intensidade', '${convertIntensidade(int.parse(intensidade))}'),
               const SizedBox(height: 16.0),

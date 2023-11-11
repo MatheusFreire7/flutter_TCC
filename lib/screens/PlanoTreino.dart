@@ -7,6 +7,8 @@ import '../widgets/TreinoDetalhes.dart';
 import '../settings/Theme.dart';
 import 'package:intl/date_symbol_data_local.dart';
 
+enum IntensidadeFiltro { Baixa, Intermediaria, Alta }
+
 class Exercise {
   Exercise({
     required this.idExercicio,
@@ -41,6 +43,19 @@ class Exercise {
   final int series;
   final int tempoS;
 
+  IntensidadeFiltro get intensidadeFiltro {
+    switch (intensidade) {
+      case 1:
+        return IntensidadeFiltro.Baixa;
+      case 2:
+        return IntensidadeFiltro.Intermediaria;
+      case 3:
+        return IntensidadeFiltro.Alta;
+      default:
+        return IntensidadeFiltro.Baixa; // ou outro valor padrão
+    }
+  }
+
   int get tempoMinutos => tempoS ~/ 60;
 }
 
@@ -49,8 +64,18 @@ class PlanoTreinoPage extends StatefulWidget {
   _PlanoTreinoPageState createState() => _PlanoTreinoPageState();
 }
 
-int convertToMinutes(int seconds) {
-  return seconds ~/ 60;
+String convertToMinutes(int seconds) {
+  if (seconds >= 60) {
+    int minutes = seconds ~/ 60;
+    int remainingSeconds = seconds % 60;
+    if (remainingSeconds > 0) {
+      return '$minutes Minutos e $remainingSeconds Segundos';
+    } else {
+      return '$minutes Minutos';
+    }
+  } else {
+    return '$seconds Segundos';
+  }
 }
 
 String intensidadeText(int intensidade) {
@@ -69,6 +94,7 @@ class _PlanoTreinoPageState extends State<PlanoTreinoPage> {
   late TextEditingController searchController = TextEditingController();
   late String selectedDay = capitalize(DateFormat('EEEE', 'pt_BR')
       .format(DateTime.now())); // Inicializa com o dia da semana atual
+  IntensidadeFiltro? selectedIntensidadeFiltro;
 
   @override
   void initState() {
@@ -124,12 +150,24 @@ class _PlanoTreinoPageState extends State<PlanoTreinoPage> {
           (selectedDay == 'Segunda-feira' ||
               selectedDay == 'Terça-feira' ||
               selectedDay == 'Quarta-feira')) {
+        if (selectedIntensidadeFiltro != null &&
+            exercise.intensidadeFiltro != selectedIntensidadeFiltro) {
+          return false; // Filtrar por intensidade
+        }
         return true;
       } else if (exercise.ciclo == 'B' &&
           (selectedDay == 'Quinta-feira' || selectedDay == 'Sexta-feira')) {
+        if (selectedIntensidadeFiltro != null &&
+            exercise.intensidadeFiltro != selectedIntensidadeFiltro) {
+          return false; // Filtrar por intensidade
+        }
         return true;
       } else if (exercise.ciclo == 'C' &&
           (selectedDay == 'Sábado' || selectedDay == 'Domingo')) {
+        if (selectedIntensidadeFiltro != null &&
+            exercise.intensidadeFiltro != selectedIntensidadeFiltro) {
+          return false; // Filtrar por intensidade
+        }
         return true;
       }
       return false;
@@ -179,6 +217,47 @@ class _PlanoTreinoPageState extends State<PlanoTreinoPage> {
     );
   }
 
+  Widget _buildIntensidadeFilter() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          'Filtrar por Intensidade:',
+          style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+        ),
+        SizedBox(height: 8),
+        Container(
+          decoration: BoxDecoration(
+            border: Border.all(color: Colors.grey),
+            borderRadius: BorderRadius.circular(8.0),
+          ),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 8.0),
+            child: DropdownButton<IntensidadeFiltro>(
+              value: selectedIntensidadeFiltro,
+              items: IntensidadeFiltro.values.map((IntensidadeFiltro value) {
+                return DropdownMenuItem<IntensidadeFiltro>(
+                  value: value,
+                  child: Text(value.toString().split('.').last),
+                );
+              }).toList(),
+              onChanged: (IntensidadeFiltro? newValue) {
+                setState(() {
+                  selectedIntensidadeFiltro = newValue;
+                  fetchExercisesForPlano();
+                });
+              },
+              underline: Container(),
+              isExpanded: true,
+              icon: Icon(Icons.arrow_drop_down),
+              iconSize: 24,
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
   Widget _buildExerciseTile(String nomeExercicio, String imageUrl,
       String series, String tempo, String intensidade, String repeticoes) {
     return Card(
@@ -220,7 +299,7 @@ class _PlanoTreinoPageState extends State<PlanoTreinoPage> {
             if (int.parse(series) > 0)
               Text('Séries: $series', style: TextStyle(fontSize: 12)),
             if (int.parse(tempo) > 0)
-              Text('Tempo: ${convertToMinutes(int.parse(tempo))} Minutos',
+              Text('Tempo: ${convertToMinutes(int.parse(tempo))}',
                   style: TextStyle(fontSize: 12)),
             if (int.parse(intensidade) > 0)
               Text('Intensidade: ${intensidadeText(int.parse(intensidade))}',
@@ -285,6 +364,8 @@ class _PlanoTreinoPageState extends State<PlanoTreinoPage> {
                   ),
                   SizedBox(height: 16),
                   _buildDaySelector(),
+                  SizedBox(height: 16),
+                  _buildIntensidadeFilter(),
                 ],
               ),
             ),
@@ -340,17 +421,18 @@ class ExerciseSearchDelegate extends SearchDelegate<Exercise> {
       onPressed: () {
         // Corrigir para fechar a tela de pesquisa sem retornar um resultado
         close(
-            context,
-            Exercise(
-              idExercicio: 0,
-              nomeExercicio: '',
-              series: 0,
-              repeticoes: 0,
-              tempoS: 0,
-              intensidade: 0,
-              ciclo: '',
-              imageUrl: '',
-            ));
+          context,
+          Exercise(
+            idExercicio: 0,
+            nomeExercicio: '',
+            series: 0,
+            repeticoes: 0,
+            tempoS: 0,
+            intensidade: 0,
+            ciclo: '',
+            imageUrl: '',
+          ),
+        );
       },
     );
   }
