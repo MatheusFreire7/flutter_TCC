@@ -49,11 +49,27 @@ class ExerciseList extends StatefulWidget {
   _ExerciseListState createState() => _ExerciseListState();
 }
 
+  String getIntensityLabel(String intensidade) {
+    switch (intensidade) {
+      case '1':
+        return 'Baixa';
+      case '2':
+        return 'Intermediária';
+      case '3':
+        return 'Alta';
+      default:
+        return '';
+    }
+  }
+
 class _ExerciseListState extends State<ExerciseList> {
   late List<Exercise> exercises = [];
+  bool isAscending = true;
+  String selectedAttribute = 'nomeExercicio';
 
   Future<List<Exercise>?> fetchExercises() async {
-    final response = await http.get(Uri.parse('http://localhost:3000/exercicio/get'));
+    final response =
+        await http.get(Uri.parse('http://localhost:3000/exercicio/get'));
     if (response.statusCode == 200) {
       final jsonResponse = json.decode(response.body);
       if (jsonResponse is List) {
@@ -72,7 +88,6 @@ class _ExerciseListState extends State<ExerciseList> {
     }
   }
 
-
   @override
   void initState() {
     super.initState();
@@ -85,98 +100,214 @@ class _ExerciseListState extends State<ExerciseList> {
     });
   }
 
-  
-@override
-Widget build(BuildContext context) {
-  return MaterialApp(
-    debugShowCheckedModeBanner: false,
-    theme: AppTheme.themeData,
-    home: Scaffold(
-      appBar: AppBar(
-        iconTheme: IconThemeData(color: AppTheme.iconColor),
-        backgroundColor: AppTheme.appBarColor,
-        centerTitle: true,
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back),
-          onPressed: () {
-            Navigator.pop(context);
+
+  void toggleSortOrder() {
+    setState(() {
+      isAscending = !isAscending;
+    });
+  }
+
+void updateSelectedAttribute(String? attribute) {
+  if (attribute != null) {
+    setState(() {
+      selectedAttribute = attribute;
+    });
+  }
+}
+
+  List<Exercise> getSortedExercises() {
+    exercises.sort((a, b) {
+      var aValue, bValue;
+
+      switch (selectedAttribute) {
+        case 'series':
+          aValue = a.series;
+          bValue = b.series;
+          break;
+        case 'repeticoes':
+          aValue = a.repeticoes;
+          bValue = b.repeticoes;
+          break;
+        case 'tempoS':
+          aValue = a.tempoS;
+          bValue = b.tempoS;
+          break;
+        case 'intensidade':
+          aValue = a.intensidade;
+          bValue = b.intensidade;
+          break;
+        default:
+          // Default to sorting by 'nomeExercicio'
+          aValue = a.nomeExercicio;
+          bValue = b.nomeExercicio;
+      }
+
+      return isAscending
+          ? Comparable.compare(aValue, bValue)
+          : Comparable.compare(bValue, aValue);
+    });
+
+    return exercises;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      theme: AppTheme.themeData,
+      home: Scaffold(
+        appBar: AppBar(
+          iconTheme: IconThemeData(color: AppTheme.iconColor),
+          backgroundColor: AppTheme.appBarColor,
+          centerTitle: true,
+          leading: IconButton(
+            icon: Icon(Icons.arrow_back),
+            onPressed: () {
+              Navigator.pop(context);
+            },
+          ),
+          actions: [
+            IconButton(
+              icon: Icon(isAscending ? Icons.arrow_upward : Icons.arrow_downward),
+              onPressed: toggleSortOrder,
+            ),
+           DropdownButton<String>(
+            value: selectedAttribute,
+            items: [
+              DropdownMenuItem(
+                child: Row(
+                  children: [
+                    Icon(Icons.title, color: Colors.blue), // Exemplo de ícone
+                    SizedBox(width: 8),
+                    Text('Nome do Exercício', style: TextStyle(fontWeight: FontWeight.bold)),
+                  ],
+                ),
+                value: 'nomeExercicio',
+              ),
+              DropdownMenuItem(
+                child: Row(
+                  children: [
+                    Icon(Icons.format_list_numbered, color: Colors.blue), // Exemplo de ícone
+                    SizedBox(width: 8),
+                    Text('Séries', style: TextStyle(fontWeight: FontWeight.bold)),
+                  ],
+                ),
+                value: 'series',
+              ),
+              DropdownMenuItem(
+                child: Row(
+                  children: [
+                    Icon(Icons.repeat, color: Colors.blue), // Exemplo de ícone
+                    SizedBox(width: 8),
+                    Text('Repetições', style: TextStyle(fontWeight: FontWeight.bold)),
+                  ],
+                ),
+                value: 'repeticoes',
+              ),
+              DropdownMenuItem(
+                child: Row(
+                  children: [
+                    Icon(Icons.timer, color: Colors.blue), // Exemplo de ícone
+                    SizedBox(width: 8),
+                    Text('Duração', style: TextStyle(fontWeight: FontWeight.bold)),
+                  ],
+                ),
+                value: 'tempoS',
+              ),
+              DropdownMenuItem(
+                child: Row(
+                  children: [
+                    Icon(Icons.timeline, color: Colors.blue), // Exemplo de ícone
+                    SizedBox(width: 8),
+                    Text('Intensidade', style: TextStyle(fontWeight: FontWeight.bold)),
+                  ],
+                ),
+                value: 'intensidade',
+              ),
+            ],
+            onChanged: updateSelectedAttribute,
+            style: TextStyle(color: Colors.black), // Cor do texto selecionado
+            icon: Icon(Icons.arrow_drop_down, color: Colors.blue), // Ícone de dropdown
+            elevation: 2, // Elevação para adicionar sombra
+          ),
+          ],
+        ),
+        body: ListView.builder(
+          itemCount: exercises.length,
+          itemBuilder: (BuildContext context, int index) {
+            final sortedExercises = getSortedExercises();
+
+            return Card(
+              elevation: 2.0,
+              margin: const EdgeInsets.all(16.0),
+              child: InkWell(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => TreinoDetalhes(
+                        nomeExercicio: sortedExercises[index].nomeExercicio.toString(),
+                        imageUrl: sortedExercises[index].imageUrl,
+                        series: sortedExercises[index].series.toString(),
+                        repeticoes: sortedExercises[index].repeticoes.toString(),
+                        tempo: sortedExercises[index].tempoS.toString(),
+                        intensidade: sortedExercises[index].intensidade.toString(),
+                      ),
+                    ),
+                  );
+                },
+                child: Row(
+                  children: [
+                    Container(
+                      height: 100,
+                      width: 100,
+                      child: Image.network(
+                        sortedExercises[index].imageUrl,
+                        fit: BoxFit.cover,
+                        errorBuilder: (context, error, stackTrace) {
+                          return Icon(Icons.error, color: Colors.red);
+                        },
+                      ),
+                    ),
+                    SizedBox(width: 10),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            sortedExercises[index].nomeExercicio,
+                            style: TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          SizedBox(height: 5),
+                          if (sortedExercises[index].series > 0) Text(
+                            'Séries: ${sortedExercises[index].series}',
+                            style: TextStyle(color: Colors.grey),
+                          ),
+                          if (sortedExercises[index].repeticoes > 0) Text(
+                            'Repetições: ${sortedExercises[index].repeticoes}',
+                            style: TextStyle(color: Colors.grey),
+                          ),
+                          if (sortedExercises[index].tempoS > 0) Text(
+                            'Duração: ${sortedExercises[index].tempoS}',
+                            style: TextStyle(color: Colors.grey),
+                          ),
+                          Text(
+                            'Intensidade: ${getIntensityLabel(sortedExercises[index].intensidade.toString())}',
+                            style: TextStyle(color: Colors.grey),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            );
           },
         ),
       ),
-      body: ListView.builder(
-        itemCount: exercises.length,
-        itemBuilder: (BuildContext context, int index) {
-          return Card(
-            elevation: 2.0,
-            margin: const EdgeInsets.all(16.0),
-            child: InkWell(
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => TreinoDetalhes(
-                      nomeExercicio:exercises[index].nomeExercicio.toString(),
-                      imageUrl: exercises[index].imageUrl,
-                      series: exercises[index].series.toString(),
-                      repeticoes: exercises[index].repeticoes.toString(),
-                      tempo: exercises[index].tempoS.toString(),
-                      intensidade: exercises[index].intensidade.toString(),
-                    ),
-                  ),
-                );
-              },
-              child: Row(
-                children: [
-                  Container(
-                    height: 100,
-                    width: 100,
-                    child: Image.network(
-                    exercises[index].imageUrl,
-                    fit: BoxFit.cover,
-                    errorBuilder: (context, error, stackTrace) {
-                      return Icon(Icons.error, color: Colors.red); 
-                    },
-                  )
-                  ),
-                  SizedBox(width: 10),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          exercises[index].nomeExercicio,
-                          style: TextStyle(
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        SizedBox(height: 5),
-                        if (exercises[index].series > 0) Text(
-                          'Séries: ${exercises[index].series}',
-                          style: TextStyle(color: Colors.grey),
-                        ),
-                        if (exercises[index].repeticoes > 0) Text(
-                          'Repetições: ${exercises[index].repeticoes}',
-                          style: TextStyle(color: Colors.grey),
-                        ),
-                        if (exercises[index].tempoS > 0) Text(
-                          'Duração: ${exercises[index].tempoS}',
-                          style: TextStyle(color: Colors.grey),
-                        ),
-                        Text(
-                          'Intensidade: ${exercises[index].intensidade}',
-                          style: TextStyle(color: Colors.grey),
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          );
-        },
-      ),
-    ),
-  );
-}
+    );
+  }
 }
