@@ -84,7 +84,24 @@ class AlimentoDetalhes extends StatelessWidget {
                 onPressed: () {
                   Navigator.pop(context);
                 },
-                child: const Text('Voltar'),
+                style: ElevatedButton.styleFrom(
+                  primary: Colors.blue, // Cor de fundo
+                  onPrimary: Colors.white, // Cor do texto
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10.0), // Borda arredondada
+                  ),
+                  elevation: 3.0, // Elevação
+                ),
+                child: const Padding(
+                  padding: EdgeInsets.all(12.0),
+                  child: Text(
+                    'Voltar',
+                    style: TextStyle(
+                      fontSize: 18.0,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
               ),
             ),
           ],

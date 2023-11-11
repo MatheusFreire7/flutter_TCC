@@ -4,7 +4,7 @@ import 'dart:convert';
 import 'package:intl/intl.dart';
 import '../service/sharedUser.dart';
 import '../widgets/TreinoDetalhes.dart';
-import '../settings/Theme.dart';
+import 'package:flutter_login/settings/theme.dart';
 import 'package:intl/date_symbol_data_local.dart';
 
 enum IntensidadeFiltro { Baixa, Intermediaria, Alta }

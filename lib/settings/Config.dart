@@ -41,8 +41,7 @@ class _ConfiguracoesPageState extends State<ConfiguracoesPage> {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'Minha Aplicação',
-      theme: _themeData, // Define o tema atual da aplicação
+      theme: _themeData,
       home: Scaffold(
         appBar: AppBar(
           iconTheme: IconThemeData(
@@ -107,71 +106,6 @@ class _ConfiguracoesPageState extends State<ConfiguracoesPage> {
                     child: Text(value),
                   );
                 }).toList(),
-              ),
-            ),
-            ListTile(
-              leading: const Icon(Icons.settings),
-              title: const Text('Unidade de Medida de Peso'),
-              trailing: DropdownButton<String>(
-                value: AppConfig.unidadeMedida,
-                onChanged: (value) {
-                  setState(() {
-                    AppConfig.unidadeMedida = value!;
-                  });
-                },
-                items: <String>['kg', 'lb']
-                    .map<DropdownMenuItem<String>>((String value) {
-                  return DropdownMenuItem<String>(
-                    value: value,
-                    child: Text(value),
-                  );
-                }).toList(),
-              ),
-            ),
-            ListTile(
-              leading: const Icon(Icons.flag),
-              title: const Text('Metas Diárias de Km Percorrido'),
-              subtitle: Text('${AppConfig.metaDiaria} km'),
-              trailing: IconButton(
-                icon: const Icon(Icons.edit),
-                onPressed: () {
-                  showDialog(
-                    context: context,
-                    builder: (BuildContext context) {
-                      double metaNova = AppConfig
-                          .metaDiaria; // Armazene o valor atualizado temporariamente
-                      return AlertDialog(
-                        title:
-                            const Text('Definir Meta Diária de Km percorridos'),
-                        content: TextField(
-                          keyboardType: TextInputType.number,
-                          onChanged: (value) {
-                            metaNova = double.tryParse(value) ??
-                                0.0; // Atualize o valor temporário
-                          },
-                        ),
-                        actions: <Widget>[
-                          TextButton(
-                            child: const Text('Cancelar'),
-                            onPressed: () {
-                              Navigator.of(context).pop();
-                            },
-                          ),
-                          TextButton(
-                            child: const Text('Salvar'),
-                            onPressed: () {
-                              setState(() {
-                                AppConfig.metaDiaria =
-                                    metaNova; // Atualize o valor na classe AppConfig
-                              });
-                              Navigator.of(context).pop();
-                            },
-                          ),
-                        ],
-                      );
-                    },
-                  );
-                },
               ),
             ),
             ListTile(

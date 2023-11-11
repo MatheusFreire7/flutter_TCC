@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import '../widgets/TreinoDetalhes.dart';
-import '../settings/Theme.dart';
+import 'package:flutter_login/settings/theme.dart';
 
 class Exercise {
   final int idExercicio;
@@ -49,18 +49,18 @@ class ExerciseList extends StatefulWidget {
   _ExerciseListState createState() => _ExerciseListState();
 }
 
-  String getIntensityLabel(String intensidade) {
-    switch (intensidade) {
-      case '1':
-        return 'Baixa';
-      case '2':
-        return 'Intermediária';
-      case '3':
-        return 'Alta';
-      default:
-        return '';
-    }
+String getIntensityLabel(String intensidade) {
+  switch (intensidade) {
+    case '1':
+      return 'Baixa';
+    case '2':
+      return 'Intermediária';
+    case '3':
+      return 'Alta';
+    default:
+      return '';
   }
+}
 
 class _ExerciseListState extends State<ExerciseList> {
   late List<Exercise> exercises = [];
@@ -100,20 +100,19 @@ class _ExerciseListState extends State<ExerciseList> {
     });
   }
 
-
   void toggleSortOrder() {
     setState(() {
       isAscending = !isAscending;
     });
   }
 
-void updateSelectedAttribute(String? attribute) {
-  if (attribute != null) {
-    setState(() {
-      selectedAttribute = attribute;
-    });
+  void updateSelectedAttribute(String? attribute) {
+    if (attribute != null) {
+      setState(() {
+        selectedAttribute = attribute;
+      });
+    }
   }
-}
 
   List<Exercise> getSortedExercises() {
     exercises.sort((a, b) {
@@ -151,10 +150,9 @@ void updateSelectedAttribute(String? attribute) {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      theme: AppTheme.themeData,
-      home: Scaffold(
+    return Theme(
+      data: AppTheme.themeData,
+      child: Scaffold(
         appBar: AppBar(
           iconTheme: IconThemeData(color: AppTheme.iconColor),
           backgroundColor: AppTheme.appBarColor,
@@ -167,68 +165,74 @@ void updateSelectedAttribute(String? attribute) {
           ),
           actions: [
             IconButton(
-              icon: Icon(isAscending ? Icons.arrow_upward : Icons.arrow_downward),
+              icon:
+                  Icon(isAscending ? Icons.arrow_upward : Icons.arrow_downward),
               onPressed: toggleSortOrder,
             ),
-           DropdownButton<String>(
-            value: selectedAttribute,
-            items: [
-              DropdownMenuItem(
-                child: Row(
-                  children: [
-                    Icon(Icons.title, color: Colors.blue), // Exemplo de ícone
-                    SizedBox(width: 8),
-                    Text('Nome do Exercício', style: TextStyle(fontWeight: FontWeight.bold)),
-                  ],
+            DropdownButton<String>(
+              value: selectedAttribute,
+              items: [
+                DropdownMenuItem(
+                  child: Row(
+                    children: [
+                      Icon(Icons.title, color: Colors.blue),
+                      SizedBox(width: 8),
+                      Text('Nome do Exercício',
+                          style: TextStyle(fontWeight: FontWeight.bold)),
+                    ],
+                  ),
+                  value: 'nomeExercicio',
                 ),
-                value: 'nomeExercicio',
-              ),
-              DropdownMenuItem(
-                child: Row(
-                  children: [
-                    Icon(Icons.format_list_numbered, color: Colors.blue), // Exemplo de ícone
-                    SizedBox(width: 8),
-                    Text('Séries', style: TextStyle(fontWeight: FontWeight.bold)),
-                  ],
+                DropdownMenuItem(
+                  child: Row(
+                    children: [
+                      Icon(Icons.format_list_numbered, color: Colors.blue),
+                      SizedBox(width: 8),
+                      Text('Séries',
+                          style: TextStyle(fontWeight: FontWeight.bold)),
+                    ],
+                  ),
+                  value: 'series',
                 ),
-                value: 'series',
-              ),
-              DropdownMenuItem(
-                child: Row(
-                  children: [
-                    Icon(Icons.repeat, color: Colors.blue), // Exemplo de ícone
-                    SizedBox(width: 8),
-                    Text('Repetições', style: TextStyle(fontWeight: FontWeight.bold)),
-                  ],
+                DropdownMenuItem(
+                  child: Row(
+                    children: [
+                      Icon(Icons.repeat, color: Colors.blue),
+                      SizedBox(width: 8),
+                      Text('Repetições',
+                          style: TextStyle(fontWeight: FontWeight.bold)),
+                    ],
+                  ),
+                  value: 'repeticoes',
                 ),
-                value: 'repeticoes',
-              ),
-              DropdownMenuItem(
-                child: Row(
-                  children: [
-                    Icon(Icons.timer, color: Colors.blue), // Exemplo de ícone
-                    SizedBox(width: 8),
-                    Text('Duração', style: TextStyle(fontWeight: FontWeight.bold)),
-                  ],
+                DropdownMenuItem(
+                  child: Row(
+                    children: [
+                      Icon(Icons.timer, color: Colors.blue),
+                      SizedBox(width: 8),
+                      Text('Duração',
+                          style: TextStyle(fontWeight: FontWeight.bold)),
+                    ],
+                  ),
+                  value: 'tempoS',
                 ),
-                value: 'tempoS',
-              ),
-              DropdownMenuItem(
-                child: Row(
-                  children: [
-                    Icon(Icons.timeline, color: Colors.blue), // Exemplo de ícone
-                    SizedBox(width: 8),
-                    Text('Intensidade', style: TextStyle(fontWeight: FontWeight.bold)),
-                  ],
+                DropdownMenuItem(
+                  child: Row(
+                    children: [
+                      Icon(Icons.timeline, color: Colors.blue),
+                      SizedBox(width: 8),
+                      Text('Intensidade',
+                          style: TextStyle(fontWeight: FontWeight.bold)),
+                    ],
+                  ),
+                  value: 'intensidade',
                 ),
-                value: 'intensidade',
-              ),
-            ],
-            onChanged: updateSelectedAttribute,
-            style: TextStyle(color: Colors.black), // Cor do texto selecionado
-            icon: Icon(Icons.arrow_drop_down, color: Colors.blue), // Ícone de dropdown
-            elevation: 2, // Elevação para adicionar sombra
-          ),
+              ],
+              onChanged: updateSelectedAttribute,
+              style: TextStyle(color: Colors.black),
+              icon: Icon(Icons.arrow_drop_down, color: Colors.blue),
+              elevation: 2,
+            ),
           ],
         ),
         body: ListView.builder(
@@ -245,12 +249,15 @@ void updateSelectedAttribute(String? attribute) {
                     context,
                     MaterialPageRoute(
                       builder: (context) => TreinoDetalhes(
-                        nomeExercicio: sortedExercises[index].nomeExercicio.toString(),
+                        nomeExercicio:
+                            sortedExercises[index].nomeExercicio.toString(),
                         imageUrl: sortedExercises[index].imageUrl,
                         series: sortedExercises[index].series.toString(),
-                        repeticoes: sortedExercises[index].repeticoes.toString(),
+                        repeticoes:
+                            sortedExercises[index].repeticoes.toString(),
                         tempo: sortedExercises[index].tempoS.toString(),
-                        intensidade: sortedExercises[index].intensidade.toString(),
+                        intensidade:
+                            sortedExercises[index].intensidade.toString(),
                       ),
                     ),
                   );
@@ -281,18 +288,21 @@ void updateSelectedAttribute(String? attribute) {
                             ),
                           ),
                           SizedBox(height: 5),
-                          if (sortedExercises[index].series > 0) Text(
-                            'Séries: ${sortedExercises[index].series}',
-                            style: TextStyle(color: Colors.grey),
-                          ),
-                          if (sortedExercises[index].repeticoes > 0) Text(
-                            'Repetições: ${sortedExercises[index].repeticoes}',
-                            style: TextStyle(color: Colors.grey),
-                          ),
-                          if (sortedExercises[index].tempoS > 0) Text(
-                            'Duração: ${sortedExercises[index].tempoS}',
-                            style: TextStyle(color: Colors.grey),
-                          ),
+                          if (sortedExercises[index].series > 0)
+                            Text(
+                              'Séries: ${sortedExercises[index].series}',
+                              style: TextStyle(color: Colors.grey),
+                            ),
+                          if (sortedExercises[index].repeticoes > 0)
+                            Text(
+                              'Repetições: ${sortedExercises[index].repeticoes}',
+                              style: TextStyle(color: Colors.grey),
+                            ),
+                          if (sortedExercises[index].tempoS > 0)
+                            Text(
+                              'Duração: ${sortedExercises[index].tempoS}',
+                              style: TextStyle(color: Colors.grey),
+                            ),
                           Text(
                             'Intensidade: ${getIntensityLabel(sortedExercises[index].intensidade.toString())}',
                             style: TextStyle(color: Colors.grey),

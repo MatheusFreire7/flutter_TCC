@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../settings/theme.dart';
+import 'package:flutter_login/settings/theme.dart';
 
 class TreinoDetalhes extends StatelessWidget {
   final String nomeExercicio;
@@ -49,10 +49,13 @@ class TreinoDetalhes extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
+       theme: AppTheme.themeData,
       home: Scaffold(
         appBar: AppBar(
           title: Text('Detalhes do: ${nomeExercicio}'), 
           centerTitle: true,
+          iconTheme: IconThemeData(color: AppTheme.iconColor),
+          backgroundColor: AppTheme.appBarColor,
         ),
         body: SingleChildScrollView(
           padding: const EdgeInsets.all(16.0),
