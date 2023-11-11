@@ -7,6 +7,7 @@ class AlimentoDetalhes extends StatelessWidget {
   final String gordura;
   final String proteina;
   final String calorias;
+  final String imageUrl;
 
   AlimentoDetalhes({
     required this.nome,
@@ -14,6 +15,7 @@ class AlimentoDetalhes extends StatelessWidget {
     required this.gordura,
     required this.proteina,
     required this.calorias,
+    required this.imageUrl,
   });
 
   @override
@@ -24,7 +26,8 @@ class AlimentoDetalhes extends StatelessWidget {
       home: Scaffold(
         appBar: AppBar(
           iconTheme: IconThemeData(
-          color: AppTheme.iconColor),
+            color: AppTheme.iconColor,
+          ),
           backgroundColor: AppTheme.appBarColor,
           centerTitle: true,
           leading: IconButton(
@@ -35,28 +38,36 @@ class AlimentoDetalhes extends StatelessWidget {
           ),
         ),
         body: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            Expanded(
-              child: SingleChildScrollView(
-                child: Column(
-                  children: [
-                    Text(carboidrato),
-                    const SizedBox(height: 16.0),
-                    Text(
-                      nome,
-                      style: const TextStyle(
-                        fontSize: 20.0,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    const SizedBox(height: 8.0),
-                    Text(gordura),
-                    const SizedBox(height: 8.0),
-                    Text(proteina),
-                    const SizedBox(height: 8.0),
-                    Text(calorias),
-                  ],
+            // Imagem do alimento com tamanho grande
+            Container(
+              height: 300, // Ajuste a altura conforme necessário
+              decoration: BoxDecoration(
+                image: DecorationImage(
+                  image: NetworkImage(imageUrl),
+                  fit: BoxFit.cover,
                 ),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    nome,
+                    style: const TextStyle(
+                      fontSize: 24.0,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  const SizedBox(height: 16.0),
+                  TabelaInformacoes(
+                    labels: ['Carboidrato (g)', 'Gordura (g)', 'Proteína (g)', 'Calorias (kcal)'],
+                    valores: [carboidrato, gordura, proteina, calorias],
+                  ),
+                ],
               ),
             ),
             Padding(
@@ -66,6 +77,54 @@ class AlimentoDetalhes extends StatelessWidget {
                   Navigator.pop(context);
                 },
                 child: const Text('Voltar'),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class TabelaInformacoes extends StatelessWidget {
+  final List<String> labels;
+  final List<String> valores;
+
+  TabelaInformacoes({
+    required this.labels,
+    required this.valores,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Table(
+      border: TableBorder.all(color: Colors.transparent),
+      defaultVerticalAlignment: TableCellVerticalAlignment.middle,
+      children: List.generate(
+        labels.length,
+        (index) => TableRow(
+          children: [
+            TableCell(
+              child: Container(
+                padding: EdgeInsets.all(8.0),
+                color: index % 2 == 0 ? Colors.indigo[100] : Colors.indigo[50],
+                child: Text(
+                  labels[index],
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    color: Colors.indigo[700],
+                  ),
+                ),
+              ),
+            ),
+            TableCell(
+              child: Container(
+                padding: EdgeInsets.all(8.0),
+                color: index % 2 == 0 ? Colors.indigo[100] : Colors.indigo[50],
+                child: Text(
+                  valores[index],
+                  style: TextStyle(color: Colors.black87),
+                ),
               ),
             ),
           ],

@@ -9,13 +9,14 @@ class TreinoDetalhes extends StatelessWidget {
   final String intensidade;
   final String repeticoes;
 
-  TreinoDetalhes(
-      {required this.nomeExercicio,
-      required this.imageUrl,
-      required this.series,
-      required this.tempo,
-      required this.intensidade,
-      required this.repeticoes});
+  TreinoDetalhes({
+    required this.nomeExercicio,
+    required this.imageUrl,
+    required this.series,
+    required this.tempo,
+    required this.intensidade,
+    required this.repeticoes,
+  });
 
   String convertToMinutes(int seconds) {
     if (seconds >= 60) {
@@ -31,33 +32,26 @@ class TreinoDetalhes extends StatelessWidget {
     }
   }
 
-
-  String? convertIntensidade(int intensidade) {
-    if (intensidade == 1) {
-      return "Baixa";
+  String getIntensityLabel(String intensidade) {
+    switch (intensidade) {
+      case '1':
+        return 'Baixa';
+      case '2':
+        return 'Intermediária';
+      case '3':
+        return 'Alta';
+      default:
+        return '';
     }
-
-    if (intensidade == 2) {
-      return "Intermediária";
-    }
-
-    if (intensidade == 3) {
-      return "Alta";
-    }
-
-    return null; // Retorna null quando não houver intensidade
   }
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      theme: AppTheme.themeData,
       home: Scaffold(
         appBar: AppBar(
-          iconTheme: IconThemeData(color: AppTheme.iconColor),
-          backgroundColor: AppTheme.appBarColor,
-          title: Text('Detalhes do Exercício'),
+          title: Text('Detalhes do: ${nomeExercicio}'), 
           centerTitle: true,
         ),
         body: SingleChildScrollView(
@@ -83,7 +77,7 @@ class TreinoDetalhes extends StatelessWidget {
                     color: Colors.blue,
                     shadows: [
                       Shadow(
-                        blurRadius: 5.0,
+                        blurRadius: 2.0,
                         color: Colors.black,
                         offset: Offset(2.0, 2.0),
                       ),
@@ -93,16 +87,19 @@ class TreinoDetalhes extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 16.0),
-              _buildInfoRow('Séries', series),
-              _buildInfoRow('Repetições', "${repeticoes} Vezes"),
-              _buildInfoRow(
-                  'Duração',
-                  convertToMinutes(int.parse(tempo)) != 0
+              TabelaInformacoes(
+                labels: ['Séries', 'Repetições', 'Duração', 'Intensidade'],
+                valores: [
+                  series,
+                  '$repeticoes Vezes',
+                  convertToMinutes(int.parse(tempo)) != '0'
                       ? '${convertToMinutes(int.parse(tempo))}'
-                      : null),
-              _buildInfoRow('Intensidade', '${convertIntensidade(int.parse(intensidade))}'),
+                      : '',
+                  getIntensityLabel(intensidade),
+                ],
+              ),
               const SizedBox(height: 16.0),
-              ElevatedButton(
+             ElevatedButton(
                 onPressed: () {
                   Navigator.pop(context);
                 },
@@ -110,10 +107,19 @@ class TreinoDetalhes extends StatelessWidget {
                   primary: Colors.blue,
                   onPrimary: Colors.white,
                   shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(20.0),
+                    borderRadius: BorderRadius.circular(30.0),
+                  ),
+                  elevation: 3.0,
+                ),
+                child: const Padding(
+                  padding: EdgeInsets.all(12.0),
+                  child: Text(
+                    'Voltar',
+                    style: TextStyle(
+                      fontSize: 18.0,
+                    ),
                   ),
                 ),
-                child: Text('Voltar'),
               ),
             ],
           ),
@@ -121,19 +127,122 @@ class TreinoDetalhes extends StatelessWidget {
       ),
     );
   }
+}
 
-  Widget _buildInfoRow(String label, String? value) {
-    if (value != null &&
-        int.tryParse(value.replaceAll(RegExp(r'[^0-9]'), '')) != 0) {
-      return Column(
-        children: [
-          Text('$label: $value',
-              style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold)),
-          const SizedBox(height: 8.0),
-        ],
-      );
-    } else {
-      return SizedBox.shrink(); // Não exibe nada se o valor for '0' ou nulo
+class TabelaInformacoes extends StatelessWidget {
+  final List<String> labels;
+  final List<String> valores;
+
+  TabelaInformacoes({
+    required this.labels,
+    required this.valores,
+  });
+
+  int? extractNumber(String value) {
+    final cleanedValue = value.replaceAll(RegExp(r'[^0-9]'), '');
+    return int.tryParse(cleanedValue);
+  }
+
+  String getIntensityLabel(String intensidade) {
+    switch (intensidade) {
+      case '1':
+        return 'Baixa';
+      case '2':
+        return 'Intermediária';
+      case '3':
+        return 'Alta';
+      default:
+        return intensidade; // Retorna a intensidade como String original se não for 1, 2 ou 3
     }
+  }
+
+  List<TableRow> buildTableRows() {
+    List<TableRow> rows = [];
+
+    for (int index = 0; index < labels.length; index++) {
+      final value = valores[index];
+      final isIntensityLabel = index == 3;
+
+      if (isIntensityLabel) {
+        // Use getIntensityLabel diretamente
+        final intensityLabel = getIntensityLabel(value);
+        if (intensityLabel.isNotEmpty) {
+          rows.add(
+            TableRow(
+              children: [
+                TableCell(
+                  child: Container(
+                    padding: EdgeInsets.all(8.0),
+                    color: Colors.blue[100],
+                    child: Text(
+                      labels[index],
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        color: Colors.blue[700],
+                      ),
+                    ),
+                  ),
+                ),
+                TableCell(
+                  child: Container(
+                    padding: EdgeInsets.all(8.0),
+                    color: Colors.blue[100],
+                    child: Text(
+                      intensityLabel,
+                      style: TextStyle(color: Colors.black87),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          );
+        }
+      } else {
+        final numericValue = extractNumber(value);
+
+        if (numericValue != null && numericValue != 0) {
+          rows.add(
+            TableRow(
+              children: [
+                TableCell(
+                  child: Container(
+                    padding: EdgeInsets.all(8.0),
+                    color: index.isEven ? Colors.blue[100] : Colors.blue[50],
+                    child: Text(
+                      labels[index],
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        color: Colors.blue[700],
+                      ),
+                    ),
+                  ),
+                ),
+                TableCell(
+                  child: Container(
+                    padding: EdgeInsets.all(8.0),
+                    color: index.isEven ? Colors.blue[100] : Colors.blue[50],
+                    child: Text(
+                      value,
+                      style: TextStyle(color: Colors.black87),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          );
+        }
+      }
+    }
+
+    return rows;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Table(
+      border: TableBorder.all(color: Colors.transparent),
+      defaultVerticalAlignment: TableCellVerticalAlignment.middle,
+      children: buildTableRows(),
+    );
   }
 }

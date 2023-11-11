@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import '../widgets/AlimentoDetalhes.dart';
 import 'telainicial.dart';
 import '../settings/theme.dart';
 
@@ -17,35 +18,42 @@ enum Ordenacao {
 }
 
 class _FoodListState extends State<FoodList> {
-  List<Alimento> alimentos = [];
+  List<Cardapio> cardapios = [];
   Ordenacao _ordenacaoAtual = Ordenacao.calorias;
   bool _ordemCrescente = true;
 
   @override
   void initState() {
     super.initState();
-    fetchAlimentos();
+    fetchCardapios();
   }
 
-Future<void> fetchAlimentos() async {
-  try{
-      final response = await http.get(Uri.parse('http://localhost:3000/alimentos'));
+  Future<void> fetchCardapios() async {
+    try {
+      final response = await http.get(Uri.parse('http://localhost:3000/cardapio/get'));
 
       if (response.statusCode == 200) {
         final List<dynamic> data = jsonDecode(response.body);
-        setState(() {
-          alimentos = data.map((item) => Alimento.fromJson(item)).toList();
-        });
-      } else {
-        print('Erro ao carregar os alimentos: ${response.statusCode}');
-      }
-  }catch(e){
-        print('Erro ao carregar os alimentos: ${e}');
-  }
-  
-}
 
-  void _ordenarAlimentos(Ordenacao novaOrdenacao) {
+        // Verifique se a lista tem pelo menos um elemento
+        if (data.isNotEmpty && data[0] is List<dynamic>) {
+          final List<dynamic> cardapiosData = data[0];
+
+          setState(() {
+            cardapios = cardapiosData.map((item) => Cardapio.fromJson(item)).toList();
+          });
+        } else {
+          print('Erro: Resposta inesperada');
+        }
+      } else {
+        print('Erro ao carregar os cardápios: ${response.statusCode}');
+      }
+    } catch (e) {
+      print('Erro ao carregar os cardápios: $e');
+    }
+  }
+
+  void _ordenarCardapios(Ordenacao novaOrdenacao) {
     setState(() {
       if (_ordenacaoAtual == novaOrdenacao) {
         _ordemCrescente = !_ordemCrescente;
@@ -54,13 +62,13 @@ Future<void> fetchAlimentos() async {
         _ordemCrescente = true;
       }
 
-      alimentos.sort((a, b) {
+      cardapios.sort((a, b) {
         double valorA, valorB;
 
         switch (_ordenacaoAtual) {
           case Ordenacao.calorias:
-            valorA = a.calorias;
-            valorB = b.calorias;
+            valorA = a.valorEnergetico;
+            valorB = b.valorEnergetico;
             break;
           case Ordenacao.proteinas:
             valorA = a.proteinas;
@@ -71,8 +79,8 @@ Future<void> fetchAlimentos() async {
             valorB = b.gorduras;
             break;
           case Ordenacao.carboidratos:
-            valorA = a.carboidratos;
-            valorB = b.carboidratos;
+            valorA = a.carb;
+            valorB = b.carb;
             break;
           default:
             valorA = 0;
@@ -111,31 +119,37 @@ Future<void> fetchAlimentos() async {
           iconTheme: IconThemeData(color: AppTheme.iconColor),
           backgroundColor: AppTheme.appBarColor,
           leading: IconButton(
-              icon: const Icon(Icons.arrow_back),
-              color: AppTheme.iconColor,
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => TelaInicial(),
-                  ),
-                );
-              },
-            ),
-           actions: [
+            icon: const Icon(Icons.arrow_back),
+            color: AppTheme.iconColor,
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => TelaInicial(),
+                ),
+              );
+            },
+          ),
+          actions: [
             DropdownButton<Ordenacao>(
               value: _ordenacaoAtual,
               onChanged: (novaOrdenacao) {
-                _ordenarAlimentos(novaOrdenacao!);
+                _ordenarCardapios(novaOrdenacao!);
               },
               elevation: 0,
               items: Ordenacao.values.map((ordenacao) {
                 return DropdownMenuItem<Ordenacao>(
                   value: ordenacao,
-                  child: Text(_textoOrdenacao(ordenacao), style: TextStyle(fontSize: 18,fontWeight: FontWeight.bold, color: Colors.blue),),
+                  child: Text(
+                    _textoOrdenacao(ordenacao),
+                    style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.blue),
+                  ),
                 );
               }).toList(),
-              dropdownColor: Colors.white, 
+              dropdownColor: Colors.white,
             ),
             IconButton(
               icon: Icon(
@@ -144,48 +158,66 @@ Future<void> fetchAlimentos() async {
               ),
               color: Colors.black,
               onPressed: () {
-                _ordenarAlimentos(_ordenacaoAtual);
+                _ordenarCardapios(_ordenacaoAtual);
               },
             ),
           ],
         ),
         body: ListView.builder(
-          itemCount: alimentos.length,
+          itemCount: cardapios.length,
           itemBuilder: (context, index) {
-            final alimento = alimentos[index];
-            return Card(
-              child: ListTile(
-                title: Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Container(
-                      width: 150,
-                      height: 150,
-                      child: Image.network(
-                        alimento.imagem,
-                        fit: BoxFit.contain,
-                      ),
+            final cardapio = cardapios[index];
+            return GestureDetector(
+              onTap: () {
+                // Navegue para a tela de detalhes ao clicar no item
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => AlimentoDetalhes(
+                      nome: cardapio.nomeCardapio,
+                      carboidrato: cardapio.carb.toStringAsFixed(2),
+                      gordura: cardapio.gorduras.toStringAsFixed(2),
+                      proteina: cardapio.proteinas.toStringAsFixed(2),
+                      calorias: cardapio.valorEnergetico.toStringAsFixed(2),
+                      imageUrl: cardapio.imageUrl,
                     ),
-                    SizedBox(width: 16),
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(alimento.nome,
-                              style: TextStyle(fontWeight: FontWeight.bold)),
-                          const SizedBox(height: 4),
-                          Text(
-                              'Calorias: ${alimento.calorias.toStringAsFixed(2)}'),
-                          Text(
-                              'Proteínas: ${alimento.proteinas.toStringAsFixed(2)}'),
-                          Text(
-                              'Gorduras: ${alimento.gorduras.toStringAsFixed(2)}'),
-                          Text(
-                              'Carboidratos: ${alimento.carboidratos.toStringAsFixed(2)}'),
-                        ],
+                  ),
+                );
+              },
+              child: Card(
+                child: ListTile(
+                  title: Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Container(
+                        width: 150,
+                        height: 150,
+                        child: Image.network(
+                          cardapio.imageUrl,
+                          fit: BoxFit.contain,
+                        ),
                       ),
-                    ),
-                  ],
+                      SizedBox(width: 16),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(cardapio.nomeCardapio,
+                                style: TextStyle(fontWeight: FontWeight.bold)),
+                            const SizedBox(height: 4),
+                            Text(
+                                'Calorias: ${cardapio.valorEnergetico.toStringAsFixed(2)}'),
+                            Text(
+                                'Proteínas: ${cardapio.proteinas.toStringAsFixed(2)}'),
+                            Text(
+                                'Gorduras: ${cardapio.gorduras.toStringAsFixed(2)}'),
+                            Text(
+                                'Carboidratos: ${cardapio.carb.toStringAsFixed(2)}'),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
             );
@@ -196,42 +228,37 @@ Future<void> fetchAlimentos() async {
   }
 }
 
-class Alimento {
-  final String nome;
-  final double calorias;
+class Cardapio {
+  final int idCardapio;
+  final String nomeCardapio;
+  final double valorEnergetico;
+  final double carb;
   final double proteinas;
   final double gorduras;
-  final double carboidratos;
-  final String imagem;
+  final int periodo;
+  final String imageUrl;
 
-  Alimento({
-    required this.nome,
-    required this.calorias,
+  Cardapio({
+    required this.idCardapio,
+    required this.nomeCardapio,
+    required this.valorEnergetico,
+    required this.carb,
     required this.proteinas,
     required this.gorduras,
-    required this.carboidratos,
-    required this.imagem,
+    required this.periodo,
+    required this.imageUrl,
   });
 
-  factory Alimento.fromJson(Map<String, dynamic> json) {
-    final nome = json['nome'] ?? '';
-    final calorias = json['calorias']?.toDouble() ?? 0.0;
-    final proteinas = json['proteinas']?.toDouble() ?? 0.0;
-    final gorduras = json['gorduras']?.toDouble() ?? 0.0;
-    final carboidratos = json['carboidratos']?.toDouble() ?? 0.0;
-    final imagem = json['imagem'] ?? '';
-
-    return Alimento(
-        nome: nome,
-        calorias: calorias,
-        proteinas: proteinas,
-        gorduras: gorduras,
-        carboidratos: carboidratos,
-        imagem: imagem);
-  }
-
-  @override
-  String toString() {
-    return 'Alimento: $nome, Calorias: $calorias, Proteínas: $proteinas, Gorduras: $gorduras, Carboidratos: $carboidratos';
+  factory Cardapio.fromJson(Map<String, dynamic> json) {
+    return Cardapio(
+      idCardapio: json['idCardapio'],
+      nomeCardapio: json['nomeCardapio'],
+      valorEnergetico: json['valorEnergetico']?.toDouble() ?? 0.0,
+      carb: json['carb']?.toDouble() ?? 0.0,
+      proteinas: json['proteinas']?.toDouble() ?? 0.0,
+      gorduras: json['gorduras']?.toDouble() ?? 0.0,
+      periodo: json['periodo'],
+      imageUrl: json['imageUrl'],
+    );
   }
 }
