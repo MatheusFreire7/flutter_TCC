@@ -79,6 +79,13 @@ class _PersonalInfoAlterFormState extends State<PersonalInfoAlterForm> {
       userData?.genero = genero;
       userData?.altura = double.parse(height);
 
+      double pesoValue = double.parse(weight);
+      double alturaValue = double.parse(height) / 100.0; // Convert altura to meter
+
+       final imc = alturaValue != 0 ? pesoValue / (alturaValue * alturaValue) : 0.0;
+
+      userData?.imc = imc;
+
       await SharedUser.saveUserData(userData!);
 
       // Verifique a resposta da API e lide com ela conforme necessário.

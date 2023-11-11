@@ -77,23 +77,20 @@ class _PersonalInfoFormState extends State<PersonalInfoForm> {
         body: novoInfoUser,
       );
 
-      double peso = 0.0;
-      double altura = 0.0;
+        double pesoValue = double.parse(peso);
+        double alturaValue = double.parse(altura) / 100.0; // Convert altura to meter
+        double alturaDouble = double.parse(altura);
 
-        peso = double.parse(dadosUser!.peso.toString());
-        altura = dadosUser!.altura / 100.0; // Converter altura para metros
-
-        final imc = altura != 0 ? peso / (altura * altura) : 0.0;
-
+        final imc = alturaValue != 0 ? pesoValue / (alturaValue * alturaValue) : 0.0;
 
       UserData userData = UserData(
         idUsuario: dadosUser!.idUsuario, 
         usuario: dadosUser.usuario,
         email: dadosUser.email, 
         genero: genero, 
-        altura: altura, 
+        altura: alturaDouble, 
         idade: int.parse(idade),
-        peso: peso, 
+        peso: pesoValue, 
         imc: imc,
         idPlanoTreino: 0,
         idPlanoAlimentacao: 0);

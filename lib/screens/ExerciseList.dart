@@ -137,7 +137,6 @@ void updateSelectedAttribute(String? attribute) {
           bValue = b.intensidade;
           break;
         default:
-          // Default to sorting by 'nomeExercicio'
           aValue = a.nomeExercicio;
           bValue = b.nomeExercicio;
       }

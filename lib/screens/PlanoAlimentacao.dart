@@ -135,7 +135,7 @@ class _DietState extends State<Diet> {
 
     // Verifica se há cardápios para exibir
     if (filteredCardapios.isEmpty) {
-      return Center(
+      return const Center(
         child: Text('Nenhum cardápio disponível para esta refeição e dia.'),
       );
     }
