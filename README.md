@@ -21,12 +21,12 @@ Antes de usar este aplicativo, você deve ter instalado no seu Computador:
 ## Como Usar  ▶️
 1. **Clone o repositório**:
 ``` bash
-   git clone https://github.com/MatheusFreire7/flutter_TCC.git
+git clone https://github.com/MatheusFreire7/flutter_TCC.git
 ```
 
 2. **Instalar as Dependências do Projeto**:
  ``` bash
-     Flutter pub get
+Flutter pub get
 ```
 
 3. **Execute o Projeto**:
