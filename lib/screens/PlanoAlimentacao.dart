@@ -25,6 +25,7 @@ class _DietState extends State<Diet> {
   ];
 
   String _selectedDay = '';
+  bool _isHovered = false;
 
   @override
   void initState() {
@@ -140,12 +141,12 @@ class _DietState extends State<Diet> {
       );
     }
 
-    // Construa os widgets para exibir os cardápios
+    // Construoi os widgets para exibir os cardápios
     return ListView.builder(
       itemCount: filteredCardapios.length,
       itemBuilder: (context, index) {
         Cardapio cardapio = filteredCardapios[index];
-        return GestureDetector(
+        return InkWell(
           onTap: () {
             // Navegue para a tela AlimentoDetalhes quando o card for clicado
             Navigator.push(
@@ -163,29 +164,47 @@ class _DietState extends State<Diet> {
               ),
             );
           },
+          onHover: (isHovered) {
+            // Defina a ação que ocorrerá ao passar o mouse sobre o card
+            // Por exemplo, você pode alterar a cor de fundo ou adicionar uma sombra
+            setState(() {
+              _isHovered = isHovered;
+            });
+          },
           child: Card(
+            elevation: _isHovered ? 8 : 4, // Adicione sombra extra ao passar o mouse
+            borderOnForeground: _isHovered, // Adicione borda ao passar o mouse
             child: ListTile(
-              title: Text(
-                '${cardapio.nomeCardapio}',
-                style: TextStyle(fontWeight: FontWeight.bold),
-              ),
-              subtitle: Column(
+              title: Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text('Calorias: ${cardapio.valorEnergetico.toStringAsFixed(2)}'),
-                  Text('Proteínas: ${cardapio.proteinas.toStringAsFixed(2)}'),
-                  Text('Gorduras: ${cardapio.gorduras.toStringAsFixed(2)}'),
-                  Text('Carboidratos: ${cardapio.carb.toStringAsFixed(2)}'),
-                  Text('Sódio: ${cardapio.sodio.toStringAsFixed(2)}'),
+                  Container(
+                    width: 120,
+                    height: 120,
+                    decoration: BoxDecoration(
+                      image: DecorationImage(
+                        image: NetworkImage(cardapio.imageUrl),
+                        fit: BoxFit.cover,
+                      ),
+                      borderRadius: BorderRadius.circular(8.0),
+                    ),
+                  ),
+                  SizedBox(width: 16),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(cardapio.nomeCardapio, style: TextStyle(fontWeight: FontWeight.bold)),
+                        const SizedBox(height: 4),
+                        Text('Calorias: ${cardapio.valorEnergetico.toStringAsFixed(2)}'),
+                        Text('Proteínas: ${cardapio.proteinas.toStringAsFixed(2)}'),
+                        Text('Gorduras: ${cardapio.gorduras.toStringAsFixed(2)}'),
+                        Text('Carboidratos: ${cardapio.carb.toStringAsFixed(2)}'),
+                        Text('Sódio: ${cardapio.sodio.toStringAsFixed(2)}'),
+                      ],
+                    ),
+                  ),
                 ],
-              ),
-              leading: Container(
-                width: 100.0, 
-                height: double.infinity,
-                child: Image.network(
-                  cardapio.imageUrl,
-                  fit: BoxFit.cover,
-                ),
               ),
             ),
           ),
@@ -193,7 +212,6 @@ class _DietState extends State<Diet> {
       },
     );
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -276,6 +294,8 @@ class _DietState extends State<Diet> {
                       indicatorSize: TabBarIndicatorSize.label,
                       indicatorColor: const Color.fromRGBO(215, 225, 255, 1.0),
                       isScrollable: true,
+                      labelPadding: EdgeInsets.symmetric(horizontal: 8.0),
+                      indicatorPadding: EdgeInsets.symmetric(horizontal: 8.0),
                     ),
                   ],
                 ),

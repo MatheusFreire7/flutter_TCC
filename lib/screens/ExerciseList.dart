@@ -62,6 +62,23 @@ String getIntensityLabel(String intensidade) {
   }
 }
 
+ String getFormattedDuration(int tempoS) {
+    int seconds = tempoS;
+
+    if (seconds < 60) {
+      return '$seconds Segundos';
+    } else {
+      int minutes = seconds ~/ 60;
+      int remainingSeconds = seconds % 60;
+
+      if (remainingSeconds == 0) {
+        return '$minutes Minutos';
+      } else {
+        return '$minutes Minutos e $remainingSeconds Segundos';
+      }
+    }
+  }
+
 class _ExerciseListState extends State<ExerciseList> {
   late List<Exercise> exercises = [];
   bool isAscending = true;
@@ -300,7 +317,7 @@ class _ExerciseListState extends State<ExerciseList> {
                             ),
                           if (sortedExercises[index].tempoS > 0)
                             Text(
-                              'Duração: ${sortedExercises[index].tempoS}',
+                              'Duração: ${getFormattedDuration(sortedExercises[index].tempoS)}',
                               style: TextStyle(color: Colors.grey),
                             ),
                           Text(
