@@ -66,7 +66,7 @@ class AlimentoDetalhes extends StatelessWidget {
                   ),
                   const SizedBox(height: 16.0),
                   TabelaInformacoes(
-                    labels: [
+                    labels: const [
                       'Carboidrato (g)',
                       'Gordura (g)',
                       'Proteína (g)',
@@ -88,7 +88,7 @@ class AlimentoDetalhes extends StatelessWidget {
                   primary: Colors.blue, // Cor de fundo
                   onPrimary: Colors.white, // Cor do texto
                   shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10.0), // Borda arredondada
+                    borderRadius: BorderRadius.circular(30.0), // Borda arredondada
                   ),
                   elevation: 3.0, // Elevação
                 ),

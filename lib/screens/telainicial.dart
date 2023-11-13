@@ -5,7 +5,6 @@ import 'package:flutter_login/service/NotificationService.dart';
 import 'package:flutter_login/service/NoticationWater.dart';
 import 'package:flutter_login/screens/FoodList.dart';
 import 'package:flutter_login/settings/Config.dart';
-import 'package:flutter_login/screens/InfoUser.dart';
 import 'package:flutter_login/screens/PlanoAlimentacao.dart';
 import 'package:flutter_login/screens/PlanoTreino.dart';
 import 'package:flutter_login/settings/Suporte.dart';

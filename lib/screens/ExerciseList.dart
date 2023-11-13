@@ -292,19 +292,19 @@ class _ExerciseListState extends State<ExerciseList> {
                         },
                       ),
                     ),
-                    SizedBox(width: 10),
+                    const SizedBox(width: 10),
                     Expanded(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
                             sortedExercises[index].nomeExercicio,
-                            style: TextStyle(
+                            style: const TextStyle(
                               fontSize: 20,
                               fontWeight: FontWeight.bold,
                             ),
                           ),
-                          SizedBox(height: 5),
+                          const SizedBox(height: 5),
                           if (sortedExercises[index].series > 0)
                             Text(
                               'Séries: ${sortedExercises[index].series}',

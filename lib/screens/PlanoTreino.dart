@@ -92,8 +92,9 @@ String intensidadeText(int intensidade) {
 class _PlanoTreinoPageState extends State<PlanoTreinoPage> {
   late List<Exercise> exercises = [];
   late TextEditingController searchController = TextEditingController();
-  late String selectedDay = capitalize(DateFormat('EEEE', 'pt_BR')
-      .format(DateTime.now())); // Inicializa com o dia da semana atual
+  // late String selectedDay = capitalize(DateFormat('EEEE', 'pt_BR')
+  //     .format(DateTime.now())); // Inicializa com o dia da semana atual
+  late String selectedDay = "A";
   IntensidadeFiltro? selectedIntensidadeFiltro;
 
   @override
@@ -147,23 +148,23 @@ class _PlanoTreinoPageState extends State<PlanoTreinoPage> {
 
     final filteredExercises = exercises.where((exercise) {
       if (exercise.ciclo == 'A' &&
-          (selectedDay == 'Segunda-feira' ||
-              selectedDay == 'Terça-feira' ||
-              selectedDay == 'Quarta-feira')) {
+          (selectedDay == 'A' ||
+              selectedDay == 'Quinta-feira' ||
+              selectedDay == 'Domingo')) {
         if (selectedIntensidadeFiltro != null &&
             exercise.intensidadeFiltro != selectedIntensidadeFiltro) {
           return false; // Filtrar por intensidade
         }
         return true;
       } else if (exercise.ciclo == 'B' &&
-          (selectedDay == 'Quinta-feira' || selectedDay == 'Sexta-feira')) {
+          (selectedDay == 'B' || selectedDay == 'Sexta-feira')) {
         if (selectedIntensidadeFiltro != null &&
             exercise.intensidadeFiltro != selectedIntensidadeFiltro) {
           return false; // Filtrar por intensidade
         }
         return true;
       } else if (exercise.ciclo == 'C' &&
-          (selectedDay == 'Sábado' || selectedDay == 'Domingo')) {
+          (selectedDay == 'C' || selectedDay == 'Sábado')) {
         if (selectedIntensidadeFiltro != null &&
             exercise.intensidadeFiltro != selectedIntensidadeFiltro) {
           return false; // Filtrar por intensidade
@@ -189,13 +190,9 @@ class _PlanoTreinoPageState extends State<PlanoTreinoPage> {
         child: DropdownButton<String>(
           value: selectedDay,
           items: [
-            'Segunda-feira',
-            'Terça-feira',
-            'Quarta-feira',
-            'Quinta-feira',
-            'Sexta-feira',
-            'Sábado',
-            'Domingo'
+              "A",
+              "B",
+              "C"
           ].map((String value) {
             return DropdownMenuItem<String>(
               value: value,
@@ -210,7 +207,7 @@ class _PlanoTreinoPageState extends State<PlanoTreinoPage> {
           },
           underline: Container(),
           isExpanded: true,
-          icon: Icon(Icons.arrow_drop_down),
+          icon: const Icon(Icons.arrow_drop_down),
           iconSize: 24,
         ),
       ),
@@ -221,11 +218,11 @@ class _PlanoTreinoPageState extends State<PlanoTreinoPage> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
+        const Text(
           'Filtrar por Intensidade:',
           style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
         ),
-        SizedBox(height: 8),
+        const SizedBox(height: 8),
         Container(
           decoration: BoxDecoration(
             border: Border.all(color: Colors.grey),
@@ -290,7 +287,7 @@ class _PlanoTreinoPageState extends State<PlanoTreinoPage> {
                 return Icon(Icons.error, color: Colors.red);
               },
             ),
-            SizedBox(height: 8),
+            const SizedBox(height: 8),
             Text(
               nomeExercicio,
               style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
@@ -323,12 +320,12 @@ class _PlanoTreinoPageState extends State<PlanoTreinoPage> {
           backgroundColor: AppTheme.appBarColor,
           centerTitle: true,
           leading: IconButton(
-            icon: Icon(Icons.arrow_back),
+            icon: const Icon(Icons.arrow_back),
             onPressed: () {
               Navigator.pop(context);
             },
           ),
-          title: Text(
+          title: const Text(
             'Plano de Treino',
             style: TextStyle(
               fontSize: 24,
@@ -356,7 +353,7 @@ class _PlanoTreinoPageState extends State<PlanoTreinoPage> {
                 children: [
                   Text(
                     'Exercícios para $selectedDay',
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
                       color: Colors.blue,

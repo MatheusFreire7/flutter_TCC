@@ -138,7 +138,7 @@ class _PlanoTreinoDetalhesState extends State<PlanoTreinoDetalhes> {
                           ),
                         ),
                       ),
-                      SizedBox(height: 8.0), // Espaço entre os planos
+                      const SizedBox(height: 8.0), // Espaço entre os planos
                     ],
                   ),
                 const SizedBox(height: 16.0),
@@ -178,9 +178,7 @@ class _PlanoTreinoDetalhesState extends State<PlanoTreinoDetalhes> {
                           ),
                         ),
                       ),
-                      SizedBox(
-                          height:
-                              8.0), // Espaço entre os planos não recomendados
+                      const SizedBox(height: 8.0), // Espaço entre os planos não recomendados
                     ],
                   ),
                 ElevatedButton(

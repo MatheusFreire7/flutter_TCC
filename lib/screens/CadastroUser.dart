@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:flutter_login/screens/FormTreino.dart';
 import 'package:flutter_login/screens/LoginUser.dart';
 import 'package:flutter_login/settings/theme.dart';
 import 'package:http/http.dart' as http;
@@ -55,6 +54,7 @@ class _CadastroPageState extends State<CadastroPage> {
             idPlanoAlimentacao: 0,
           );
           await SharedUser.saveUserData(userDataObject);
+          // ignore: use_build_context_synchronously
           Navigator.push(
             context,
             MaterialPageRoute(
@@ -64,7 +64,7 @@ class _CadastroPageState extends State<CadastroPage> {
         } else {
           final error = response.body;
           print(error);
-           // ignore: use_build_context_synchronously
+          // ignore: use_build_context_synchronously
           showDialog(
               context: context,
               builder: (context) => AlertDialog(

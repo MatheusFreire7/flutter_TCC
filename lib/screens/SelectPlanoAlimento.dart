@@ -118,7 +118,7 @@ class _PlanoAlimentoDetalhesState extends State<PlanoAlimentoDetalhes> {
                           ),
                         ),
                       ),
-                      SizedBox(height: 8.0), // Espaço entre os planos não recomendados
+                      const SizedBox(height: 8.0), // Espaço entre os planos não recomendados
                     ],
                   ),
 
